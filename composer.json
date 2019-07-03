@@ -4,12 +4,13 @@
     "type": "library",
     "require": {
         "php": "^7.2",
-        "psychob/dependency-injection": "^0.7.1",
-        "symfony/var-dumper": "^4.3"
+        "psychob/dependency-injection": "^0.7.1"
     },
     "require-dev": {
+        "mikey179/vfsstream": "^1.6",
+        "mockery/mockery": "^1.2",
         "phpunit/phpunit": "^8.2",
-        "mockery/mockery": "^1.2"
+        "symfony/var-dumper": "^4.3"
     },
     "license": "MPL-2.0",
     "authors": [

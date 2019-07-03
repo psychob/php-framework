@@ -48,12 +48,14 @@
                 $isVolatile = false;
                 $customLoader = null;
                 $file = '.env';
+                $envEnv = 'APP_ENV';
 
                 if (is_array($source)) {
                     $type = $source['type'];
                     $isVolatile = $source['volatile'] ?? false;
                     $customLoader = $source['bind'] ?? null;
                     $file = $source['file'] ?? '.env';
+                    $envEnv = $source['env'] ?? $envEnv;
                 }
 
                 switch ($type) {
@@ -66,7 +68,7 @@
                         break;
 
                     case self::ORDER_DOT_ENV_ENVIRONMENT:
-                        $this->order[] = new NonDirectEnvSource($basePath, $file, $isVolatile, 'APP_ENV');
+                        $this->order[] = new NonDirectEnvSource($basePath, $file, $isVolatile, $envEnv);
                         break;
 
                     case self::ORDER_ENV:

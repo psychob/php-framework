@@ -15,6 +15,8 @@
      */
     abstract class DotEnvBase implements DotEnvSourceInterface
     {
+        use EnvTrait;
+
         /** @var bool */
         protected $volatile = false;
 

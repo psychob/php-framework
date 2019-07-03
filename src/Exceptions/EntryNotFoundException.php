@@ -9,4 +9,25 @@
 
     class EntryNotFoundException extends FrameworkException
     {
+        /** @var string */
+        protected $key;
+
+        /** @var string[] */
+        protected $available;
+
+        /**
+         * EntryNotFoundException constructor.
+         *
+         * @param string          $key
+         * @param string[]        $available
+         * @param \Throwable|null $prev
+         */
+        public function __construct(string $key, array $available = [], \Throwable $prev = NULL)
+        {
+            $this->key = $key;
+            $this->available = $available;
+
+            parent::__construct('Could not found key', 0, $prev);
+        }
+
     }

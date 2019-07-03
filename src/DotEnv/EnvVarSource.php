@@ -17,8 +17,6 @@
      */
     class EnvVarSource extends DotEnvBase
     {
-        use EnvTrait;
-
         /**
          * EnvVarSource constructor.
          *
