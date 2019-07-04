@@ -7,9 +7,10 @@
 
     namespace Tests\PsychoB\Framework\DotEnv;
 
+    use PsychoB\Framework\DotEnv\DotEnv;
     use PsychoB\Framework\DotEnv\DotEnvSourceInterface;
-    use PsychoB\Framework\DotEnv\EnvSource;
-    use PsychoB\Framework\DotEnv\EnvVarSource;
+    use PsychoB\Framework\DotEnv\DotEnvFileSource;
+    use PsychoB\Framework\DotEnv\Sources\GetEnvSource;
     use PsychoB\Framework\DotEnv\NonDirectEnvSource;
     use PsychoB\Framework\Testing\TestCase;
 
@@ -24,9 +25,9 @@
         public function provideIsVolatile()
         {
             return [
-                [new EnvVarSource(true)],
-                [new EnvSource('', '', true)],
-                [new NonDirectEnvSource('', '', true, 'env')],
+                [new GetEnvSource(true)],
+                [new DotEnvFileSource('', '', true)],
+                [new NonDirectEnvSource('', '', true, 'env', new DotEnv(''))],
             ];
         }
     }
