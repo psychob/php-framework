@@ -5,16 +5,16 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace Tests\PsychoB\Framework\DotEnv;
+    namespace Tests\PsychoB\Framework\DotEnv\Sources;
 
-    use PsychoB\Framework\DotEnv\EnvVarSource;
+    use PsychoB\Framework\DotEnv\Sources\GetEnvSource;
     use PsychoB\Framework\Exceptions\EntryNotFoundException;
     use PsychoB\Framework\Testing\TestCase;
 
-    class EnvVarSourceTest extends TestCase
+    class GetEnvSourceTest extends TestCase
     {
         /**
-         * @var EnvVarSource
+         * @var GetEnvSource
          */
         private $source;
 
@@ -22,7 +22,7 @@
         {
             parent::setUp();
 
-            $this->source = new EnvVarSource(false);
+            $this->source = new GetEnvSource(false);
         }
 
         /** @runInSeparateProcess  */

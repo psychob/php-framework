@@ -5,17 +5,20 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\DotEnv;
+    namespace PsychoB\Framework\DotEnv\Sources;
 
+    use PsychoB\Framework\DotEnv\DotEnvBase;
     use PsychoB\Framework\Exceptions\EntryNotFoundException;
 
     /**
-     * Source for environmental variables fetched from environment
+     * Source for environmental variables fetched from environment.
+     *
+     * This class will always load variables from getenv.
      *
      * @author Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
      * @since 0.1
      */
-    class EnvVarSource extends DotEnvBase
+    class GetEnvSource extends DotEnvBase
     {
         /**
          * EnvVarSource constructor.
