@@ -9,9 +9,10 @@
 
     use PsychoB\Framework\DotEnv\DotEnv;
     use PsychoB\Framework\DotEnv\DotEnvSourceInterface;
-    use PsychoB\Framework\DotEnv\DotEnvFileSource;
+    use PsychoB\Framework\DotEnv\Sources\DeferredDotEnvSource;
+    use PsychoB\Framework\DotEnv\Sources\DotEnvSource;
+    use PsychoB\Framework\DotEnv\Sources\EnvVarSource;
     use PsychoB\Framework\DotEnv\Sources\GetEnvSource;
-    use PsychoB\Framework\DotEnv\NonDirectEnvSource;
     use PsychoB\Framework\Testing\TestCase;
 
     class DotEnvSourceInterfaceTest extends TestCase
@@ -26,8 +27,9 @@
         {
             return [
                 [new GetEnvSource(true)],
-                [new DotEnvFileSource('', '', true)],
-                [new NonDirectEnvSource('', '', true, 'env', new DotEnv(''))],
+                [new DeferredDotEnvSource(null, '.env', 'APP_ENV', true, new DotEnv(''))],
+                [new DotEnvSource(null, '.env', true)],
+                [new EnvVarSource(true)],
             ];
         }
     }
