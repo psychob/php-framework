@@ -22,12 +22,12 @@
         {
             parent::setUp();
 
-            $this->source = new EnvVarSource(false);
-
             $_ENV = [
                 'ABC' => 'DEF',
                 'EFG' => 'HIJ',
             ];
+
+            $this->source = new EnvVarSource(false);
         }
 
         protected function tearDown(): void

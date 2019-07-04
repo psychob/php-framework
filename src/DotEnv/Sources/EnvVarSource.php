@@ -19,6 +19,25 @@
      */
     class EnvVarSource extends AbstractSource
     {
+        protected $source = [];
+
+        /**
+         * EnvVarSource constructor.
+         *
+         * @param bool       $volatile Dont allow cache
+         * @param array|null $source   Source
+         */
+        public function __construct(bool $volatile, ?array $source = NULL)
+        {
+            parent::__construct($volatile);
+
+            if ($source === NULL) {
+                $source = $_ENV;
+            }
+
+            $this->source = $source;
+        }
+
         /** @inheritDoc */
         public function get(string $value)
         {
@@ -26,12 +45,12 @@
                 throw new EntryNotFoundException($value, array_keys($_ENV));
             }
 
-            return $_ENV[$value];
+            return $this->source[$value];
         }
 
         /** @inheritDoc */
         public function has(string $value): bool
         {
-            return array_key_exists($value, $_ENV);
+            return array_key_exists($value, $this->source);
         }
     }
