@@ -5,19 +5,18 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace Tests\PsychoB\Framework\DotEnv;
+    namespace Tests\PsychoB\Framework\DotEnv\Sources;
 
     use org\bovigo\vfs\vfsStream;
     use org\bovigo\vfs\vfsStreamFile;
-    use PsychoB\Framework\DotEnv\EnvSource;
-    use PsychoB\Framework\DotEnv\EnvVarSource;
+    use PsychoB\Framework\DotEnv\Sources\DotEnvSource;
     use PsychoB\Framework\Exceptions\EntryNotFoundException;
     use PsychoB\Framework\Testing\TestCase;
 
-    class EnvSourceTest extends TestCase
+    class DotEnvSourceTest extends TestCase
     {
         /**
-         * @var EnvVarSource
+         * @var DotEnvSource
          */
         private $source;
 
@@ -41,7 +40,7 @@ CONF
 );
             $directory->addChild($file);
 
-            $this->source = new EnvSource(null, $file->url(), false);
+            $this->source = new DotEnvSource(null, $file->url(), false);
         }
 
         public function testExists()
