@@ -18,9 +18,20 @@
 
             if (file_exists($path)) {
                 foreach (file($path, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES) as $line) {
+                    //
+                    // We assume line contains comment if:
+                    // - Line starts with #
+                    // - Line contains sequence: SPACE HASH ( #)
+                    //
+                    // Second option is for lines that contains hash in url, so we won't pick up those as comments
+                    //
                     $hasComment = strpos($line, '#');
                     if ($hasComment !== false) {
-                        $line = substr($line, 0, $hasComment - 1);
+                        if ($hasComment === 0) {
+                            continue;
+                        } else if ($line[$hasComment - 1] === ' ') {
+                            $line = substr($line, 0, $hasComment - 1);
+                        }
                     }
 
                     $assign = strpos($line, '=');

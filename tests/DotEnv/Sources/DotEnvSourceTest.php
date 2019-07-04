@@ -31,6 +31,8 @@
 DEFINE=WITH_SOMETHING # This line will have definition
 DEFINE_2=WITHOUT
 
+URL=FOOBAR#ARC
+
 ABC=DEF
 GHI=JKL
 
@@ -60,6 +62,7 @@ CONF
             $this->assertSame('WITHOUT', $this->source->get('DEFINE_2'));
             $this->assertSame('DEF', $this->source->get('ABC'));
             $this->assertSame('JKL', $this->source->get('GHI'));
+            $this->assertSame('FOOBAR#ARC', $this->source->get('URL'));
             $this->assertSame(2, $this->source->get('JKL'));
         }
 
