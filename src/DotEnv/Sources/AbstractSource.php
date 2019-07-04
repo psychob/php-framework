@@ -5,7 +5,9 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\DotEnv;
+    namespace PsychoB\Framework\DotEnv\Sources;
+
+    use PsychoB\Framework\DotEnv\DotEnvSourceInterface;
 
     /**
      * Base class for DotEnv Sources
@@ -13,9 +15,9 @@
      * @author Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
      * @since 0.1
      */
-    abstract class DotEnvBase implements DotEnvSourceInterface
+    abstract class AbstractSource implements DotEnvSourceInterface
     {
-        use EnvTrait;
+        use ValueParserTrait;
 
         /** @var bool */
         protected $volatile = false;

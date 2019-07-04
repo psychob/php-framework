@@ -7,7 +7,6 @@
 
     namespace PsychoB\Framework\DotEnv\Sources;
 
-    use PsychoB\Framework\DotEnv\DotEnvBase;
     use PsychoB\Framework\Exceptions\EntryNotFoundException;
 
     /**
@@ -18,7 +17,7 @@
      * @author Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
      * @since  0.1
      */
-    class EnvVarSource extends DotEnvBase
+    class EnvVarSource extends AbstractSource
     {
         /** @inheritDoc */
         public function get(string $value)

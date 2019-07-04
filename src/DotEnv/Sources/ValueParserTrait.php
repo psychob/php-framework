@@ -5,11 +5,11 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\DotEnv;
+    namespace PsychoB\Framework\DotEnv\Sources;
 
-    trait EnvTrait
+    trait ValueParserTrait
     {
-        protected function parseValue(string $value)
+        protected static function parseValue(string $value)
         {
             switch ($value) {
                 case 'true':
