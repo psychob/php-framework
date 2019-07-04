@@ -7,6 +7,11 @@
 
     namespace PsychoB\Framework\DotEnv;
 
+    use PsychoB\Framework\DotEnv\Sources\DeferredDotEnvSource;
+    use PsychoB\Framework\DotEnv\Sources\DotEnvSource;
+    use PsychoB\Framework\DotEnv\Sources\EnvVarSource;
+    use PsychoB\Framework\DotEnv\Sources\GetEnvSource;
+
     class DotEnv
     {
         /**
@@ -30,9 +35,14 @@
         public const ORDER_CUSTOM = 4;
 
         /**
+         * Load variables from $_ENV
+         */
+        public const ORDER_ENV_VAR = 5;
+
+        /**
          * @var DotEnvSourceInterface[]
          */
-        protected $order;
+        protected $order = [];
 
         /**
          * Values cached for current execution
@@ -44,23 +54,23 @@
         public function __construct(string $basePath, ...$sources)
         {
             foreach ($sources as $source) {
-                $type = null;
+                $type = $source;
                 $isVolatile = false;
-                $customLoader = null;
+                $customLoader = NULL;
                 $file = '.env';
                 $envEnv = 'APP_ENV';
 
                 if (is_array($source)) {
                     $type = $source['type'];
                     $isVolatile = $source['volatile'] ?? false;
-                    $customLoader = $source['bind'] ?? null;
+                    $customLoader = $source['bind'] ?? NULL;
                     $file = $source['file'] ?? '.env';
                     $envEnv = $source['env'] ?? $envEnv;
                 }
 
                 switch ($type) {
                     case self::ORDER_DOT_ENV:
-                        $this->order[] = new EnvSource($basePath, $file, $isVolatile);
+                        $this->order[] = new DotEnvSource($basePath, $file, $isVolatile);
                         break;
 
                     case self::ORDER_CUSTOM:
@@ -68,10 +78,14 @@
                         break;
 
                     case self::ORDER_DOT_ENV_ENVIRONMENT:
-                        $this->order[] = new NonDirectEnvSource($basePath, $file, $isVolatile, $envEnv);
+                        $this->order[] = new DeferredDotEnvSource($basePath, $file, $envEnv, $isVolatile, $this);
                         break;
 
-                    case self::ORDER_ENV:
+                    case self::ORDER_GETENV:
+                        $this->order[] = new GetEnvSource($isVolatile);
+                        break;
+
+                    case self::ORDER_ENV_VAR:
                         $this->order[] = new EnvVarSource($isVolatile);
                         break;
                 }
@@ -89,7 +103,7 @@
                 if ($source->has($key)) {
                     $value = $source->get($key);
 
-                    if ($source->isVolatile()) {
+                    if (!$source->isVolatile()) {
                         $this->cached[$key] = $value;
                     }
 
