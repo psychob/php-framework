@@ -17,7 +17,7 @@
         /**
          * Load variables from $_ENV server variables
          */
-        public const ORDER_ENV = 2;
+        public const ORDER_GETENV = 2;
 
         /**
          * Load variables from .env.{environment} file
