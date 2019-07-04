@@ -64,7 +64,7 @@
          *
          * @return array
          */
-        public static function dotEnvDotEnv(string $env, bool $cache = true, string $file = '.env')
+        public static function dotEnvDotEnv(string $env, bool $cache = true, string $file = '.env'): array
         {
             return [
                 'type'     => DotEnv::ORDER_DOT_ENV_ENVIRONMENT,
@@ -91,5 +91,13 @@
                     'volatile' => !$cache,
                 ];
             }
+        }
+
+        public static function custom(DotEnvSourceInterface $custom): array
+        {
+            return [
+                'type' => DotEnv::ORDER_CUSTOM,
+                'bind' => $custom,
+            ];
         }
     }

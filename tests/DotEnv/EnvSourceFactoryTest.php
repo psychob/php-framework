@@ -9,6 +9,7 @@
 
     use PsychoB\Framework\DotEnv\DotEnv;
     use PsychoB\Framework\DotEnv\EnvSourceFactory;
+    use PsychoB\Framework\DotEnv\Sources\EnvVarSource;
     use PsychoB\Framework\Testing\TestCase;
 
     class EnvSourceFactoryTest extends TestCase
@@ -46,6 +47,12 @@
             $this->assertSame(DotEnv::ORDER_ENV_VAR, EnvSourceFactory::envVar(true));
 
             $this->assertSame(['type' => DotEnv::ORDER_ENV_VAR, 'volatile' => true], EnvSourceFactory::envVar(false));
+        }
 
+        public function testCustom()
+        {
+            $dot = new EnvVarSource(false);
+
+            $this->assertSame(['type' => DotEnv::ORDER_CUSTOM, 'bind' => $dot], EnvSourceFactory::custom($dot));
         }
     }
