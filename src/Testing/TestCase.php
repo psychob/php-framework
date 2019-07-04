@@ -13,6 +13,10 @@
     {
         protected function tearDown(): void
         {
+            if ($container = \Mockery::getContainer()) {
+                $this->addToAssertionCount($container->mockery_getExpectationCount());
+            }
+
             \Mockery::close();
 
             parent::tearDown();
