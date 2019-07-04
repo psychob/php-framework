@@ -5,15 +5,15 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace Tests\PsychoB\Framework\DotEnv;
+    namespace Tests\PsychoB\Framework\DotEnv\Sources;
 
     use PsychoB\Framework\Testing\TestCase;
-    use Tests\PsychoB\Framework\Mocks\DotEnv\EnvTraitMock;
+    use Tests\PsychoB\Framework\Mocks\DotEnv\Sources\ValueParserMock;
 
-    class EnvTraitTest extends TestCase
+    class ValueParserTraitTests extends TestCase
     {
         /**
-         * @var \Mockery\MockInterface|EnvTraitMock
+         * @var \Mockery\MockInterface|ValueParserMock
          */
         private $parser;
 
@@ -21,7 +21,7 @@
         {
             parent::setUp();
 
-            $this->parser = \Mockery::mock(EnvTraitMock::class)
+            $this->parser = \Mockery::mock(ValueParserMock::class)
                                     ->makePartial();
         }
 

@@ -5,13 +5,13 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace Tests\PsychoB\Framework\Mocks\DotEnv;
+    namespace Tests\PsychoB\Framework\Mocks\DotEnv\Sources;
 
-    use PsychoB\Framework\DotEnv\EnvTrait;
+    use PsychoB\Framework\DotEnv\Sources\ValueParserTrait;
 
-    class EnvTraitMock
+    class ValueParserMock
     {
-        use EnvTrait;
+        use ValueParserTrait;
 
         public function parseVal($val)
         {
