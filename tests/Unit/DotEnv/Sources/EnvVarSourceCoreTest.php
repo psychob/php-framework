@@ -9,9 +9,9 @@
 
     use PsychoB\Framework\DotEnv\Exceptions\EnvNotFoundException;
     use PsychoB\Framework\DotEnv\Sources\EnvVarSource;
-    use PsychoB\Framework\Testing\TestCase;
+    use PsychoB\Framework\Testing\CoreTestCase;
 
-    class EnvVarSourceTest extends TestCase
+    class EnvVarSourceCoreTest extends CoreTestCase
     {
         /**
          * @var EnvVarSource

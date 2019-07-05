@@ -9,7 +9,7 @@
 
     use PHPUnit\Framework\TestCase as PhpUnitTestCase;
 
-    class TestCase extends PhpUnitTestCase
+    class CoreTestCase extends PhpUnitTestCase
     {
         protected function tearDown(): void
         {
