@@ -64,6 +64,12 @@
          */
         public function has(string $value): bool
         {
+            // unless we already loaded source, we are never responsible for {$this->envVar} variable
+            // this will prevent infinite redirection
+            if ($this->source === null && $this->envVar === $value) {
+                return false;
+            }
+
             $this->ensureSource();
 
             return !($this->source === false) && $this->source->has($value);
