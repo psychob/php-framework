@@ -39,9 +39,10 @@
         /**
          * Create application, that will be used to process this request
          *
+         * @param string    $basePath
          * @param Container $container
          *
          * @return ApplicationInterface
          */
-        public static function createApplication(Container $container): ApplicationInterface;
+        public static function createApplication(string $basePath, Container $container): ApplicationInterface;
     }

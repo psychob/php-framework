@@ -75,7 +75,7 @@
 
             set_exception_handler([$ehTrampoline, 'catchException']);
 
-            return $driver->createApplication($container);
+            return $driver->createApplication($this->basePath, $container);
         }
 
         private function pickDriver(array $drivers, Container $container): DriverInterface

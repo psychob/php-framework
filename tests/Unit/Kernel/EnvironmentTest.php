@@ -55,13 +55,55 @@
             $perfectDriver = Mockery::mock(DriverInterface::class);
             $perfectDriver->shouldReceive('defaultExceptionHandler')
                           ->andReturn($exceptionHandlerClass);
-            $perfectDriver->shouldReceive('createApplication')->withArgs(function ($container) {
+            $perfectDriver->shouldReceive('createApplication')->withArgs(function ($basePath, $container) {
                 $this->assertInstanceOf(Container::class, $container);
 
                 return true;
             })->andReturn($appMock);
 
             $app = $environment->load(get_class($perfectDriver));
+            $this->assertInstanceOf(ApplicationInterface::class, $app);
+            $this->assertSame($appMock, $app);
+
+            $lastExceptionHandler = set_exception_handler(NULL);
+            $this->assertIsArray($lastExceptionHandler);
+            $this->assertInstanceOf(ExceptionHandler::class, $lastExceptionHandler[0]);
+            $this->assertSame('catchException', $lastExceptionHandler[1]);
+        }
+
+        /** @runInSeparateProcess */
+        public function testLoadMultipleOneGood()
+        {
+            $vfs = $this->getVfs();
+
+            $environment = new Environment($vfs->url(),
+                                           new DotEnv($vfs->url(), EnvSourceFactory::envVar(false)),
+                                           'testing',
+                                           new ErrorHandler()
+            );
+
+            $appMock = Mockery::mock(ApplicationInterface::class);
+            $exceptionHandlerClass = get_class(Mockery::mock(ExceptionHandlerInterface::class));
+
+            $perfectDriver = Mockery::mock(DriverInterface::class);
+            $perfectDriver->shouldReceive('defaultExceptionHandler')
+                          ->andReturn($exceptionHandlerClass);
+            $perfectDriver->shouldReceive('supportsEnvironment')->andReturn(128);
+            $perfectDriver->shouldReceive('createApplication')->withArgs(function ($basePath, $container) {
+                $this->assertInstanceOf(Container::class, $container);
+
+                return true;
+            })->andReturn($appMock);
+
+            $drivers = [
+                get_class($this->createEmptyDriver(-25)),
+                get_class($this->createEmptyDriver(-50)),
+                get_class($this->createEmptyDriver(5)),
+                get_class($this->createEmptyDriver(10)),
+                get_class($perfectDriver),
+            ];
+
+            $app = $environment->load(...$drivers);
             $this->assertInstanceOf(ApplicationInterface::class, $app);
             $this->assertSame($appMock, $app);
 
