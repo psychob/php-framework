@@ -7,8 +7,8 @@
 
     namespace Tests\PsychoB\Framework\Unit\DotEnv\Sources;
 
+    use PsychoB\Framework\DotEnv\Exceptions\EnvNotFoundException;
     use PsychoB\Framework\DotEnv\Sources\EnvVarSource;
-    use PsychoB\Framework\Exceptions\EntryNotFoundException;
     use PsychoB\Framework\Testing\TestCase;
 
     class EnvVarSourceTest extends TestCase
@@ -50,7 +50,7 @@
 
         public function testGetterNotExist()
         {
-            $this->expectException(EntryNotFoundException::class);
+            $this->expectException(EnvNotFoundException::class);
 
             $this->source->get('IJK');
         }

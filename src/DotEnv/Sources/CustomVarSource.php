@@ -7,7 +7,7 @@
 
     namespace PsychoB\Framework\DotEnv\Sources;
 
-    use PsychoB\Framework\Exceptions\EntryNotFoundException;
+    use PsychoB\Framework\DotEnv\Exceptions\EnvNotFoundException;
 
     class CustomVarSource extends AbstractSource
     {
@@ -32,7 +32,7 @@
         public function get(string $value)
         {
             if (!$this->has($value)) {
-                throw new EntryNotFoundException($value, array_keys($_ENV));
+                throw new EnvNotFoundException($value, array_keys($_ENV));
             }
 
             return $this->source[$value];

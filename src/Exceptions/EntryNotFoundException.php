@@ -27,7 +27,7 @@
             $this->key = $key;
             $this->available = $available;
 
-            parent::__construct('Could not found key', 0, $prev);
+            parent::__construct(sprintf('Could not found key: %s', $key), 0, $prev);
         }
 
     }

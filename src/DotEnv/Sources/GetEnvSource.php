@@ -7,7 +7,7 @@
 
     namespace PsychoB\Framework\DotEnv\Sources;
 
-    use PsychoB\Framework\Exceptions\EntryNotFoundException;
+    use PsychoB\Framework\DotEnv\Exceptions\EnvNotFoundException;
 
     /**
      * Source for environmental variables fetched from environment.
@@ -33,7 +33,7 @@
         public function get(string $value)
         {
             if (!$this->has($value)) {
-                throw new EntryNotFoundException($value);
+                throw new EnvNotFoundException($value);
             }
 
             return $this->parseValue(getenv($value));

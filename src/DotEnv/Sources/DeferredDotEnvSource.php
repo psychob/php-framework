@@ -8,7 +8,7 @@
     namespace PsychoB\Framework\DotEnv\Sources;
 
     use PsychoB\Framework\DotEnv\DotEnv;
-    use PsychoB\Framework\Exceptions\EntryNotFoundException;
+    use PsychoB\Framework\DotEnv\Exceptions\EnvNotFoundException;
 
     class DeferredDotEnvSource extends AbstractSource
     {
@@ -53,7 +53,7 @@
             $this->ensureSource();
 
             if ($this->source === false) {
-                throw new EntryNotFoundException($value);
+                throw new EnvNotFoundException($value);
             }
 
             return $this->source->get($value);

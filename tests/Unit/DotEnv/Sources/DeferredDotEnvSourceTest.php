@@ -10,8 +10,8 @@
     use org\bovigo\vfs\vfsStream;
     use org\bovigo\vfs\vfsStreamFile;
     use PsychoB\Framework\DotEnv\DotEnv;
+    use PsychoB\Framework\DotEnv\Exceptions\EnvNotFoundException;
     use PsychoB\Framework\DotEnv\Sources\DeferredDotEnvSource;
-    use PsychoB\Framework\Exceptions\EntryNotFoundException;
     use PsychoB\Framework\Testing\TestCase;
 
     class DeferredDotEnvSourceTest extends TestCase
@@ -45,7 +45,7 @@ CONFIG
 
             $source = new DeferredDotEnvSource($stream->url(), '.env', 'APP_ENV', false, $dotEnv);
 
-            $this->expectException(EntryNotFoundException::class);
+            $this->expectException(EnvNotFoundException::class);
             $source->get('FOO');
         }
 
@@ -59,7 +59,7 @@ CONFIG
 
             $this->assertFalse($source->has('FOO'));
 
-            $this->expectException(EntryNotFoundException::class);
+            $this->expectException(EnvNotFoundException::class);
             $source->get('FOO');
         }
 
@@ -72,7 +72,7 @@ CONFIG
 
             $this->assertFalse($source->has('FOO'));
 
-            $this->expectException(EntryNotFoundException::class);
+            $this->expectException(EnvNotFoundException::class);
             $source->get('FOO');
         }
     }
