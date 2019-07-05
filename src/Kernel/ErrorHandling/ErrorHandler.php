@@ -5,7 +5,9 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Kernel;
+    namespace PsychoB\Framework\Kernel\ErrorHandling;
+
+    use ErrorException;
 
     /**
      * ErrorHandler class.
@@ -35,11 +37,11 @@
          * @param string $file    File where error occurred
          * @param int    $line    Line on which error occurred
          *
-         * @throws \ErrorException
+         * @throws ErrorException
          */
         public function throwException(int $level, string $message, string $file, int $line)
         {
             /// TODO: Maybe rethrow NoticeException and stuff
-            throw new \ErrorException($message, -1, $level, $file, $line);
+            throw new ErrorException($message, -1, $level, $file, $line);
         }
     }

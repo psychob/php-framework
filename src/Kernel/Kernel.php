@@ -10,6 +10,7 @@
     use PsychoB\Framework\DotEnv\DotEnv;
     use PsychoB\Framework\DotEnv\EnvSourceFactory;
     use PsychoB\Framework\Kernel\Environment\Environment;
+    use PsychoB\Framework\Kernel\ErrorHandling\ErrorHandler;
 
     /**
      * Application Kernel.
@@ -40,6 +41,9 @@
                                  EnvSourceFactory::dotEnvDotEnv('APP_ENV')
             );
 
-            return new Environment($masterBootRecord, $dotEnv, $dotEnv->get('APP_ENV', 'production'));
+            $errorHandler = new ErrorHandler();
+            $errorHandler->register();
+
+            return new Environment($masterBootRecord, $dotEnv, $dotEnv->get('APP_ENV', 'production'), $errorHandler);
         }
     }
