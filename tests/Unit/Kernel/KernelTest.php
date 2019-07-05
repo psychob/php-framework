@@ -13,7 +13,7 @@
     use PsychoB\Framework\Kernel\ErrorHandling\ErrorHandler;
     use PsychoB\Framework\Kernel\Kernel;
 
-    class InitializationTest extends TestCase
+    class KernelTest extends TestCase
     {
         protected function getVfs()
         {
