@@ -7,7 +7,7 @@
 
     namespace PsychoB\Framework\DotEnv\Sources;
 
-    class DotEnvSource extends EnvVarSource
+    class DotEnvSource extends CustomVarSource
     {
         use FileLoaderTrait;
 

@@ -7,6 +7,7 @@
 
     namespace PsychoB\Framework\DotEnv;
 
+    use PsychoB\Framework\DotEnv\Sources\CustomVarSource;
     use PsychoB\Framework\DotEnv\Sources\DeferredDotEnvSource;
     use PsychoB\Framework\DotEnv\Sources\DotEnvSource;
     use PsychoB\Framework\DotEnv\Sources\EnvVarSource;
@@ -39,6 +40,10 @@
          */
         public const ORDER_ENV_VAR = 5;
 
+        /**
+         * Load variables from custom array
+         */
+        public const ORDER_ENV_CUSTOM = 6;
         /**
          * @var DotEnvSourceInterface[]
          */
@@ -87,6 +92,10 @@
 
                     case self::ORDER_ENV_VAR:
                         $this->order[] = new EnvVarSource($isVolatile);
+                        break;
+
+                    case self::ORDER_ENV_CUSTOM:
+                        $this->order[] = new CustomVarSource($isVolatile, $customLoader);
                         break;
                 }
             }

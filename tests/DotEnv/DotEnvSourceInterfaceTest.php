@@ -9,6 +9,7 @@
 
     use PsychoB\Framework\DotEnv\DotEnv;
     use PsychoB\Framework\DotEnv\DotEnvSourceInterface;
+    use PsychoB\Framework\DotEnv\Sources\CustomVarSource;
     use PsychoB\Framework\DotEnv\Sources\DeferredDotEnvSource;
     use PsychoB\Framework\DotEnv\Sources\DotEnvSource;
     use PsychoB\Framework\DotEnv\Sources\EnvVarSource;
@@ -27,9 +28,10 @@
         {
             return [
                 [new GetEnvSource(true)],
-                [new DeferredDotEnvSource(null, '.env', 'APP_ENV', true, new DotEnv(''))],
-                [new DotEnvSource(null, '.env', true)],
+                [new DeferredDotEnvSource(NULL, '.env', 'APP_ENV', true, new DotEnv(''))],
+                [new DotEnvSource(NULL, '.env', true)],
                 [new EnvVarSource(true)],
+                [new CustomVarSource(true, [])],
             ];
         }
     }
