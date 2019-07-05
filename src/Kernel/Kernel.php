@@ -9,7 +9,7 @@
 
     use PsychoB\Framework\DotEnv\DotEnv;
     use PsychoB\Framework\DotEnv\EnvSourceFactory;
-    use PsychoB\Framework\Kernel\Environment\Environment;
+    use PsychoB\Framework\Kernel\Environment;
     use PsychoB\Framework\Kernel\ErrorHandling\ErrorHandler;
 
     /**

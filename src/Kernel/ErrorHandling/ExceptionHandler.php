@@ -5,10 +5,9 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Kernel;
+    namespace PsychoB\Framework\Kernel\ErrorHandling;
 
     use PsychoB\DependencyInjection\Container;
-    use PsychoB\Framework\Application\Console\ConsoleExceptionHandler;
     use Throwable;
 
     /**
@@ -22,7 +21,7 @@
      * @author Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
      * @since  0.1
      */
-    class ExceptionHandler implements ExceptionHandlerInterface
+    class ExceptionHandler
     {
         /** @var Container */
         protected $container;
@@ -37,22 +36,11 @@
             $this->container = $container;
         }
 
-        /**
-         * Registers this exception handler as current
-         */
-        public function register()
-        {
-            set_exception_handler([$this, 'catchException']);
-        }
-
-        /** @inheritDoc */
         public function catchException(Throwable $t)
         {
-            if (php_sapi_name() !== 'cli') {
-                http_response_code(500);
-                header('Content-Type: text/plain');
-            }
+            /** @var ExceptionHandlerInterface $eh */
+            $eh = $this->container->get(ExceptionHandlerInterface::class);
 
-            $this->container->make(ConsoleExceptionHandler::class)->catchException($t);
+            $eh->catchException($t);
         }
     }
