@@ -5,7 +5,7 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace Tests\PsychoB\Framework\DotEnv\Sources;
+    namespace Tests\PsychoB\Framework\Unit\DotEnv\Sources;
 
     use PsychoB\Framework\Testing\TestCase;
     use Tests\PsychoB\Framework\Mocks\DotEnv\Sources\ValueParserMock;

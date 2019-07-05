@@ -5,7 +5,7 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace Tests\PsychoB\Framework\DotEnv;
+    namespace Tests\PsychoB\Framework\Unit\DotEnv;
 
     use Mockery\MockInterface;
     use org\bovigo\vfs\vfsStream;
