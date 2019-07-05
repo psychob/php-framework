@@ -44,6 +44,7 @@
          * Load variables from custom array
          */
         public const ORDER_ENV_CUSTOM = 6;
+
         /**
          * @var DotEnvSourceInterface[]
          */
@@ -99,6 +100,21 @@
                         break;
                 }
             }
+        }
+
+        public function has(string $key): bool
+        {
+            if (array_key_exists($key, $this->cached)) {
+                return true;
+            }
+
+            foreach ($this->order as $source) {
+                if ($source->has($key)) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public function get(string $key, $default = NULL)
