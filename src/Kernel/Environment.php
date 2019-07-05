@@ -67,7 +67,7 @@
             /** @var DriverInterface $driver */
             $driver = $this->pickDriver($allowedDrivers, $container);
 
-            $eh = $container->make($driver->defaultErrorHandler());
+            $eh = $container->make($driver->defaultExceptionHandler());
             $container->add(ExceptionHandlerInterface::class, $eh);
 
             $ehTrampoline = new ExceptionHandler($container);

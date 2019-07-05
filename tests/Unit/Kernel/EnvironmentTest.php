@@ -53,7 +53,7 @@
             $exceptionHandlerClass = get_class(Mockery::mock(ExceptionHandlerInterface::class));
 
             $perfectDriver = Mockery::mock(DriverInterface::class);
-            $perfectDriver->shouldReceive('defaultErrorHandler')
+            $perfectDriver->shouldReceive('defaultExceptionHandler')
                           ->andReturn($exceptionHandlerClass);
             $perfectDriver->shouldReceive('createApplication')->withArgs(function ($container) {
                 $this->assertInstanceOf(Container::class, $container);
