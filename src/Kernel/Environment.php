@@ -8,8 +8,8 @@
     namespace PsychoB\Framework\Kernel;
 
     use PsychoB\DependencyInjection\Container;
-    use PsychoB\Framework\Application\ApplicationInterface;
     use PsychoB\Framework\DotEnv\DotEnv;
+    use PsychoB\Framework\Kernel\Driver\ApplicationInterface;
     use PsychoB\Framework\Kernel\Driver\DriverInterface;
     use PsychoB\Framework\Kernel\ErrorHandling\ErrorHandler;
     use PsychoB\Framework\Kernel\ErrorHandling\ExceptionHandler;

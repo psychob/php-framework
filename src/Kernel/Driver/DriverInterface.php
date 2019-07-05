@@ -8,7 +8,6 @@
     namespace PsychoB\Framework\Kernel\Driver;
 
     use PsychoB\DependencyInjection\Container;
-    use PsychoB\Framework\Application\ApplicationInterface;
 
     interface DriverInterface
     {

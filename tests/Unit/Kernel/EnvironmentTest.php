@@ -10,9 +10,9 @@
     use Mockery;
     use org\bovigo\vfs\vfsStream;
     use PsychoB\DependencyInjection\Container;
-    use PsychoB\Framework\Application\ApplicationInterface;
     use PsychoB\Framework\DotEnv\DotEnv;
     use PsychoB\Framework\DotEnv\EnvSourceFactory;
+    use PsychoB\Framework\Kernel\Driver\ApplicationInterface;
     use PsychoB\Framework\Kernel\Driver\DriverInterface;
     use PsychoB\Framework\Kernel\Environment;
     use PsychoB\Framework\Kernel\ErrorHandling\ErrorHandler;
@@ -22,7 +22,6 @@
     use PsychoB\Framework\Kernel\Exception\NoDriverSelectedException;
     use PsychoB\Framework\Kernel\Exception\NoSuitableDriverSelectedException;
     use PsychoB\Framework\Testing\CoreTestCase;
-    use SebastianBergmann\CodeCoverage\Driver\Driver;
 
     class EnvironmentTest extends CoreTestCase
     {
