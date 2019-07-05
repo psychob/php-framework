@@ -9,7 +9,7 @@
 
     use org\bovigo\vfs\vfsStream;
     use PHPUnit\Framework\TestCase;
-    use PsychoB\Framework\Kernel\Environment\EnvironmentInterface;
+    use PsychoB\Framework\Kernel\Environment\Environment;
     use PsychoB\Framework\Kernel\ErrorHandling\ErrorHandler;
     use PsychoB\Framework\Kernel\Kernel;
 
@@ -25,7 +25,7 @@
         {
             $vfs = $this->getVfs();
 
-            $this->assertInstanceOf(EnvironmentInterface::class, Kernel::boot($vfs->url()));
+            $this->assertInstanceOf(Environment::class, Kernel::boot($vfs->url()));
 
             $handler = set_error_handler(NULL);
             $this->assertIsArray($handler, 'Error Handler is not set');
