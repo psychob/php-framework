@@ -93,6 +93,23 @@
             }
         }
 
+        /**
+         * Creates source that fetches variable from custom array
+         *
+         * @param array $custom Array source
+         * @param bool  $cache  Allow caching results
+         *
+         * @return array
+         */
+        public static function customArray(array $custom, bool $cache = true): array
+        {
+            return [
+                'type'     => DotEnv::ORDER_ENV_VAR,
+                'volatile' => !$cache,
+                'bind'     => $custom,
+            ];
+        }
+
         public static function custom(DotEnvSourceInterface $custom): array
         {
             return [
