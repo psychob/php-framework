@@ -21,9 +21,9 @@
     use PsychoB\Framework\Kernel\Exception\AmbiguousDriverSelectionException;
     use PsychoB\Framework\Kernel\Exception\NoDriverSelectedException;
     use PsychoB\Framework\Kernel\Exception\NoSuitableDriverSelectedException;
-    use PsychoB\Framework\Testing\CoreTestCase;
+    use PsychoB\Framework\Testing\UnitTestCase;
 
-    class EnvironmentTest extends CoreTestCase
+    class EnvironmentTest extends UnitTestCase
     {
         protected function getVfs()
         {

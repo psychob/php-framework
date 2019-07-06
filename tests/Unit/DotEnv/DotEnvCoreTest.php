@@ -12,9 +12,9 @@
     use org\bovigo\vfs\vfsStreamFile;
     use PsychoB\Framework\DotEnv\DotEnv;
     use PsychoB\Framework\DotEnv\EnvSourceFactory;
-    use PsychoB\Framework\Testing\CoreTestCase;
+    use PsychoB\Framework\Testing\UnitTestCase;
 
-    class DotEnvCoreTest extends CoreTestCase
+    class DotEnvCoreTest extends UnitTestCase
     {
         /** @var DotEnv|MockInterface */
         private $env;

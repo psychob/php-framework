@@ -10,9 +10,9 @@
     use PsychoB\Framework\DotEnv\DotEnv;
     use PsychoB\Framework\DotEnv\EnvSourceFactory;
     use PsychoB\Framework\DotEnv\Sources\EnvVarSource;
-    use PsychoB\Framework\Testing\CoreTestCase;
+    use PsychoB\Framework\Testing\UnitTestCase;
 
-    class EnvSourceFactoryCoreTest extends CoreTestCase
+    class EnvSourceFactoryCoreTest extends UnitTestCase
     {
         public function testGetEnv()
         {

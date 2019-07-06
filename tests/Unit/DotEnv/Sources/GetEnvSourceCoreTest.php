@@ -9,9 +9,9 @@
 
     use PsychoB\Framework\DotEnv\Sources\GetEnvSource;
     use PsychoB\Framework\Exceptions\EntryNotFoundException;
-    use PsychoB\Framework\Testing\CoreTestCase;
+    use PsychoB\Framework\Testing\UnitTestCase;
 
-    class GetEnvSourceCoreTest extends CoreTestCase
+    class GetEnvSourceCoreTest extends UnitTestCase
     {
         /**
          * @var GetEnvSource

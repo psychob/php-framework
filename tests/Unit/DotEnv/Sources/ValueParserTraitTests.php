@@ -7,10 +7,10 @@
 
     namespace Tests\PsychoB\Framework\Unit\DotEnv\Sources;
 
-    use PsychoB\Framework\Testing\CoreTestCase;
+    use PsychoB\Framework\Testing\UnitTestCase;
     use Tests\PsychoB\Framework\Mocks\DotEnv\Sources\ValueParserMock;
 
-    class ValueParserTraitTests extends CoreTestCase
+    class ValueParserTraitTests extends UnitTestCase
     {
         /**
          * @var \Mockery\MockInterface|ValueParserMock

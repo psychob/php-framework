@@ -14,9 +14,9 @@
     use PsychoB\Framework\DotEnv\Sources\DotEnvSource;
     use PsychoB\Framework\DotEnv\Sources\EnvVarSource;
     use PsychoB\Framework\DotEnv\Sources\GetEnvSource;
-    use PsychoB\Framework\Testing\CoreTestCase;
+    use PsychoB\Framework\Testing\UnitTestCase;
 
-    class DotEnvSourceInterfaceCoreTest extends CoreTestCase
+    class DotEnvSourceInterfaceCoreTest extends UnitTestCase
     {
         /** @dataProvider provideIsVolatile */
         public function testIsVolatile(DotEnvSourceInterface $source)

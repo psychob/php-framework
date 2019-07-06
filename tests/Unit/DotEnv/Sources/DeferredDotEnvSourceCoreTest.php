@@ -12,9 +12,9 @@
     use PsychoB\Framework\DotEnv\DotEnv;
     use PsychoB\Framework\DotEnv\Exceptions\EnvNotFoundException;
     use PsychoB\Framework\DotEnv\Sources\DeferredDotEnvSource;
-    use PsychoB\Framework\Testing\CoreTestCase;
+    use PsychoB\Framework\Testing\UnitTestCase;
 
-    class DeferredDotEnvSourceCoreTest extends CoreTestCase
+    class DeferredDotEnvSourceCoreTest extends UnitTestCase
     {
         public function testLoadFileExist(): void
         {

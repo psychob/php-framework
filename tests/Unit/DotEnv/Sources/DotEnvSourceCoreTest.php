@@ -11,9 +11,9 @@
     use org\bovigo\vfs\vfsStreamFile;
     use PsychoB\Framework\DotEnv\Sources\DotEnvSource;
     use PsychoB\Framework\Exceptions\EntryNotFoundException;
-    use PsychoB\Framework\Testing\CoreTestCase;
+    use PsychoB\Framework\Testing\UnitTestCase;
 
-    class DotEnvSourceCoreTest extends CoreTestCase
+    class DotEnvSourceCoreTest extends UnitTestCase
     {
         /**
          * @var DotEnvSource
