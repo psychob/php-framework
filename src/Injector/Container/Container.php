@@ -44,8 +44,14 @@
         /** @inheritDoc */
         public function add(string $class, $object, int $type = self::ADD_OVERRIDE): void
         {
-            if ($type === self::ADD_THROW && $this->has($class)) {
-                throw new ElementExistsException($class, $this->container[$class]);
+            if ($type !== self::ADD_OVERRIDE && $this->has($class)) {
+                switch ($type) {
+                    case self::ADD_THROW:
+                        throw new ElementExistsException($class, $this->container[$class]);
+
+                    case self::ADD_IGNORE:
+                        return;
+                }
             }
 
             $this->container[$class] = $object;

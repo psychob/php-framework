@@ -78,6 +78,28 @@
             $container->add(EmptyConstructorMock::class, $instances[1], ContainerInterface::ADD_THROW);
         }
 
+        public function testAddIgnore()
+        {
+            $container = new Container();
+
+            $this->assertFalse($container->has(EmptyConstructorMock::class));
+
+            $instances = [
+                new EmptyConstructorMock(),
+                new EmptyConstructorMock(),
+            ];
+
+            $container->add(EmptyConstructorMock::class, $instances[0], ContainerInterface::ADD_IGNORE);
+
+            $this->assertTrue($container->has(EmptyConstructorMock::class));
+            $this->assertSame($instances[0], $container->get(EmptyConstructorMock::class));
+
+            $container->add(EmptyConstructorMock::class, $instances[1], ContainerInterface::ADD_IGNORE);
+
+            $this->assertTrue($container->has(EmptyConstructorMock::class));
+            $this->assertSame($instances[0], $container->get(EmptyConstructorMock::class));
+        }
+
         public function testGetNotExist()
         {
             $container = new Container();

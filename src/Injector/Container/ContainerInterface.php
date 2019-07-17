@@ -33,6 +33,11 @@
         public const ADD_THROW = 1;
 
         /**
+         * When adding new $class into container, ignore new value if old value exists
+         */
+        public const ADD_IGNORE = 2;
+
+        /**
          * When resolving $class, always add it inside container.
          */
         public const RESOLVE_ADD = 0x0001;
