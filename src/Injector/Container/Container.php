@@ -15,6 +15,16 @@
     {
         protected $container = [];
 
+        /**
+         * Container constructor.
+         */
+        public function __construct()
+        {
+            $this->add(Container::class, $this);
+            $this->add(ContainerInterface::class, $this);
+            $this->add(PsrContainerInterface::class, new PsrContainerAdapter($this));
+        }
+
         /** @inheritDoc */
         public function has(string $class): bool
         {
@@ -41,15 +51,7 @@
             $this->container[$class] = $object;
         }
 
-        /**
-         * Resolve $class, and create new or fetch cached version
-         *
-         * @param string $class
-         * @param array  $arguments
-         * @param int    $type
-         *
-         * @return mixed
-         */
+        /** @inheritDoc */
         public function resolve(string $class,
                                 array $arguments = [],
                                 int $type = self::RESOLVE_TYPEHINT | self::RESOLVE_ADD)
@@ -57,11 +59,9 @@
             // TODO: Implement resolve() method.
         }
 
-        /**
-         * Convert $this object into Psr compatibile container
-         */
+        /** @inheritDoc */
         public function psr(): PsrContainerInterface
         {
-            return new PsrContainerAdapter($this);
+            return $this->get(PsrContainerInterface::class);
         }
     }

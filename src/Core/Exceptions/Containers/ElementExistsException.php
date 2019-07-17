@@ -7,6 +7,7 @@
 
     namespace PsychoB\Framework\Core\Exceptions\Containers;
 
+    use PsychoB\Framework\Core\Utility\Str;
     use RuntimeException;
     use Throwable;
 
@@ -31,7 +32,7 @@
             $this->key = $key;
             $this->value = $value;
 
-            parent::__construct(sprintf('%s: element %s already exists with value: %s', $message, $key, strval($value)),
+            parent::__construct(sprintf('%s: element %s already exists with value: %s', $message, $key, Str::toStr($value)),
                                 0, $previous);
         }
 

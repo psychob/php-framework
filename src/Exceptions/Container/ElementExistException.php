@@ -7,6 +7,7 @@
 
     namespace PsychoB\Framework\Exceptions\Container;
 
+    use PsychoB\Framework\Core\Utility\Str;
     use PsychoB\Framework\Exceptions\BaseException;
     use Throwable;
 
@@ -40,7 +41,7 @@
             $this->value = $value;
             $this->collection = $collection;
 
-            parent::__construct(sprintf('%s: Key: %s is value: %s', $message, $element, strval($value)), 0, $previous);
+            parent::__construct(sprintf('%s: Key: %s is value: %s', $message, $element, Str::toStr($value, "???")), 0, $previous);
         }
 
         /**
