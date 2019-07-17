@@ -7,8 +7,8 @@
 
     namespace Tests\PsychoB\Framework\Unit\DotEnv\Sources;
 
+    use PsychoB\Framework\DotEnv\Exceptions\EnvNotFoundException;
     use PsychoB\Framework\DotEnv\Sources\GetEnvSource;
-    use PsychoB\Framework\Exceptions\EntryNotFoundException;
     use PsychoB\Framework\Testing\UnitTestCase;
 
     class GetEnvSourceCoreTest extends UnitTestCase
@@ -45,7 +45,7 @@
         /** @runInSeparateProcess  */
         public function testGetterNotExist()
         {
-            $this->expectException(EntryNotFoundException::class);
+            $this->expectException(EnvNotFoundException::class);
 
             $this->source->get('EFG');
         }

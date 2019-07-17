@@ -7,9 +7,13 @@
 
     namespace PsychoB\Framework\DotEnv\Exceptions;
 
-    use PsychoB\Framework\Exceptions\EntryNotFoundException;
+    use PsychoB\Framework\Core\Exceptions\Containers\ElementNotFoundException;
+    use Throwable;
 
-    class EnvNotFoundException extends EntryNotFoundException
+    class EnvNotFoundException extends ElementNotFoundException
     {
-
+        public function __construct($key, array $array = [], Throwable $previous = NULL)
+        {
+            parent::__construct($key, $array, false, 'Could not found element in environment', $previous);
+        }
     }

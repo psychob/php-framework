@@ -9,8 +9,8 @@
 
     use org\bovigo\vfs\vfsStream;
     use org\bovigo\vfs\vfsStreamFile;
+    use PsychoB\Framework\DotEnv\Exceptions\EnvNotFoundException;
     use PsychoB\Framework\DotEnv\Sources\DotEnvSource;
-    use PsychoB\Framework\Exceptions\EntryNotFoundException;
     use PsychoB\Framework\Testing\UnitTestCase;
 
     class DotEnvSourceCoreTest extends UnitTestCase
@@ -68,7 +68,7 @@ CONF
 
         public function testDosentExist()
         {
-            $this->expectException(EntryNotFoundException::class);
+            $this->expectException(EnvNotFoundException::class);
 
             $this->source->get('DEF');
         }
