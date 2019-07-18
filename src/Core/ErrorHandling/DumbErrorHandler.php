@@ -19,10 +19,31 @@
      */
     class DumbErrorHandler implements ErrorHandlerInterface
     {
+        /** @var DumbExceptionHandler */
+        protected $exception;
+
+        /**
+         * DumbErrorHandler constructor.
+         *
+         * @param DumbExceptionHandler $exception
+         */
+        public function __construct(DumbExceptionHandler $exception)
+        {
+            $this->exception = $exception;
+        }
+
         /** @inheritDoc */
         public function register(): void
         {
             set_error_handler([$this, 'handle']);
+            register_shutdown_function(function () {
+                $error = error_get_last();
+
+                if ($error['type'] === E_ERROR) {
+                    $this->exception->handle(new PHPErrorException($error['message'], -1, $error['type'],
+                                                                   $error['file'] ?? '', $error['line'] ?? -1));
+                }
+            });
         }
 
         /**
