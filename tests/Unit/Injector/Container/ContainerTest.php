@@ -13,7 +13,7 @@
     use PsychoB\Framework\Injector\Exceptions\ElementExistsException;
     use PsychoB\Framework\Injector\Exceptions\ElementNotFoundException;
     use PsychoB\Framework\Testing\UnitTestCase;
-    use Tests\PsychoB\Framework\Mocks\DependencyInjection\Injector\EmptyConstructorMock;
+    use Tests\PsychoB\Framework\Mocks\Injector\Injector\EmptyConstructorMock;
 
     class ContainerTest extends UnitTestCase
     {

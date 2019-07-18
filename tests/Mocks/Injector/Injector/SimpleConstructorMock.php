@@ -5,7 +5,9 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace Tests\PsychoB\Framework\Mocks\DependencyInjection\Injector;
+    namespace Tests\PsychoB\Framework\Mocks\Injector\Injector;
+
+    use Tests\PsychoB\Framework\Mocks\Injector\Injector\EmptyConstructorMock;
 
     class SimpleConstructorMock
     {
