@@ -9,9 +9,13 @@
 
     use PsychoB\Framework\Injector\Container\ContainerInterface;
     use PsychoB\Framework\Injector\Exceptions\CanNotResolveArgumentException;
+    use PsychoB\Framework\Injector\Exceptions\ClassNotFoundException;
     use PsychoB\Framework\Injector\Exceptions\InvalidCallableException;
+    use PsychoB\Framework\Injector\Exceptions\MethodNotFoundInClassException;
     use PsychoB\Framework\Injector\Exceptions\StaticCallOfNonStaticFunctionException;
     use ReflectionClass;
+    use ReflectionException;
+    use ReflectionFunction;
     use ReflectionFunctionAbstract;
 
     class Injector implements InjectorInterface
@@ -68,7 +72,7 @@
             }
 
             if (is_callable($callable)) {
-                return $this->injectInFunction($callable);
+                return $this->injectInFunction($callable, $arguments);
             }
 
             throw InvalidCallableException::unknownFormat($callable, $arguments);
@@ -78,7 +82,7 @@
         {
             try {
                 $refClass = new ReflectionClass($class);
-            } catch (\ReflectionException $e) {
+            } catch (ReflectionException $e) {
                 throw new ClassNotFoundException($class);
             }
 
@@ -91,11 +95,8 @@
 
         protected function injectInObject($object, string $method, array $arguments)
         {
-            try {
-                $refClass = new ReflectionClass($object);
-            } catch (\ReflectionException $e) {
-                throw new ClassNotFoundException(get_class($object));
-            }
+            /** @noinspection PhpUnhandledExceptionInspection */
+            $refClass = new ReflectionClass($object);
 
             if ($method === '__construct') {
                 return $this->makeFromReflection($refClass, $arguments);
@@ -104,11 +105,21 @@
             }
         }
 
+        protected function injectInFunction($callable, array $arguments)
+        {
+            /** @noinspection PhpUnhandledExceptionInspection */
+            $refMethod = new ReflectionFunction($callable);
+
+            $args = $this->resolveArguments($refMethod, $arguments);
+
+            return call_user_func_array($callable, $args);
+        }
+
         protected function injectFromReflection(ReflectionClass $ref, string $method, array $arguments, $object = NULL)
         {
             try {
                 $refMethod = $ref->getMethod($method);
-            } catch (\ReflectionException $e) {
+            } catch (ReflectionException $e) {
                 throw new MethodNotFoundInClassException($ref->getName(), $method);
             }
 
@@ -143,7 +154,9 @@
             return $refClass->newInstance(...$arguments);
         }
 
-        protected function resolveArguments(ReflectionFunctionAbstract $method, array $arguments, ?string $className = null): array
+        protected function resolveArguments(ReflectionFunctionAbstract $method,
+                                            array $arguments,
+                                            ?string $className = NULL): array
         {
             $ret = [];
 
@@ -166,6 +179,7 @@
                 }
 
                 if ($param->isDefaultValueAvailable()) {
+                    /** @noinspection PhpUnhandledExceptionInspection */
                     $ret[] = $param->getDefaultValue();
                     continue;
                 }

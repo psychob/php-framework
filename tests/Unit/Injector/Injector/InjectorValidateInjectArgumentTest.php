@@ -8,9 +8,12 @@
     namespace Tests\PsychoB\Framework\Unit\Injector\Injector;
 
     use PsychoB\Framework\Injector\Container\Container;
+    use PsychoB\Framework\Injector\Exceptions\ClassNotFoundException;
     use PsychoB\Framework\Injector\Exceptions\InvalidCallableException;
+    use PsychoB\Framework\Injector\Exceptions\MethodNotFoundInClassException;
     use PsychoB\Framework\Injector\Injector\Injector;
     use PsychoB\Framework\Testing\UnitTestCase;
+    use Tests\PsychoB\Framework\Mocks\Injector\Injector\EmptyConstructorMock;
     use Tests\PsychoB\Framework\Mocks\Injector\Injector\NoConstructorMock;
 
     class InjectorValidateInjectArgumentTest extends UnitTestCase
@@ -79,5 +82,28 @@
             $class = $this->injector->inject([new NoConstructorMock(), '__construct']);
 
             $this->assertInstanceOf(NoConstructorMock::class, $class);
+        }
+
+        public function testMake_ClassWithoutConstructor_Callable()
+        {
+            $class = $this->injector->inject(function (NoConstructorMock $mock) {
+                return $mock;
+            });
+
+            $this->assertInstanceOf(NoConstructorMock::class, $class);
+        }
+
+        public function testClassNotFound()
+        {
+            $this->expectException(ClassNotFoundException::class);
+
+            $this->injector->inject(['This Class Dosen\'t exist', 'foo']);
+        }
+
+        public function testMethodNotFound()
+        {
+            $this->expectException(MethodNotFoundInClassException::class);
+
+            $this->injector->inject([new EmptyConstructorMock(), 'non existing method']);
         }
     }
