@@ -10,6 +10,7 @@
     use Psr\Container\ContainerInterface as PsrContainerInterface;
     use PsychoB\Framework\Injector\Exceptions\ElementExistsException;
     use PsychoB\Framework\Injector\Exceptions\ElementNotFoundException;
+    use PsychoB\Framework\Injector\Injector\InjectorInterface;
 
     class Container implements ContainerInterface
     {
@@ -62,7 +63,43 @@
                                 array $arguments = [],
                                 int $type = self::RESOLVE_TYPEHINT | self::RESOLVE_ADD)
         {
-            // TODO: Implement resolve() method.
+            if ($this->has($class)) {
+                return $this->get($class);
+            }
+
+            $ret = $this->get(InjectorInterface::class)->inject([$class, '__construct'], $arguments);
+
+            switch ($type) {
+                case self::RESOLVE_ADD:
+                    $this->add($class, $ret, self::ADD_IGNORE);
+                    break;
+
+                case self::RESOLVE_IGNORE:
+                    break;
+
+                case self::RESOLVE_TYPEHINT:
+                    break;
+
+                case self::RESOLVE_ADD | self::RESOLVE_TYPEHINT:
+                    $this->add($class, $ret, self::ADD_IGNORE);
+                    break;
+
+                case self::RESOLVE_IGNORE | self::RESOLVE_TYPEHINT:
+                    break;
+
+                default:
+                    throw new CombinationException('$type', 3, Ref::getMembers($this,
+                                                                               Ref::MEMBER_CONSTANT | Ref::RETURN_KEYVALUE | Ref::FILTER_STARTSWITH,
+                                                                               'RESOLVE_'), [
+                                                       self::RESOLVE_ADD,
+                                                       self::RESOLVE_IGNORE,
+                                                       self::RESOLVE_TYPEHINT,
+                                                       self::RESOLVE_ADD | self::RESOLVE_TYPEHINT,
+                                                       self::RESOLVE_IGNORE | self::RESOLVE_TYPEHINT,
+                                                   ], CombinationException::BITMASK);
+            }
+
+            return $ret;
         }
 
         /** @inheritDoc */
