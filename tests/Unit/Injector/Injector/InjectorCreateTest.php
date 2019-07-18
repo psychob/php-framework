@@ -15,7 +15,7 @@
     use Tests\PsychoB\Framework\Mocks\Injector\Injector\NoConstructorMock;
     use Tests\PsychoB\Framework\Mocks\Injector\Injector\SimpleConstructorMock;
 
-    class InjectorTest extends UnitTestCase
+    class InjectorCreateTest extends UnitTestCase
     {
         /**
          * @var Container
