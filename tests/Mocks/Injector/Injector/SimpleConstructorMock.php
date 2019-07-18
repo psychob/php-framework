@@ -7,8 +7,6 @@
 
     namespace Tests\PsychoB\Framework\Mocks\Injector\Injector;
 
-    use Tests\PsychoB\Framework\Mocks\Injector\Injector\EmptyConstructorMock;
-
     class SimpleConstructorMock
     {
         /** @var EmptyConstructorMock */
