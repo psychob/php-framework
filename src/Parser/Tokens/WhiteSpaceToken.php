@@ -5,8 +5,9 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Kernel\Driver;
+    namespace PsychoB\Framework\Parser\Tokens;
 
-    interface ApplicationInterface
+    class WhiteSpaceToken extends Token
     {
+
     }
