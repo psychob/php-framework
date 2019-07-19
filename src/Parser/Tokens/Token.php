@@ -26,4 +26,20 @@
             $this->token = $token;
             $this->debug = $debug;
         }
+
+        /**
+         * @return string
+         */
+        public function getToken(): string
+        {
+            return $this->token;
+        }
+
+        /**
+         * @return null
+         */
+        public function getDebug()
+        {
+            return $this->debug;
+        }
     }

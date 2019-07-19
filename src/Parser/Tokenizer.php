@@ -67,8 +67,9 @@
 
         public function tokenize(string $content): array
         {
+            /** @var Token $token */
             foreach ($this->scanForTokens($content) as $token) {
-                dump($token);
+                echo substr(get_class($token), strrpos(get_class($token), '\\') + 1).'(' . ($token->getToken()) . ') ';
             }
         }
 
@@ -149,23 +150,29 @@
 
         protected function fetchSymbolTokens(string $line, int $idx, int $no): iterable
         {
-            $tmp = '';
+            if ($this->canBeSymbol($line[$idx])) {
+                for ($it = $idx + 1; $it < strlen($line); ++$it) {
+//                    dump([substr($line, $idx, $it - $idx),
+//                          $this->canBeSymbol(substr($line, $idx, $it - $idx)),
+//                          $this->isSymbol(substr($line, $idx, $it - $idx - 1))]);
 
-            for ($it = $idx; $it < strlen($line); ++$it) {
-                if (!$this->isSymbol($line[$it], $tmp)) {
-                    if ($tmp !== '') {
-                        yield [$this->newToken($tmp, $idx, $it, 'symbol', $no), $it];
+                    if ($this->canBeSymbol(substr($line, $idx, $it - $idx))) {
+                        continue;
+                    } else if ($this->isSymbol(substr($line, $idx, $it - $idx - 1))) {
+                        yield [$this->newToken(substr($line[$idx], $idx, $it - $idx - 1),
+                                               $idx, $idx + 1, 'symbol', $no), $idx + 1];
+                        return;
+                    } else {
+                        break;
                     }
-
-                    return;
                 }
-
-                $tmp .= $line[$it];
             }
 
-            if ($tmp !== '') {
-                yield [$this->newToken($tmp, $idx, $it, 'symbol', $no), strlen($line)];
+            if ($this->isSymbol($line[$idx])) {
+                yield [$this->newToken($line[$idx], $idx, $idx + 1, 'symbol', $no), $idx + 1];
             }
+
+            return;
         }
 
         protected function fetchLiteralTokens(string $line, int $idx, int $no): iterable
@@ -173,7 +180,9 @@
             $tmp = '';
 
             for ($it = $idx; $it < strlen($line); ++$it) {
-                if ($this->isWhiteSpace($line[$it]) || $this->isSymbol($line[$it])) {
+                if ($this->isWhiteSpace($line[$it]) ||
+                    $this->isSymbol($line[$it]) ||
+                    ($idx !== $it && $this->canBeSymbol($line[$it]))) {
                     if ($tmp !== '') {
                         yield [$this->newToken($tmp, $idx, $it, 'literal', $no), $it];
                     }
@@ -196,6 +205,22 @@
 
         protected function isSymbol(string $it, string $txt = ''): bool
         {
-            return in_array($it, $this->symbols);
+            return in_array($txt . $it, $this->symbols);
+        }
+
+        protected function canBeSymbol(string $it, string $txt = ''): bool
+        {
+            foreach ($this->symbols as $s) {
+                if (strlen($s) > 1) {
+                    $str = $txt . $it;
+                    $substr = substr($s, 0, strlen($str));
+
+                    if ($str === $substr) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
