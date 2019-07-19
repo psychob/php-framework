@@ -9,5 +9,5 @@
 
     interface TransformerInterface
     {
-
+        public function transform($iterable);
     }

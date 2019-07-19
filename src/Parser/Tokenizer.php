@@ -14,8 +14,10 @@
     use PsychoB\Framework\Parser\Tokens\SymbolToken;
     use PsychoB\Framework\Parser\Tokens\Token;
     use PsychoB\Framework\Parser\Tokens\WhiteSpaceToken;
+    use PsychoB\Framework\Parser\Transformers\MakeStringTokens;
+    use PsychoB\Framework\Parser\Transformers\MergeLines;
+    use PsychoB\Framework\Parser\Transformers\MergeTokens;
     use PsychoB\Framework\Parser\Transformers\TransformerInterface;
-    use PsychoB\Framework\Stream\Binder as B;
 
     class Tokenizer implements InstanceTag
     {
@@ -27,6 +29,15 @@
 
         /** @var TransformerInterface */
         protected $transformers = [];
+
+        public function __construct()
+        {
+            $this->transformers = [
+                new MergeTokens(),
+                new MakeStringTokens(),
+                new MergeLines(),
+            ];
+        }
 
         /**
          * @return string[]
@@ -67,13 +78,16 @@
 
         public function tokenize(string $content): array
         {
-            /** @var Token $token */
-            foreach ($this->scanForTokens($content) as $token) {
-                echo substr(get_class($token), strrpos(get_class($token), '\\') + 1).'(' . ($token->getToken()) . ') ';
+            $tokens = $this->scanForTokens($content);
+
+            foreach ($this->transformers as $transformer) {
+                $tokens = $transformer->transform($tokens);
             }
+
+            return iterator_to_array($tokens);
         }
 
-        protected function scanForTokens(string $content): iterable
+        protected function scanForTokens(string $content)
         {
             foreach (explode("\n", $content) as $no => $line) {
                 if (empty(trim($line))) {
@@ -152,10 +166,6 @@
         {
             if ($this->canBeSymbol($line[$idx])) {
                 for ($it = $idx + 1; $it < strlen($line); ++$it) {
-//                    dump([substr($line, $idx, $it - $idx),
-//                          $this->canBeSymbol(substr($line, $idx, $it - $idx)),
-//                          $this->isSymbol(substr($line, $idx, $it - $idx - 1))]);
-
                     if ($this->canBeSymbol(substr($line, $idx, $it - $idx))) {
                         continue;
                     } else if ($this->isSymbol(substr($line, $idx, $it - $idx - 1))) {
