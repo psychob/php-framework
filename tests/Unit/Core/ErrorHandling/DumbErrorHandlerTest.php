@@ -8,9 +8,11 @@
     namespace Tests\PsychoB\Framework\Unit\Core\ErrorHandling;
 
     use PsychoB\Framework\Core\ErrorHandling\DumbErrorHandler;
+    use PsychoB\Framework\Core\ErrorHandling\ExceptionHandlerInterface;
     use PsychoB\Framework\Core\Exceptions\PHPErrorException;
     use PsychoB\Framework\Testing\UnitTestCase;
 
+    /** @runTestsInSeparateProcesses  */
     class DumbErrorHandlerTest extends UnitTestCase
     {
         static private $old;
@@ -31,7 +33,7 @@
 
         public function testRegistration()
         {
-            $eh = new DumbErrorHandler();
+            $eh = new DumbErrorHandler(\Mockery::mock(ExceptionHandlerInterface::class));
             $eh->register();
 
             $our = set_error_handler([static::class, 'handle']);
@@ -43,7 +45,7 @@
 
         public function testException()
         {
-            (new DumbErrorHandler())->register();
+            (new DumbErrorHandler(\Mockery::mock(ExceptionHandlerInterface::class)))->register();
 
             $this->expectException(PHPErrorException::class);
             /** @noinspection PhpUndefinedVariableInspection */
@@ -53,7 +55,7 @@
 
         public function testExceptionSilenced()
         {
-            (new DumbErrorHandler())->register();
+            (new DumbErrorHandler(\Mockery::mock(ExceptionHandlerInterface::class)))->register();
 
             /** @noinspection PhpUndefinedVariableInspection */
             /** @noinspection PhpUnusedLocalVariableInspection */

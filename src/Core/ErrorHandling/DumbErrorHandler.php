@@ -19,15 +19,15 @@
      */
     class DumbErrorHandler implements ErrorHandlerInterface
     {
-        /** @var DumbExceptionHandler */
+        /** @var ExceptionHandlerInterface */
         protected $exception;
 
         /**
          * DumbErrorHandler constructor.
          *
-         * @param DumbExceptionHandler $exception
+         * @param ExceptionHandlerInterface $exception
          */
-        public function __construct(DumbExceptionHandler $exception)
+        public function __construct(ExceptionHandlerInterface $exception)
         {
             $this->exception = $exception;
         }
