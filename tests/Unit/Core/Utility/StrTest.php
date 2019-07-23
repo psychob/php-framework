@@ -32,6 +32,24 @@
             $this->assertSame($strObj, Str::toStr($obj));
         }
 
+        public function provideFindFirstNot(): array
+        {
+            return [
+                ['NotFound', ' ', false],
+                ['NotFound', [' '], false],
+                ['Not First', ' ', 0],
+                ['Not First', [' '], 0],
+                ['    First', ' ', 4],
+                ['    First', [' '], 4],
+            ];
+        }
+
+        /** @dataProvider provideFindFirstNot */
+        public function testFindFirstNot($str, $char, $ret): void
+        {
+            $this->assertEquals($ret, Str::findFirstNot($str, $char));
+        }
+
         public function provideToType(): array
         {
             return [

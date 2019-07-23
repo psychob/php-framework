@@ -46,7 +46,7 @@
             }
         }
 
-        private static function findFirstNot_String(string $str, string $chars): int
+        private static function findFirstNot_String(string $str, string $chars)
         {
             /// TODO: Use mb_ ?
             $strLen = strlen($str);
@@ -63,9 +63,22 @@
             return false;
         }
 
+        private static function findFirstNot_Array(string $str, array $chars): int
+        {
+            $strLen = strlen($str);
+
+            for ($it = 0; $it < $strLen; ++$it) {
+                if (!in_array($str[$it], $chars)) {
+                    return $it;
+                }
+            }
+
+            return false;
+        }
+
         public static function toType($obj): string
         {
-            if ($obj === null) {
+            if ($obj === NULL) {
                 return "null";
             }
 
