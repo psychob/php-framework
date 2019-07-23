@@ -36,7 +36,7 @@
         }
 
         /**
-         * @return null
+         * @return DebugInfo
          */
         public function getDebug()
         {

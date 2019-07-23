@@ -32,4 +32,27 @@
             $this->line = $line;
         }
 
+        /**
+         * @return int
+         */
+        public function getStart(): int
+        {
+            return $this->start;
+        }
+
+        /**
+         * @return int
+         */
+        public function getEnd(): int
+        {
+            return $this->end;
+        }
+
+        /**
+         * @return int
+         */
+        public function getLine(): int
+        {
+            return $this->line;
+        }
     }

@@ -15,7 +15,6 @@
     use PsychoB\Framework\Parser\Tokens\Token;
     use PsychoB\Framework\Parser\Tokens\WhiteSpaceToken;
     use PsychoB\Framework\Parser\Transformers\MakeStringTokens;
-    use PsychoB\Framework\Parser\Transformers\MergeLines;
     use PsychoB\Framework\Parser\Transformers\MergeTokens;
     use PsychoB\Framework\Parser\Transformers\TransformerInterface;
 
@@ -35,7 +34,6 @@
             $this->transformers = [
                 new MergeTokens(),
                 new MakeStringTokens(),
-                new MergeLines(),
             ];
         }
 
@@ -71,12 +69,12 @@
             $this->symbols = $symbols;
         }
 
-        public function tokenizeFile(string $path): array
+        public function tokenizeFile(string $path)
         {
             return $this->tokenize(file_get_contents($path));
         }
 
-        public function tokenize(string $content): array
+        public function tokenize(string $content)
         {
             $tokens = $this->scanForTokens($content);
 
@@ -84,18 +82,25 @@
                 $tokens = $transformer->transform($tokens);
             }
 
-            return iterator_to_array($tokens);
+            return $tokens;
         }
 
         protected function scanForTokens(string $content)
         {
-            foreach (explode("\n", $content) as $no => $line) {
+            $lines = explode("\n", $content);
+            $lastLine = count($lines);
+
+            foreach ($lines as $no => $line) {
                 if (empty(trim($line))) {
                     continue;
                 }
 
                 foreach ($this->scanLine($line, $no) as $token) {
                     yield $token;
+                }
+
+                if ($lastLine - 1 > $no) {
+                    yield new NewLineToken($this->makeDebugInfo(strlen($line) - 1, strlen($line), $no + 1));
                 }
             }
         }
@@ -137,8 +142,6 @@
                     $it = $nit;
                 }
             }
-
-            yield new NewLineToken($this->makeDebugInfo($it, $it, $no + 1));
         }
 
         protected function fetchWhitespaceTokens(string $line, int $idx, int $no): iterable
