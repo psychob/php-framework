@@ -11,6 +11,7 @@
     use PsychoB\Framework\Injector\Exceptions\ElementExistsException;
     use PsychoB\Framework\Injector\Exceptions\ElementNotFoundException;
     use PsychoB\Framework\Injector\Injector\InjectorInterface;
+    use PsychoB\Framework\Injector\Tag\InstanceTag;
 
     class Container implements ContainerInterface
     {
@@ -81,7 +82,9 @@
                     break;
 
                 case self::RESOLVE_ADD | self::RESOLVE_TYPEHINT:
-                    $this->add($class, $ret, self::ADD_IGNORE);
+                    if (!($ret instanceof InstanceTag)) {
+                        $this->add($class, $ret, self::ADD_IGNORE);
+                    }
                     break;
 
                 case self::RESOLVE_IGNORE | self::RESOLVE_TYPEHINT:
