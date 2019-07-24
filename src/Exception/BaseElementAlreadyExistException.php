@@ -32,7 +32,7 @@
             $this->oldValue = $oldValue;
 
             parent::__construct(sprintf('%s: Element %s already exist in container with value: %s', $message,
-                                        Str::toInformableString($element), Str::toInformableString($oldValue)), 0,
+                                        Str::toRepr($element), Str::toRepr($oldValue)), 0,
                                 $previous);
         }
 
