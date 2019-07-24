@@ -39,8 +39,9 @@
             $this->container->add(App::class, $this);
             $this->container->add(AppInterface::class, $this);
 
-            $this->container->add(Injector::class, new Injector($this->container));
-            $this->container->add(Resolver::class, new Resolver($this->container));
+            $injector = new Injector($this->container);
+            $this->container->add(Injector::class, $injector);
+            $this->container->add(Resolver::class, new Resolver($this->container, $injector));
         }
 
         public function handleWebRequest(string $method, string $uri)
