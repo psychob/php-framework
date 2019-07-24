@@ -9,5 +9,9 @@
 
     interface AppInterface
     {
+        public function setup(): void;
+
+        public function handleWebRequest(string $method, string $uri);
+
         public function run();
     }
