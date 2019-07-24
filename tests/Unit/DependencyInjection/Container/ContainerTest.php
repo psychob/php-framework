@@ -5,13 +5,13 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace Tests\PsychoB\Framework\Unit\Container;
+    namespace Tests\PsychoB\Framework\Unit\DependencyInjection\Container;
 
     use Psr\Container\ContainerInterface as PsrContainerInterface;
-    use PsychoB\Framework\Container\Container;
-    use PsychoB\Framework\Container\ContainerInterface;
-    use PsychoB\Framework\Container\Exception\ElementAlreadyExistException;
-    use PsychoB\Framework\Container\Exception\ElementNotFoundException;
+    use PsychoB\Framework\DependencyInjection\Container\Container;
+    use PsychoB\Framework\DependencyInjection\Container\ContainerInterface;
+    use PsychoB\Framework\DependencyInjection\Container\Exception\ElementAlreadyExistException;
+    use PsychoB\Framework\DependencyInjection\Container\Exception\ElementNotFoundException;
     use PsychoB\Framework\Testing\UnitTestCase;
 
     class ContainerTest extends UnitTestCase

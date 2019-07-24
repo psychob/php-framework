@@ -7,8 +7,8 @@
 
     namespace PsychoB\Framework\Application;
 
-    use PsychoB\Framework\Container\Container;
-    use PsychoB\Framework\Container\ContainerInterface;
+    use PsychoB\Framework\DependencyInjection\Container\Container;
+    use PsychoB\Framework\DependencyInjection\Container\ContainerInterface;
 
     class App implements AppInterface
     {

@@ -5,12 +5,12 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Container;
+    namespace PsychoB\Framework\DependencyInjection\Container;
 
     use Exception;
     use Psr\Container\ContainerInterface as PsrContainerInterface;
-    use PsychoB\Framework\Container\Exception\ErrorRetrievingElementException;
-    use PsychoB\Framework\Container\Exception\PsrElementNotFoundException;
+    use PsychoB\Framework\DependencyInjection\Container\Exception\ErrorRetrievingElementException;
+    use PsychoB\Framework\DependencyInjection\Container\Exception\PsrElementNotFoundException;
 
     class ContainerAdapter implements PsrContainerInterface
     {

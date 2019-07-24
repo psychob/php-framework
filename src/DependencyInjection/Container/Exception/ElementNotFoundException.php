@@ -5,7 +5,7 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Container\Exception;
+    namespace PsychoB\Framework\DependencyInjection\Container\Exception;
 
     use PsychoB\Framework\Exception\BaseElementNotFoundException;
 

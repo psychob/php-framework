@@ -5,11 +5,11 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Container;
+    namespace PsychoB\Framework\DependencyInjection\Container;
 
     use Psr\Container\ContainerInterface as PsrContainerInterface;
-    use PsychoB\Framework\Container\Exception\ElementAlreadyExistException;
-    use PsychoB\Framework\Container\Exception\ElementNotFoundException;
+    use PsychoB\Framework\DependencyInjection\Container\Exception\ElementAlreadyExistException;
+    use PsychoB\Framework\DependencyInjection\Container\Exception\ElementNotFoundException;
 
     /**
      * Class Container.

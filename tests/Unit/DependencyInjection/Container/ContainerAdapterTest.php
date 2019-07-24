@@ -5,16 +5,16 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace Tests\PsychoB\Framework\Unit\Container;
+    namespace Tests\PsychoB\Framework\Unit\DependencyInjection\Container;
 
     use Mockery;
     use Mockery\MockInterface;
     use Psr\Container\ContainerExceptionInterface;
     use Psr\Container\NotFoundExceptionInterface;
-    use PsychoB\Framework\Container\ContainerAdapter;
-    use PsychoB\Framework\Container\ContainerInterface;
-    use PsychoB\Framework\Container\Exception\ErrorRetrievingElementException;
-    use PsychoB\Framework\Container\Exception\PsrElementNotFoundException;
+    use PsychoB\Framework\DependencyInjection\Container\ContainerAdapter;
+    use PsychoB\Framework\DependencyInjection\Container\ContainerInterface;
+    use PsychoB\Framework\DependencyInjection\Container\Exception\ErrorRetrievingElementException;
+    use PsychoB\Framework\DependencyInjection\Container\Exception\PsrElementNotFoundException;
     use PsychoB\Framework\Testing\UnitTestCase;
 
     class ContainerAdapterTest extends UnitTestCase
