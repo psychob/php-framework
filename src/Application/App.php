@@ -5,7 +5,7 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Framework\Application;
+    namespace PsychoB\Framework\Application;
 
     class App implements AppInterface
     {

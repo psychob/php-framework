@@ -5,10 +5,9 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Framework\Exception;
+    namespace PsychoB\Framework\Application;
 
-    use RuntimeException;
-
-    class BaseException extends RuntimeException
+    interface AppInterface
     {
+        public function run();
     }

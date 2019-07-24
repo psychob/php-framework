@@ -5,9 +5,10 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Framework\Application;
+    namespace PsychoB\Framework\Exception;
 
-    interface AppInterface
+    use ErrorException;
+
+    class PHPErrorException extends ErrorException
     {
-        public function run();
     }

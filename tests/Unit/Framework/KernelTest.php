@@ -9,8 +9,8 @@
 
     use org\bovigo\vfs\vfsStream;
     use org\bovigo\vfs\vfsStreamDirectory;
-    use PsychoB\Framework\Framework\Application\App;
-    use PsychoB\Framework\Framework\Kernel;
+    use PsychoB\Framework\Application\App;
+    use PsychoB\Framework\Kernel;
     use PsychoB\Framework\Testing\UnitTestCase;
 
     class KernelTest extends UnitTestCase

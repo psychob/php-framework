@@ -5,7 +5,7 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Framework\Utility;
+    namespace PsychoB\Framework\Utility;
 
     class Path
     {

@@ -5,13 +5,13 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Framework;
+    namespace PsychoB\Framework;
 
-    use PsychoB\Framework\Framework\Application\App;
-    use PsychoB\Framework\Framework\Application\AppInterface;
-    use PsychoB\Framework\Framework\Exception\ErrorHandling\DumbExceptionHandler;
-    use PsychoB\Framework\Framework\Exception\ErrorHandling\ErrorTrampoline;
-    use PsychoB\Framework\Framework\Utility\SingletonTrait;
+    use PsychoB\Framework\Application\App;
+    use PsychoB\Framework\Application\AppInterface;
+    use PsychoB\Framework\Exception\ErrorHandling\DumbExceptionHandler;
+    use PsychoB\Framework\Exception\ErrorHandling\ErrorTrampoline;
+    use PsychoB\Framework\Utility\SingletonTrait;
 
     /**
      * Base class which initializes framework.

@@ -5,7 +5,7 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Framework\Exception\ErrorHandling;
+    namespace PsychoB\Framework\Exception\ErrorHandling;
 
     class DumbExceptionHandler
     {

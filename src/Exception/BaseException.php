@@ -5,10 +5,10 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Framework\Exception;
+    namespace PsychoB\Framework\Exception;
 
-    use ErrorException;
+    use RuntimeException;
 
-    class PHPErrorException extends ErrorException
+    class BaseException extends RuntimeException
     {
     }
