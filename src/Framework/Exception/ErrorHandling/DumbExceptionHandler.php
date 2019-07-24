@@ -5,11 +5,11 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Exceptions;
+    namespace PsychoB\Framework\Framework\Exception\ErrorHandling;
 
-    use RuntimeException;
-
-    class FrameworkException extends RuntimeException
+    class DumbExceptionHandler
     {
-
+        public static function catch(): void
+        {
+        }
     }

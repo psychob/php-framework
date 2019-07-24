@@ -11,6 +11,8 @@
 
     class UnitTestCase extends PhpUnitTestCase
     {
+        use ArrayAssertTrait;
+
         protected function tearDown(): void
         {
             if ($container = \Mockery::getContainer()) {

@@ -26,7 +26,7 @@
             "PsychoB\\Framework\\": "./src"
         },
         "files": [
-            "./src/Core/Utility/helpers.php"
+            "./src/Framework/helpers.php"
         ]
     },
     "autoload-dev": {
