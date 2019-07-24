@@ -5,7 +5,7 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Exception\ErrorHandling;
+    namespace PsychoB\Framework\ErrorHandling;
 
     use PsychoB\Framework\Exception\PHPErrorException;
 

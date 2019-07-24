@@ -9,8 +9,8 @@
 
     use PsychoB\Framework\Application\App;
     use PsychoB\Framework\Application\AppInterface;
-    use PsychoB\Framework\Exception\ErrorHandling\DumbExceptionHandler;
-    use PsychoB\Framework\Exception\ErrorHandling\ErrorTrampoline;
+    use PsychoB\Framework\ErrorHandling\DumbExceptionHandler;
+    use PsychoB\Framework\ErrorHandling\ErrorTrampoline;
     use PsychoB\Framework\Utility\SingletonTrait;
 
     /**
