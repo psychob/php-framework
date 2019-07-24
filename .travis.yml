@@ -11,7 +11,13 @@ before_script:
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
   - composer install --prefer-dist --no-interaction --no-progress --no-suggest -o
+
 script:
   - phpunit --coverage-clover build/logs/clover.xml
+
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+
+cache:
+  directories:
+    - vendor/
