@@ -5,11 +5,10 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Injector\Exceptions;
+    namespace PsychoB\Framework\Framework\Exception;
 
-    use RuntimeException;
+    use ErrorException;
 
-    class CanNotInjectException extends RuntimeException
+    class PHPErrorException extends ErrorException
     {
-
     }

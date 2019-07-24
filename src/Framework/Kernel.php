@@ -11,7 +11,6 @@
     use PsychoB\Framework\Framework\Application\AppInterface;
     use PsychoB\Framework\Framework\Exception\ErrorHandling\DumbExceptionHandler;
     use PsychoB\Framework\Framework\Exception\ErrorHandling\ErrorTrampoline;
-    use PsychoB\Framework\Framework\Utility\Path;
     use PsychoB\Framework\Framework\Utility\SingletonTrait;
 
     /**

@@ -5,9 +5,10 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace Tests\PsychoB\Framework\Mocks\Injector\Injector;
+    namespace PsychoB\Framework\Framework\Exception;
 
-    class NoConstructorMock
+    use RuntimeException;
+
+    class BaseException extends RuntimeException
     {
-
     }
