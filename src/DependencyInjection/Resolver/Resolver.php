@@ -30,8 +30,8 @@
             $this->injector = $injector;
         }
 
-        public function resolve(string $class, ?string $fromWhat)
+        public function resolve(string $class, array $arguments, ?string $fromWhat = NULL)
         {
-            return $this->injector->make($class);
+            return $this->injector->make($class, $arguments);
         }
     }

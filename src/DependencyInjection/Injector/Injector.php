@@ -218,7 +218,7 @@
                 $type = $parameter->getType();
                 if ($type !== NULL) {
                     if (!$type->isBuiltin()) {
-                        $ret[] = $this->resolver->resolve($type->getName(), $class);
+                        $ret[] = $this->resolver->resolve($type->getName(), [], $class);
                         continue;
                     }
                 }

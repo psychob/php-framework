@@ -12,6 +12,7 @@
     use PsychoB\Framework\DependencyInjection\Injector\Injector;
     use PsychoB\Framework\DependencyInjection\Resolver\DeferredResolver;
     use PsychoB\Framework\DependencyInjection\Resolver\Resolver;
+    use PsychoB\Framework\DependencyInjection\Resolver\ResolverInterface;
 
     class App implements AppInterface
     {
@@ -54,5 +55,10 @@
         public function handleWebRequest(string $method, string $uri)
         {
             // TODO: Implement handleWebRequest() method.
+        }
+
+        public function resolve(string $class, array $arguments = [])
+        {
+            return $this->container->get(ResolverInterface::class)->resolve($class, $arguments);
         }
     }

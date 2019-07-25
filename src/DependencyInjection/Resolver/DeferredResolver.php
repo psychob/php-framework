@@ -38,8 +38,8 @@
             $this->resolver = $resolver;
         }
 
-        public function resolve(string $class, ?string $fromWhat)
+        public function resolve(string $class, array $arguments, ?string $fromWhat = NULL)
         {
-            return $this->resolver->resolve($class, $fromWhat);
+            return $this->resolver->resolve($class, $arguments, $fromWhat);
         }
     }

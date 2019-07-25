@@ -9,5 +9,5 @@
 
     interface ResolverInterface
     {
-        public function resolve(string $class, ?string $fromWhat);
+        public function resolve(string $class, array $arguments, ?string $fromWhat = NULL);
     }
