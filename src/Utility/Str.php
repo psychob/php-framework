@@ -31,7 +31,13 @@
             }
 
             if (is_array($element)) {
-                return 'array';
+                $ret = '';
+
+                foreach ($element as $value) {
+                    $ret .= self::toRepr($value) . ', ';
+                }
+
+                return '[' . $ret . ']';
             }
 
             if (is_object($element)) {
@@ -39,5 +45,34 @@
             }
 
             return '???';
+        }
+
+        /**
+         * Match regular expression and return matched groups if any. FALSE if nothing was matched.
+         *
+         * @param string $regExp
+         * @param string $subject
+         *
+         * @return mixed[]|false
+         */
+        public static function matchGroups(string $regExp, string $subject)
+        {
+            $matches = [];
+
+            if (preg_match($regExp, $subject, $matches) === 1) {
+                $ret = [];
+
+                foreach ($matches as $id => $match) {
+                    if ($id === 0) {
+                        continue;
+                    }
+
+                    $ret[] = $match;
+                }
+
+                return $ret;
+            }
+
+            return false;
         }
     }

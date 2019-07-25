@@ -26,7 +26,7 @@
                 [10, "integer(10)"],
                 [21.37, "double(21.37)"],
                 ['str', "string(str)"],
-                [[], "array"],
+                [[], "[]"],
                 [$this, static::class],
             ];
         }

@@ -5,9 +5,9 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\DependencyInjection\Resolver;
+    namespace PsychoB\Framework\DependencyInjection\Injector\Lookup;
 
-    interface ResolverInterface
+    interface ArgumentLookupInterface
     {
-        public function resolve(string $class, ?string $fromWhat);
+
     }

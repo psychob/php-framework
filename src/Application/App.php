@@ -9,6 +9,9 @@
 
     use PsychoB\Framework\DependencyInjection\Container\Container;
     use PsychoB\Framework\DependencyInjection\Container\ContainerInterface;
+    use PsychoB\Framework\DependencyInjection\Injector\Injector;
+    use PsychoB\Framework\DependencyInjection\Resolver\DeferredResolver;
+    use PsychoB\Framework\DependencyInjection\Resolver\Resolver;
 
     class App implements AppInterface
     {
@@ -39,9 +42,13 @@
             $this->container->add(App::class, $this);
             $this->container->add(AppInterface::class, $this);
 
-            $injector = new Injector($this->container);
+            $deferredResolver = new DeferredResolver();
+            $injector = new Injector($this->container, $deferredResolver);
+            $resolver = new Resolver($this->container, $injector);
+            $deferredResolver->setResolver($resolver);
+
             $this->container->add(Injector::class, $injector);
-            $this->container->add(Resolver::class, new Resolver($this->container, $injector));
+            $this->container->add(Resolver::class, $resolver);
         }
 
         public function handleWebRequest(string $method, string $uri)

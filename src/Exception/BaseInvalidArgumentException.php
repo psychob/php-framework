@@ -5,9 +5,9 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\DependencyInjection\Resolver;
+    namespace PsychoB\Framework\Exception;
 
-    interface ResolverInterface
+    class BaseInvalidArgumentException extends BaseException
     {
-        public function resolve(string $class, ?string $fromWhat);
+
     }

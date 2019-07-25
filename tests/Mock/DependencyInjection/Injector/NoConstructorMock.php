@@ -5,9 +5,9 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\DependencyInjection\Resolver;
+    namespace Tests\PsychoB\Framework\Mock\DependencyInjection\Injector;
 
-    interface ResolverInterface
+    class NoConstructorMock
     {
-        public function resolve(string $class, ?string $fromWhat);
+
     }

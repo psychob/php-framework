@@ -37,4 +37,9 @@
         {
             $this->resolver = $resolver;
         }
+
+        public function resolve(string $class, ?string $fromWhat)
+        {
+            return $this->resolver->resolve($class, $fromWhat);
+        }
     }
