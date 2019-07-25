@@ -92,4 +92,9 @@
 
             return get_class($obj);
         }
+
+        public static function escapeHtml(string $html): string
+        {
+            return htmlspecialchars($html);
+        }
     }

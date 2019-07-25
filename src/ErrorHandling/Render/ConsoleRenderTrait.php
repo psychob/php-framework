@@ -19,7 +19,19 @@
 
         protected static function consoleHandle(Throwable $t): void
         {
-            $ret = static::consoleHandleThrowable($t);
+            $it = 0;
+            $ret = '';
+
+            while ($t !== NULL) {
+                $ret .= static::consoleHandleThrowable($t, $it);
+
+                if ($t->getPrevious()) {
+                    $ret .= sprintf('%sCaused by:%s', str_repeat(' ', $it), PHP_EOL);
+                }
+
+                $t = $t->getPrevious();
+                $it++;
+            }
 
             echo $ret;
         }

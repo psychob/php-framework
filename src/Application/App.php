@@ -78,4 +78,10 @@
             $commandManager = $this->resolve(CommandManager::class);
             $commandManager->run();
         }
+
+        protected function handleWebRequest()
+        {
+            $routeManager = $this->resolve(RouteManager::class);
+            $routeManager->run();
+        }
     }
