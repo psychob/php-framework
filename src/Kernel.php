@@ -57,6 +57,9 @@
             // also we want to have some control over how exceptions are displayed in early stage of framework
             // initialization
             $this->oldExceptionHandler = set_exception_handler([DumbExceptionHandler::class, 'catch']);
+
+            // we also want to tie ourself to shutdown function, so we could hijack errors
+            register_shutdown_function([ErrorTrampoline::class, 'shutdown']);
         }
 
         /**

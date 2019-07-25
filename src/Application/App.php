@@ -7,6 +7,7 @@
 
     namespace PsychoB\Framework\Application;
 
+    use PsychoB\Framework\Commands\CommandManager;
     use PsychoB\Framework\DependencyInjection\Container\Container;
     use PsychoB\Framework\DependencyInjection\Container\ContainerInterface;
     use PsychoB\Framework\DependencyInjection\Injector\Injector;
@@ -35,6 +36,14 @@
         public function run()
         {
             $this->setup();
+
+            // first we need to verify what kind of environment we are in, so we could create proper request,
+            // and response
+            if (php_sapi_name() === 'cli') {
+                $this->handleCommand();
+            } else {
+                $this->handleWebRequest();
+            }
         }
 
         public function setup(): void
@@ -50,15 +59,23 @@
 
             $this->container->add(Injector::class, $injector);
             $this->container->add(Resolver::class, $resolver);
-        }
-
-        public function handleWebRequest(string $method, string $uri)
-        {
-            // TODO: Implement handleWebRequest() method.
+            $this->container->add(ResolverInterface::class, $resolver);
         }
 
         public function resolve(string $class, array $arguments = [])
         {
             return $this->container->get(ResolverInterface::class)->resolve($class, $arguments);
+        }
+
+        public function basePath(): string
+        {
+            return $this->basePath;
+        }
+
+        protected function handleCommand()
+        {
+            /** @var CommandManager $commandManager */
+            $commandManager = $this->resolve(CommandManager::class);
+            $commandManager->run();
         }
     }

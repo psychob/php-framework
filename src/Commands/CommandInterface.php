@@ -5,11 +5,9 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Application;
+    namespace PsychoB\Framework\Commands;
 
-    interface AppInterface
+    interface CommandInterface
     {
-        public function setup(): void;
 
-        public function run();
     }

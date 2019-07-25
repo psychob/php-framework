@@ -32,6 +32,10 @@
 
         public function resolve(string $class, array $arguments, ?string $fromWhat = NULL)
         {
+            if ($this->container->has($class)) {
+                return $this->container->get($class);
+            }
+
             return $this->injector->make($class, $arguments);
         }
     }

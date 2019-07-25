@@ -75,4 +75,21 @@
 
             return false;
         }
+
+        public static function toType($obj): string
+        {
+            if ($obj === null) {
+                return "null";
+            }
+
+            if (is_scalar($obj)) {
+                return gettype($obj);
+            }
+
+            if (is_array($obj)) {
+                return 'array';
+            }
+
+            return get_class($obj);
+        }
     }

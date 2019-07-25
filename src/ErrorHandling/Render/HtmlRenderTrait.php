@@ -5,11 +5,9 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Application;
+    namespace PsychoB\Framework\ErrorHandling\Render;
 
-    interface AppInterface
+    trait HtmlRenderTrait
     {
-        public function setup(): void;
 
-        public function run();
     }

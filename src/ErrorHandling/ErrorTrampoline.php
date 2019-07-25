@@ -20,4 +20,17 @@
 
             throw new PHPErrorException($message, -1, $level, $file, $line);
         }
+
+        public static function shutdown()
+        {
+            $lastError = error_get_last();
+
+            if ($lastError !== NULL) {
+                $e = new PHPErrorException($lastError['message'], -1, $lastError['type'], $lastError['file'],
+                                           $lastError['line']);
+
+                DumbExceptionHandler::catch($e);
+                error_clear_last();
+            }
+        }
     }

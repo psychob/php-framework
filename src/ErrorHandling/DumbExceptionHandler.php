@@ -7,9 +7,21 @@
 
     namespace PsychoB\Framework\ErrorHandling;
 
+    use PsychoB\Framework\ErrorHandling\Render\ConsoleRenderTrait;
+    use PsychoB\Framework\ErrorHandling\Render\HtmlRenderTrait;
+    use Throwable;
+
     class DumbExceptionHandler
     {
-        public static function catch(): void
+        use ConsoleRenderTrait;
+        use HtmlRenderTrait;
+
+        public static function catch(Throwable $t): void
         {
+            if (static::isConsole()) {
+                static::consoleHandle($t);
+            } else {
+                static::handleWeb($t);
+            }
         }
     }
