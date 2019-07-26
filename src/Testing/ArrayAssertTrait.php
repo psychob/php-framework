@@ -9,8 +9,9 @@
 
     use Iterator;
     use PHPUnit\Framework\Assert;
-    use PsychoB\Framework\Core\Utility\Arr;
-    use PsychoB\Framework\Core\Utility\Str;
+    use PsychoB\Framework\Utility\Arr;
+    use PsychoB\Framework\Utility\Str;
+    use function Tests\PsychoB\Framework\Mock\DependencyInjection\Injector\NonStaticInjectMock;
 
     trait ArrayAssertTrait
     {
@@ -22,15 +23,15 @@
                 Assert::assertEquals(0, iterator_count($container), 'Iterator should have no elements' . $message);
             } else {
                 Assert::fail(sprintf('Unknown type (%s) passed as $container%s',
-                                     Str::toType($container), $message ? PHP_EOL . $message : ''));
+                    Str::toType($container), $message ? PHP_EOL . $message : ''));
             }
         }
 
         protected static function assertArrayElementsAre($expected,
-                                                         $current,
-                                                         callable $verify,
-                                                         ?string $message = NULL,
-                                                         string $assertMethod = 'assertArrayElementsAre'): void
+            $current,
+            callable $verify,
+            ?string $message = NULL,
+            string $assertMethod = 'assertArrayElementsAre'): void
         {
             $eIt = Arr::toIterator($expected);
             $cIt = Arr::toIterator($current);
@@ -54,10 +55,10 @@
 
                     if ($eIt->valid()) {
                         $msg .= sprintf('Expected more values, currently expected: %s => %s',
-                                        Str::toRepr($eIt->key()), Str::toRepr($eIt->current()));
+                            Str::toRepr($eIt->key()), Str::toRepr($eIt->current()));
                     } else {
                         $msg .= sprintf('Encountered more values, currently encountered: %s => %s',
-                                        Str::toRepr($cIt->key()), Str::toRepr($cIt->current()));
+                            Str::toRepr($cIt->key()), Str::toRepr($cIt->current()));
                     }
 
                     if ($message !== NULL) {
@@ -65,8 +66,19 @@
                     }
 
                     Assert::fail($msg);
+
                     return;
                 }
+            }
+        }
+
+        protected static function assertArrayElementsContainsValues($expected,
+            $current,
+            bool $strict = true,
+            string $message = ''): void
+        {
+            foreach ($current as $item) {
+                Assert::assertContains($item, $expected);
             }
         }
     }

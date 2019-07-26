@@ -35,8 +35,8 @@
                 $this->basePaths[] = $path;
             }
 
-            if (!Arr::containsRecursive($this->pathClassifications, [$module], $path)) {
-                $this->pathClassifications[$module] = $path;
+            if (!Arr::recursiveContains($this->pathClassifications, [$module], $path)) {
+                $this->pathClassifications[$module][] = $path;
             }
         }
 
@@ -77,5 +77,10 @@
             }
 
             return Arr::pluck($finder, 'getPathname');
+        }
+
+        public function getModuleDirectories(string $module): array
+        {
+            return $this->pathClassifications[$module] ?? [];
         }
     }

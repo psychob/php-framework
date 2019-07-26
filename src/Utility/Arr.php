@@ -46,6 +46,11 @@
             return in_array($element, $array);
         }
 
+        public static function recursiveContains($array, array $getter, $element): bool
+        {
+            return Arr::contains(Arr::recursiveGet($array, $getter, []), $element);
+        }
+
         public static function push(array &$array, $element): void
         {
             array_push($array, $element);

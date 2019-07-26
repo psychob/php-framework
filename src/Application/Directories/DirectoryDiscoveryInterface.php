@@ -15,5 +15,7 @@
 
         public function getApplicationDirectory(): string;
 
-        public function fetchPathsFor(string $module, ?string $subPath = null): array;
+        public function fetchPathsFor(string $module, ?string $subPath = NULL): array;
+
+        public function getModuleDirectories(string $module): array;
     }
