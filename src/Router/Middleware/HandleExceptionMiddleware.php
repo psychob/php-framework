@@ -7,9 +7,12 @@
 
     namespace PsychoB\Framework\Router\Middleware;
 
+    use PsychoB\Framework\Router\Http\Request;
+    use PsychoB\Framework\Router\Http\Response;
+
     class HandleExceptionMiddleware extends AbstractMiddleware
     {
-        public function handle($request, MiddlewareInterface $next)
+        public function handle(Request $request, MiddlewareInterface $next): Response
         {
             return $next->handle($request, $this->next());
         }

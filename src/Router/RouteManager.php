@@ -12,6 +12,7 @@
     use PsychoB\Framework\DependencyInjection\Injector\CustomInjectionInterface;
     use PsychoB\Framework\DependencyInjection\Injector\Lookup\GetPropertyFromResolve;
     use PsychoB\Framework\DependencyInjection\Resolver\ResolverInterface;
+    use PsychoB\Framework\Router\Http\Request;
     use PsychoB\Framework\Router\Middleware\MiddlewareInterface;
 
     class RouteManager implements CustomInjectionInterface
@@ -46,11 +47,16 @@
 
         public function run()
         {
-            $request = [];
+            $request = $this->createRequestFromGlobal();
 
             /** @var MiddlewareExecutor $passThrough */
             $passThrough = $this->resolver->resolve(MiddlewareExecutor::class, [$this->middlewares]);
             $response = $passThrough->handle($request, $passThrough->next());
+        }
+
+        private function createRequestFromGlobal()
+        {
+            return Request::createFromGlobals();
         }
     }
 

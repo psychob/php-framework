@@ -8,10 +8,12 @@
     namespace PsychoB\Framework\Router\Middleware;
 
     use PsychoB\Framework\Router\Exception\NullMiddlewareReachedException;
+    use PsychoB\Framework\Router\Http\Request;
+    use PsychoB\Framework\Router\Http\Response;
 
     class NullMiddleware implements MiddlewareInterface
     {
-        public function handle($request, MiddlewareInterface $next)
+        public function handle(Request $request, MiddlewareInterface $next): Response
         {
             throw new NullMiddlewareReachedException();
         }
