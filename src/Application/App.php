@@ -8,12 +8,18 @@
     namespace PsychoB\Framework\Application;
 
     use PsychoB\Framework\Commands\CommandManager;
+    use PsychoB\Framework\Config\ConfigManager;
+    use PsychoB\Framework\Config\ConfigManagerInterface;
     use PsychoB\Framework\DependencyInjection\Container\Container;
     use PsychoB\Framework\DependencyInjection\Container\ContainerInterface;
     use PsychoB\Framework\DependencyInjection\Injector\Injector;
+    use PsychoB\Framework\DependencyInjection\Injector\InjectorInterface;
     use PsychoB\Framework\DependencyInjection\Resolver\DeferredResolver;
     use PsychoB\Framework\DependencyInjection\Resolver\Resolver;
     use PsychoB\Framework\DependencyInjection\Resolver\ResolverInterface;
+    use PsychoB\Framework\FrameworkSource;
+    use PsychoB\Framework\Router\RouteManager;
+    use PsychoB\Framework\Utility\Path;
 
     class App implements AppInterface
     {
@@ -52,14 +58,25 @@
             $this->container->add(App::class, $this);
             $this->container->add(AppInterface::class, $this);
 
+            $this->setupResolver();
+        }
+
+        protected function setupResolver(): void
+        {
+            $config = new ConfigManager(Path::realpath(Path::join(FrameworkSource::CURRENT_DIR, '..', 'resources', 'config')),
+                                        Path::realpath(Path::join($this->basePath, 'resources', 'config')));
+
             $deferredResolver = new DeferredResolver();
             $injector = new Injector($this->container, $deferredResolver);
-            $resolver = new Resolver($this->container, $injector);
+            $resolver = new Resolver($this->container, $injector, $config);
             $deferredResolver->setResolver($resolver);
 
             $this->container->add(Injector::class, $injector);
+            $this->container->add(InjectorInterface::class, $injector);
             $this->container->add(Resolver::class, $resolver);
             $this->container->add(ResolverInterface::class, $resolver);
+            $this->container->add(ConfigManager::class, $config);
+            $this->container->add(ConfigManagerInterface::class, $config);
         }
 
         public function resolve(string $class, array $arguments = [])
@@ -67,7 +84,7 @@
             return $this->container->get(ResolverInterface::class)->resolve($class, $arguments);
         }
 
-        public function basePath(): string
+        public function getBasePath(): string
         {
             return $this->basePath;
         }
@@ -81,6 +98,7 @@
 
         protected function handleWebRequest()
         {
+            /** @var RouteManager $routeManager */
             $routeManager = $this->resolve(RouteManager::class);
             $routeManager->run();
         }

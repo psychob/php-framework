@@ -11,6 +11,9 @@
 
     class Arr
     {
+        public const MERGE_USE_LATEST = 0b00000001;
+        public const MERGE_PRESERVE_KEYS = 0b00000010;
+
         public static function has($arr, $index): bool
         {
             if ($arr instanceof ArrayAccess) {
@@ -48,5 +51,50 @@
         public static function pop(array &$array)
         {
             return array_pop($array);
+        }
+
+        public static function sortByKey(array &$container)
+        {
+            ksort($container);
+        }
+
+        public static function get($container, $key, $default = NULL)
+        {
+            if (Arr::has($container, $key)) {
+                return $container[$key];
+            }
+
+            return $default;
+        }
+
+        public static function recursiveGet($container, array $elements, $default = NULL)
+        {
+            foreach ($elements as $idx) {
+                if (Arr::has($container, $idx)) {
+                    $container = $container[$idx];
+                } else {
+                    return $default;
+                }
+            }
+
+            return $container;
+        }
+
+        public static function merge(int $type, array ...$arrays): array
+        {
+            switch ($type) {
+                case self::MERGE_USE_LATEST:
+                    return static::mergePickLatest(...$arrays);
+            }
+        }
+
+        private static function mergePickLatest(...$arrays)
+        {
+            return array_merge_recursive(...$arrays);
+        }
+
+        public static function keys(array $arr): array
+        {
+            return array_keys($arr);
         }
     }

@@ -7,6 +7,7 @@
 
     namespace PsychoB\Framework\ErrorHandling\Render;
 
+    use PsychoB\Framework\Utility\Arr;
     use PsychoB\Framework\Utility\Str;
     use Throwable;
 
@@ -116,6 +117,14 @@ ol li:nth-of-type(2n) {
 ol li:hover {
     background-color: #ddd;
 }
+.arg .type {
+    font-style: italic;
+}
+.arg .value {
+}
+.arg:hover .type, .arg:hover .value {
+    font-weight: bolder;
+}
 </style>
 <body>
 <h1>Internal Server Error</h1>
@@ -167,10 +176,17 @@ HTML;
 
             $ret .= '<ol reversed="reversed">';
             foreach ($t->getTrace() as $no => $trace) {
-                $ret .= sprintf('<li class="stack"><span class="class">%s</span><span class="type">%s</span><span class="function">%s</span>()',
+                $ret .= sprintf('<li class="stack"><span class="class">%s</span><span class="type">%s</span><span class="function">%s</span>(',
                                 Str::escapeHtml($trace['class'] ?? ''), Str::escapeHtml($trace['type'] ?? ''),
                                 Str::escapeHtml($trace['function'] ?? '<internal>'));
-                $ret .= sprintf(' at <span class="file">%s</span>:<span class="line">%d</span></li>',
+                if (Arr::has($trace, 'args')) {
+                    foreach ($trace['args'] as $arg) {
+                        $ret .= sprintf('<span class="arg"><span class="type">%s</span> <span class="value">%s</span></span>, ',
+                                        Str::toType($arg), Str::escapeHtml(Str::toStr($arg)));
+                    }
+                }
+
+                $ret .= sprintf(') at <span class="file">%s</span>:<span class="line">%d</span></li>',
                                 Str::escapeHtml($trace['file'] ?? '<internal>'), Str::escapeHtml($trace['line'] ?? -1));
             }
             $ret .= '</ol>';

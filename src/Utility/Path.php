@@ -18,4 +18,9 @@
         {
             return implode(DIRECTORY_SEPARATOR, $paths);
         }
+
+        public static function fileExists(string $path): bool
+        {
+            return file_exists($path);
+        }
     }

@@ -56,7 +56,7 @@
         {
             $ret = '';
             $ret .= sprintf('%s%s%s()', $trace['class'] ?? '', $trace['type'] ?? '', $trace['function'] ?? 'anonymous');
-            $ret .= sprintf(' at %s:%d', $trace['file'] ?? '<internal>', $trace['line']);
+            $ret .= sprintf(' at %s:%d', $trace['file'] ?? '<internal>', $trace['line'] ?? -1);
 
             return $ret;
         }

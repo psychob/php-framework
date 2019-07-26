@@ -78,7 +78,7 @@
 
         public static function toType($obj): string
         {
-            if ($obj === null) {
+            if ($obj === NULL) {
                 return "null";
             }
 
@@ -96,5 +96,23 @@
         public static function escapeHtml(string $html): string
         {
             return htmlspecialchars($html);
+        }
+
+        public static function toStr($arg): string
+        {
+            if ($arg === NULL) {
+                return "null";
+            }
+
+            if (is_scalar($arg)) {
+                return strval($arg);
+            }
+
+            return "???";
+        }
+
+        public static function explode(string $string, string $separator): array
+        {
+            return explode($separator, $string);
         }
     }
