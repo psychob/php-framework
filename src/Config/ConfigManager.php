@@ -11,6 +11,12 @@
     use PsychoB\Framework\Utility\Path;
     use PsychoB\Framework\Utility\Str;
 
+    /**
+     * Class ConfigManager
+     *
+     * @author Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
+     * @since  0.1
+     */
     class ConfigManager implements ConfigManagerInterface
     {
         protected $configPaths = [];
@@ -32,7 +38,7 @@
         }
 
         /** @inheritDoc */
-        public function get(string $key, $default)
+        public function get(string $key, $default = NULL)
         {
             $components = Str::explode($key, '.');
 
@@ -80,7 +86,7 @@
 
         private function mergeBranches(array $branch): array
         {
-            return Arr::merge(Arr::MERGE_USE_LATEST, ...$branch);
+            return Arr::merge(Arr::MERGE_USE_LATEST | Arr::MERGE_RECURSIVE, ...$branch);
         }
     }
 

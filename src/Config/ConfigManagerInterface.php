@@ -7,7 +7,21 @@
 
     namespace PsychoB\Framework\Config;
 
+    /**
+     * Interface ConfigManagerInterface
+     *
+     * @author Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
+     * @since  0.1
+     */
     interface ConfigManagerInterface
     {
-        public function get(string $key, $default);
+        /**
+         * Get value from configuration
+         *
+         * @param string $key Key separated by dots
+         * @param mixed  $default
+         *
+         * @return mixed
+         */
+        public function get(string $key, $default = NULL);
     }
