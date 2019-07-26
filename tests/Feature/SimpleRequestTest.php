@@ -21,8 +21,8 @@
             $kernel = Kernel::make($vfs->url());
             $kernel->init();
             $app = $kernel->createApp();
+
             $app->setup();
-            $app->handleWebRequest('GET', '/');
             $kernel->deinit();
 
             $this->assertTrue(true);

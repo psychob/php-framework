@@ -7,6 +7,9 @@
 
     namespace PsychoB\Framework\Application;
 
+    use PsychoB\Framework\Application\Directories\DirectoryAdderInterface;
+    use PsychoB\Framework\Application\Directories\DirectoryDiscoveryInterface;
+    use PsychoB\Framework\Application\Directories\DirectoryManagerTrait;
     use PsychoB\Framework\Commands\CommandManager;
     use PsychoB\Framework\Config\ConfigManager;
     use PsychoB\Framework\Config\ConfigManagerInterface;
@@ -21,10 +24,9 @@
     use PsychoB\Framework\Router\RouteManager;
     use PsychoB\Framework\Utility\Path;
 
-    class App implements AppInterface
+    class App implements AppInterface, DirectoryAdderInterface, DirectoryDiscoveryInterface
     {
-        /** @var string */
-        protected $basePath;
+        use DirectoryManagerTrait;
 
         /** @var ContainerInterface */
         protected $container;
@@ -36,7 +38,8 @@
          */
         public function __construct(string $basePath)
         {
-            $this->basePath = $basePath;
+            $this->appBasePath = $basePath;
+            $this->frameworkBasePath = Path::realpath(Path::join(FrameworkSource::CURRENT_DIR, '..'));
         }
 
         public function run()
@@ -57,14 +60,15 @@
             $this->container = new Container();
             $this->container->add(App::class, $this);
             $this->container->add(AppInterface::class, $this);
+            $this->container->add(DirectoryDiscoveryInterface::class, $this);
+            $this->container->add(DirectoryAdderInterface::class, $this);
 
             $this->setupResolver();
         }
 
         protected function setupResolver(): void
         {
-            $config = new ConfigManager(Path::realpath(Path::join(FrameworkSource::CURRENT_DIR, '..', 'resources', 'config')),
-                                        Path::realpath(Path::join($this->basePath, 'resources', 'config')));
+            $config = new ConfigManager($this);
 
             $deferredResolver = new DeferredResolver();
             $injector = new Injector($this->container, $deferredResolver);
@@ -82,11 +86,6 @@
         public function resolve(string $class, array $arguments = [])
         {
             return $this->container->get(ResolverInterface::class)->resolve($class, $arguments);
-        }
-
-        public function getBasePath(): string
-        {
-            return $this->basePath;
         }
 
         protected function handleCommand()

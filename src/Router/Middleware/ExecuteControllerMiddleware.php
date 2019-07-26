@@ -14,7 +14,7 @@
     {
         public function handle(Request $request, MiddlewareInterface $next): Response
         {
-            throw new \Exception();
+            dump($request);
         }
 
         public static function getPriority(): ?int

@@ -11,7 +11,7 @@
 
     class UnitTestCase extends PhpUnitTestCase
     {
-        use ArrayAssertTrait;
+        use ArrayAssertTrait, VirtualSystemAssertTrait;
 
         protected function tearDown(): void
         {

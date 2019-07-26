@@ -20,5 +20,10 @@
                 TrustedProxyMiddleware::class,
                 ExecuteControllerMiddleware::class,
             ],
+
+            'aliases' => [
+                'DebugMode' => DebugModeMiddleware::class,
+                'DisableCache' => DisableCacheMiddleware::class,
+            ],
         ],
     ];

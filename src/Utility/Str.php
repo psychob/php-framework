@@ -115,4 +115,29 @@
         {
             return explode($separator, $string);
         }
+
+        public static function startsWith(string $string, string $substring): bool
+        {
+            return strpos($string, $substring) === 0;
+        }
+
+        public static function remove(string $string, string $toRemove): string
+        {
+            return Str::replace($string, $toRemove, '');
+        }
+
+        public static function replace(string $string, string $toReplace, string $replaceWith): string
+        {
+            return str_replace($toReplace, $replaceWith, $string);
+        }
+
+        public static function upperCaseWords(string $string, string $delimiters = " \t\r\n\f\v"): string
+        {
+            return ucwords($string, $delimiters);
+        }
+
+        public static function toLower(string $string): string
+        {
+            return strtolower($string);
+        }
     }

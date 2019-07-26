@@ -7,6 +7,7 @@
 
     namespace PsychoB\Framework\Config;
 
+    use PsychoB\Framework\Application\Directories\DirectoryDiscoveryInterface;
     use PsychoB\Framework\Utility\Arr;
     use PsychoB\Framework\Utility\Path;
     use PsychoB\Framework\Utility\Str;
@@ -19,22 +20,23 @@
      */
     class ConfigManager implements ConfigManagerInterface
     {
-        protected $configPaths = [];
+        /** @var DirectoryDiscoveryInterface */
+        protected $discovery = NULL;
+
+        /** @var string[] */
         protected $loaded = [];
+
+        /** @var mixed[] */
         protected $container = [];
 
         /**
          * ConfigManager constructor.
          *
-         * @param string $frameworkPath
-         * @param string $appPath
+         * @param DirectoryDiscoveryInterface $discovery
          */
-        public function __construct(string $frameworkPath, string $appPath)
+        public function __construct(DirectoryDiscoveryInterface $discovery)
         {
-            $this->configPaths = [
-                $frameworkPath,
-                $appPath,
-            ];
+            $this->discovery = $discovery;
         }
 
         /** @inheritDoc */
@@ -58,7 +60,7 @@
         {
             $branch = [];
 
-            foreach ($this->configPaths as $path) {
+            foreach ($this->discovery->fetchPathsFor('config', $component) as $path) {
                 $branch[] = $this->loadPath($path, $component);
             }
 
@@ -67,7 +69,6 @@
 
         protected function loadPath(string $path, string $component): array
         {
-            $path = Path::join($path, $component . '.php');
             $content = $this->parseFile($path);
 
             $this->loaded[$component][] = $path;

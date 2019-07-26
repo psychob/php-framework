@@ -8,14 +8,17 @@
     namespace PsychoB\Framework\Router;
 
     use PsychoB\Framework\Application\AppInterface;
+    use PsychoB\Framework\Application\Directories\DirectoryDiscoveryInterface;
     use PsychoB\Framework\Config\ConfigManagerInterface;
     use PsychoB\Framework\DependencyInjection\Injector\CustomInjectionInterface;
     use PsychoB\Framework\DependencyInjection\Injector\Lookup\GetPropertyFromResolve;
     use PsychoB\Framework\DependencyInjection\Resolver\ResolverInterface;
+    use PsychoB\Framework\Router\Http\ParameterContainer;
     use PsychoB\Framework\Router\Http\Request;
+    use PsychoB\Framework\Router\Http\RequestFactory;
     use PsychoB\Framework\Router\Middleware\MiddlewareInterface;
 
-    class RouteManager implements CustomInjectionInterface
+    class RouteManager
     {
         /** @var ResolverInterface */
         protected $resolver;
@@ -23,30 +26,28 @@
         /** @var MiddlewareInterface[] */
         protected $middlewares = [];
 
-        public static function __pbfw_injectHint(): array
-        {
-            return [
-                '__construct' => [
-                    'basePath' => new GetPropertyFromResolve(AppInterface::class, 'getBasePath'),
-                ],
-            ];
-        }
+        /**  @var DirectoryDiscoveryInterface */
+        protected $discovery;
 
         /**
          * RouteManager constructor.
          *
-         * @param string                 $basePath
-         * @param ConfigManagerInterface $config
-         * @param ResolverInterface      $resolver
+         * @param DirectoryDiscoveryInterface $discovery
+         * @param ConfigManagerInterface      $config
+         * @param ResolverInterface           $resolver
          */
-        public function __construct(string $basePath, ConfigManagerInterface $config, ResolverInterface $resolver)
+        public function __construct(DirectoryDiscoveryInterface $discovery,
+                                    ConfigManagerInterface $config,
+                                    ResolverInterface $resolver)
         {
+            $this->discovery = $discovery;
             $this->resolver = $resolver;
             $this->middlewares = $config->get('routes.middlewares.default', []);
         }
 
         public function run()
         {
+            $this->ensureRoutesAreLoaded();
             $request = $this->createRequestFromGlobal();
 
             /** @var MiddlewareExecutor $passThrough */
@@ -56,7 +57,11 @@
 
         private function createRequestFromGlobal()
         {
-            return Request::createFromGlobals();
+            return $this->resolver->resolve(RequestFactory::class)->fromGlobals();
+        }
+
+        private function ensureRoutesAreLoaded()
+        {
         }
     }
 

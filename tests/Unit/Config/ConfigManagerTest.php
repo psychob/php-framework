@@ -7,82 +7,37 @@
 
     namespace Tests\PsychoB\Framework\Unit\Config;
 
-    use org\bovigo\vfs\vfsStream;
-    use org\bovigo\vfs\vfsStreamDirectory;
-    use org\bovigo\vfs\vfsStreamFile;
     use PsychoB\Framework\Config\ConfigManager;
     use PsychoB\Framework\Testing\UnitTestCase;
+    use Tests\PsychoB\Framework\Mock\Application\Directories\DirectoryManagerTraitMock;
 
     class ConfigManagerTest extends UnitTestCase
     {
         private $vfs;
 
+        /** @var ConfigManager */
+        private $config;
+
         protected function setUp(): void
         {
             parent::setUp();
 
-            $this->vfs = vfsStream::setup('/');
-            $framework = new vfsStreamDirectory('framework');
-            $app = new vfsStreamDirectory('app');
+            $this->vfs = $this->prepareVirtualFileSystem(['framework' => [
+                'resources/config' => [
+                    'framework.php' => "<?php return [ 'exists' => 42, ];",
+                    'overlapping.php' => "<?php return [ 'framework' => 42, 'overlapped' => 42, ];",
+                    'complex.php' => "<?php return [ 'overlapping' => [ 'foo' =>250, 'bar' => 'baz' ]];",
+                ],
+            ], 'app' => [
+                'resources/config' => [
+                    'app.php' => "<?php return [ 'exists' => 42, ];",
+                    'overlapping.php' => "<?php return [ 'app' => 84, 'overlapped' => 112, ];",
+                    'complex.php' => "<?php return [ 'overlapping' => [ 'foo' =>300, 'bar' => 'baz' ]];",
+                ],
+            ],]);
 
-            $framework->at($this->vfs);
-            $app->at($this->vfs);
-
-            $frameworkConfig = new vfsStreamFile('framework.php');
-            $frameworkConfig->at($framework)->setContent(<<<PHP
-<?php
-    return [
-        'exists' => 42,
-    ];
-PHP
-            );
-            (new vfsStreamFile('overlapping.php'))->at($framework)->setContent(<<<PHP
-<?php
-    return [
-        'framework' => 42,
-        
-        'overlapped' => 42,
-    ];
-PHP
-            );
-            (new vfsStreamFile('complex.php'))->at($framework)->setContent(<<<PHP
-<?php
-    return [
-        'overlapping' => [
-            'foo' => 250,
-            'bar' => 'baz',
-        ],
-    ];
-PHP
-            );
-
-            $appConfig = new vfsStreamFile('app.php');
-            $appConfig->at($app)->setContent(<<<PHP
-<?php
-    return [
-        'exists' => 42,
-    ];
-PHP
-            );
-            (new vfsStreamFile('overlapping.php'))->at($app)->setContent(<<<PHP
-<?php
-    return [
-        'app' => 84,
-        
-        'overlapped' => 112,
-    ];
-PHP
-            );
-            (new vfsStreamFile('complex.php'))->at($app)->setContent(<<<PHP
-<?php
-    return [
-        'overlapping' => [
-            'foo' => 300,
-            'bar' => 'baz',
-        ],
-    ];
-PHP
-            );
+            $this->config = new ConfigManager(new DirectoryManagerTraitMock($this->getAppVfs(),
+                $this->getFrameworkVfs()));
         }
 
         private function getFrameworkVfs(): string
@@ -97,35 +52,27 @@ PHP
 
         public function testLoadFromEmpty()
         {
-            $config = new ConfigManager($this->getFrameworkVfs(), $this->getAppVfs());
-
-            $this->assertNull($config->get('non-existing.foo'));
+            $this->assertNull($this->config->get('non-existing.foo'));
         }
 
         public function testLoadFromNotOverlappingFile()
         {
-            $config = new ConfigManager($this->getFrameworkVfs(), $this->getAppVfs());
+            $this->assertSame(42, $this->config->get('framework.exists'));
+            $this->assertSame(42, $this->config->get('app.exists'));
 
-            $this->assertSame(42, $config->get('framework.exists'));
-            $this->assertSame(42, $config->get('app.exists'));
-
-            $this->assertSame(84, $config->get('framework.not-exists', 84));
-            $this->assertSame(84, $config->get('app.not-exists', 84));
+            $this->assertSame(84, $this->config->get('framework.not-exists', 84));
+            $this->assertSame(84, $this->config->get('app.not-exists', 84));
         }
 
         public function testLoadFromOverlappingFile()
         {
-            $config = new ConfigManager($this->getFrameworkVfs(), $this->getAppVfs());
-
-            $this->assertSame(42, $config->get('overlapping.framework'));
-            $this->assertSame(84, $config->get('overlapping.app'));
-            $this->assertSame(112, $config->get('overlapping.overlapped'));
+            $this->assertSame(42, $this->config->get('overlapping.framework'));
+            $this->assertSame(84, $this->config->get('overlapping.app'));
+            $this->assertSame(112, $this->config->get('overlapping.overlapped'));
         }
 
         public function testLoadComplexFromOverlappingFile()
         {
-            $config = new ConfigManager($this->getFrameworkVfs(), $this->getAppVfs());
-
-            $this->assertSame(300, $config->get('complex.overlapping.foo'));
+            $this->assertSame(300, $this->config->get('complex.overlapping.foo'));
         }
     }

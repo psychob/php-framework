@@ -110,7 +110,6 @@
                     }
                 }
 
-
                 // if element last in array is scalar/simple type, we dont need to inspect other values, as they
                 // will be discarded
                 $lastElement = Arr::last($branches);
@@ -153,6 +152,11 @@
             return array_keys($arr);
         }
 
+        public static function packArray(...$elements): array
+        {
+            return $elements;
+        }
+
         private static function first(array $branches)
         {
             reset($branches);
@@ -177,6 +181,22 @@
             foreach ($arr as $key => $value) {
                 if (call_user_func($callback, $value, $key)) {
                     yield $key => $value;
+                }
+            }
+        }
+
+        public static function pluck($arr, string $key): array
+        {
+            return iterator_to_array(static::lazyPluck($arr, $key));
+        }
+
+        public static function lazyPluck($arr, string $getter): \Generator
+        {
+            foreach ($arr as $key => $value) {
+                if (method_exists($value, $getter)) {
+                    yield $key => ($value->$getter());
+                } else {
+                    yield $key => $value[$getter];
                 }
             }
         }
