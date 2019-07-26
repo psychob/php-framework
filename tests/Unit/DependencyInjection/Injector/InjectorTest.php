@@ -7,6 +7,7 @@
 
     namespace Tests\PsychoB\Framework\Unit\DependencyInjection\Injector;
 
+    use PsychoB\Framework\Config\ConfigManagerInterface;
     use PsychoB\Framework\DependencyInjection\Container\Container;
     use PsychoB\Framework\DependencyInjection\Injector\Exception\AmbiguousInjectionException;
     use PsychoB\Framework\DependencyInjection\Injector\Exception\CircularDependencyDetectedException;
@@ -37,7 +38,8 @@
             $def = new DeferredResolver();
             $cont = new Container();
             $this->injector = new Injector($cont, $def);
-            $res = new Resolver($cont, $this->injector);
+            $config = \Mockery::mock(ConfigManagerInterface::class);
+            $res = new Resolver($cont, $this->injector, $config);
             $def->setResolver($res);
         }
 
