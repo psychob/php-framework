@@ -10,6 +10,7 @@
     use Psr\Container\ContainerInterface as PsrContainerInterface;
     use PsychoB\Framework\DependencyInjection\Container\Exception\ElementAlreadyExistException;
     use PsychoB\Framework\DependencyInjection\Container\Exception\ElementNotFoundException;
+    use PsychoB\Framework\Utility\Arr;
 
     /**
      * Class Container.
@@ -64,6 +65,8 @@
             }
 
             $this->container[$id] = $obj;
+
+            Arr::sortByKey($this->container);
         }
 
         /** @inheritDoc */

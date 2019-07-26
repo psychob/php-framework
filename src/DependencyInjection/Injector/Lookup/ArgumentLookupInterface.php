@@ -7,7 +7,9 @@
 
     namespace PsychoB\Framework\DependencyInjection\Injector\Lookup;
 
+    use PsychoB\Framework\DependencyInjection\Resolver\ResolverInterface;
+
     interface ArgumentLookupInterface
     {
-
+        public function resolve(ResolverInterface $resolver);
     }

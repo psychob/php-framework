@@ -131,7 +131,19 @@
                 if ($constructor === NULL) {
                     return $this->makeWith($refClass);
                 } else {
-                    $args = $this->fetchArgsFrom($constructor, $arguments, $refClass->getName());
+                    $customInjection = [];
+                    if ($refClass->implementsInterface(CustomInjectionInterface::class)) {
+                        $customInjection = $this->inject([$refClass->getName(),
+                                                          CustomInjectionInterface::PBFW_CUSTOM_INJECTION_METHOD]);
+
+                        if (Arr::has($customInjection, '__construct')) {
+                            $customInjection = $customInjection['__construct'];
+                        } else {
+                            $customInjection = [];
+                        }
+                    }
+
+                    $args = $this->fetchArgsFrom($constructor, $arguments, $refClass->getName(), $customInjection);
 
                     return $this->makeWith($refClass, $args);
                 }
@@ -148,7 +160,21 @@
                 throw new StaticCallNormalMethodException($refClass->getName(), $method);
             }
 
-            $args = $this->fetchArgsFrom($refMethod, $arguments, $refClass->getName());
+            $customInjection = [];
+            if ($method !== CustomInjectionInterface::PBFW_CUSTOM_INJECTION_METHOD) {
+                if ($refClass->implementsInterface(CustomInjectionInterface::class)) {
+                    $customInjection = $this->inject([$refClass->getName(),
+                                                      CustomInjectionInterface::PBFW_CUSTOM_INJECTION_METHOD]);
+
+                    if (Arr::has($customInjection, $method)) {
+                        $customInjection = $customInjection[$method];
+                    } else {
+                        $customInjection = [];
+                    }
+                }
+            }
+
+            $args = $this->fetchArgsFrom($refMethod, $arguments, $refClass->getName(), $customInjection);
 
             return $this->injectWith($refMethod, $args, $object);
         }
@@ -182,7 +208,8 @@
 
         protected function fetchArgsFrom(ReflectionFunctionAbstract $callable,
                                          array $arguments,
-                                         ?string $class = NULL): array
+                                         ?string $class = NULL,
+                                         array $injectArguments = []): array
         {
             $ret = [];
 
@@ -210,6 +237,16 @@
                         $ret[] = $arguments[$pName]->resolve($this->resolver);
                     } else {
                         $ret[] = $arguments[$pName];
+                    }
+
+                    continue;
+                }
+
+                if (Arr::has($injectArguments, $pName)) {
+                    if ($injectArguments[$pName] instanceof ArgumentLookupInterface) {
+                        $ret[] = $injectArguments[$pName]->resolve($this->resolver);
+                    } else {
+                        $ret[] = $injectArguments[$pName];
                     }
 
                     continue;
