@@ -1,0 +1,6 @@
+prefix "/__pbfw/":
+    middleware DisableCache:
+        prefix "/debug/":
+            middleware DebugMode:
+                GET "/index"                  execute PsychoB\Framework\Controllers\DebugPanel\Dashboard->dashboard name "pbfw.debug.index"
+                GET "/custom/{{module:str}}"  execute PsychoB\Framework\Controllers\DebugPanel\Custom->dispatch     name "pbfw.debug.custom"

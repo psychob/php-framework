@@ -62,6 +62,15 @@
 
         private function ensureRoutesAreLoaded()
         {
+            foreach ($this->discovery->fetchPathsFor('routes') as $paths) {
+                $this->loadFile($paths);
+            }
+        }
+
+        private function loadFile($path)
+        {
+            $content = $this->resolver->resolve(RouteFileParser::class)->parse($path);
+            dump($content);
         }
     }
 
