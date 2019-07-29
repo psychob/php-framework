@@ -5,9 +5,9 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Parser\Tokens;
+    namespace PsychoB\Framework\Parser\Transformers;
 
-    interface TokenInterface
+    interface TransformerInterface
     {
-        public function getToken(): string;
+        public function transform($input);
     }

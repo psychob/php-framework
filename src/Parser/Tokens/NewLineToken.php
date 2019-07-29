@@ -7,7 +7,6 @@
 
     namespace PsychoB\Framework\Parser\Tokens;
 
-    interface TokenInterface
+    class NewLineToken extends WhitespaceToken
     {
-        public function getToken(): string;
     }

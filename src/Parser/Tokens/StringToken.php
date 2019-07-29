@@ -7,7 +7,6 @@
 
     namespace PsychoB\Framework\Parser\Tokens;
 
-    interface TokenInterface
+    class StringToken extends AbstractToken
     {
-        public function getToken(): string;
     }

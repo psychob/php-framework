@@ -32,4 +32,34 @@
             $this->endIt = $endIt;
         }
 
+        public function getToken(): string
+        {
+            return $this->token;
+        }
+
+        public static function fromRange(array $tokens): self
+        {
+            $tok = '';
+            $start = $tokens[0]->startIt;
+            $end = $tokens[0]->endIt;
+
+            /** @var AbstractToken $token */
+            foreach ($tokens as $token) {
+                $tok .= $token->token;
+                $start = min($start, $token->startIt);
+                $end = max($end, $token->endIt);
+            }
+
+            return new static($tok, $start, $end);
+        }
+
+        public function getStart(): int
+        {
+            return $this->startIt;
+        }
+
+        public function getEnd(): int
+        {
+            return $this->endIt;
+        }
     }
