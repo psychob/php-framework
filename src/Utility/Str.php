@@ -9,6 +9,8 @@
 
     class Str
     {
+        const COMPARE_LENGTH_REVERSE = [Str::class, 'cmpLengthReverse'];
+
         /**
          * Convert $element to string, while also preserving some information about type
          *
@@ -139,5 +141,37 @@
         public static function toLower(string $string): string
         {
             return strtolower($string);
+        }
+
+        public static function equals(string $left, string $right, ?int $length = NULL): bool
+        {
+            if ($length === NULL) {
+                return $left === $right;
+            } else {
+                return strncmp($left, $right, $length) === 0;
+            }
+        }
+
+        public static function length(string $str): int
+        {
+            return strlen($str);
+        }
+
+        public static function cmpLengthReverse(string $left, string $right): int
+        {
+            return -(Str::length($left) <=> Str::length($right));
+        }
+
+        public static function equalsPart(string $left,
+            int $leftStart,
+            int $leftLength,
+            string $right,
+            int $rightStart,
+            int $rightLength): bool
+        {
+            $left_sub = substr($left, $leftStart, $leftLength);
+            $right_sub = substr($right, $rightStart, $rightLength);
+
+            return $left_sub === $right_sub;
         }
     }

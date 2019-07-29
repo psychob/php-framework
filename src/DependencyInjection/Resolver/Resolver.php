@@ -10,6 +10,7 @@
     use PsychoB\Framework\Config\ConfigManagerInterface;
     use PsychoB\Framework\DependencyInjection\Container\ContainerInterface;
     use PsychoB\Framework\DependencyInjection\Injector\Injector;
+    use PsychoB\Framework\DependencyInjection\Resolver\Tag\ResolverNeverCache;
 
     class Resolver implements ResolverInterface
     {
@@ -43,7 +44,9 @@
             }
 
             $obj = $this->injector->make($class, $arguments);
-            $this->container->add($class, $obj);
+            if (!($obj instanceof ResolverNeverCache)) {
+                $this->container->add($class, $obj);
+            }
 
             return $obj;
         }

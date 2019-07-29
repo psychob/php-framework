@@ -162,7 +162,7 @@
             return $elements;
         }
 
-        private static function first(array $branches)
+        public static function first(array $branches)
         {
             reset($branches);
 
@@ -204,5 +204,17 @@
                     yield $key => $value[$getter];
                 }
             }
+        }
+
+        public static function dropKeys(array $arr): array
+        {
+            return array_values($arr);
+        }
+
+        public static function sortValues(array $arr, $callable): array
+        {
+            uasort($arr, $callable);
+
+            return $arr;
         }
     }
