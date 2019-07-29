@@ -8,6 +8,7 @@
     namespace PsychoB\Framework\Parser;
 
     use PsychoB\Framework\DependencyInjection\Resolver\Tag\ResolverNeverCache;
+    use PsychoB\Framework\Exception\BaseException;
     use PsychoB\Framework\Parser\Tokens\LiteralToken;
     use PsychoB\Framework\Parser\Tokens\TokenInterface;
     use PsychoB\Framework\Parser\Tokens\WhitespaceToken;
@@ -60,9 +61,6 @@
                     [$type, $canStartSequence, $canCombine, $symbols, $isWholeSymbol] = $possibleValues[0];
 
                     if ($canStartSequence) {
-//                        Assert::isFalse($isWholeSymbol, LogicParserException::class,
-//                            'Symbol must be whole, if it can not be continue');
-
                         // Here we need to peek in future, and depending on if we could find one of the symbols
                         // we either fall back to literal, or swallow whole symbol
 
@@ -158,6 +156,8 @@
                             }
                         }
                     }
+                } else {
+                    throw new BaseException("Todo");
                 }
             }
 
