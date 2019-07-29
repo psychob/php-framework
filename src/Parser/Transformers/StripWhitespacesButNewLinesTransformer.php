@@ -21,13 +21,14 @@
                     $tok = $token->getToken();
                     $offset = 0;
 
-                    $hasNewLine = Str::findFirst($tok, "\n");
-
                     while (($it = Str::findFirst($tok, "\n")) !== false) {
-                        yield new NewLineToken("\n", $token->getStart() + $offset, $token->getStart() + $offset + 1);
+                        $start = $token->getStart() + $offset + $it;
+                        $end = $token->getStart() + $offset + $it + 1;
+                        yield new NewLineToken("\n", $token->getStart() + $offset + $it,
+                            $token->getStart() + $offset + $it + 1);
 
-                        $tok = Str::substr($tok, $offset + $it + 1);
-                        $offset += $it;
+                        $tok = Str::substr($tok, $it + 1);
+                        $offset += $it + 1;
                     }
                 } else {
                     yield $token;

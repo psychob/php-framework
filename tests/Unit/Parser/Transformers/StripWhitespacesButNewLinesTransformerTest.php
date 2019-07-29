@@ -41,6 +41,22 @@
             $this->assertSame($exp->getToken(), $cur->getToken());
         }
 
+        protected function verifyTokensWithNumbers(TokenInterface $exp, $cur, int $expIt, int $curIt)
+        {
+            $this->assertInstanceOf(TokenInterface::class, $cur);
+            $this->assertSame(get_class($exp), get_class($cur), 'Type miss match with token: ' . $cur->getToken());
+
+            $this->assertSame($exp->getToken(), $cur->getToken());
+
+            $this->assertSame([
+                'start' => $exp->getStart(),
+                'end' => $exp->getEnd(),
+            ], [
+                'start' => $cur->getStart(),
+                'end' => $cur->getEnd(),
+            ], 'Index dosen\'t match');
+        }
+
         public function testRemovingWhitespaces()
         {
             $this->tokenizer->addGroup('symbols', ['(', ')', '$', '->', '-'], SymbolToken::class, false);
@@ -120,5 +136,41 @@
                 new SymbolToken('$', 0, 0),
                 new LiteralToken('b', 0, 0),
             ], $this->tokenizer->tokenize("func(\$x) \n\n \n -> \$x - \$b"), [$this, 'verifyTokens']);
+        }
+
+        public function testRemovingWhitespacesProperOffsetCalculate()
+        {
+            $this->assertArrayElementsAre([
+                new NewLineToken(PHP_EOL, 0, 1),
+                new NewLineToken(PHP_EOL, 2, 3),
+                new NewLineToken(PHP_EOL, 5, 6),
+                new NewLineToken(PHP_EOL, 9, 10),
+                new NewLineToken(PHP_EOL, 14, 15),
+            ], $this->tokenizer->tokenize(
+                "". // ignore phpstorm formatting
+                "\n"    . // 0, 1
+                " \n"   . // 2, 3
+                "  \n"  . // 5, 6
+                "   \n" . // 9, 10
+                "    \n"  // 14, 15
+            ), [$this, 'verifyTokensWithNumbers']);
+        }
+
+        public function testRemovingWhitespacesProperOffsetCalculateWithDifferentCharacters()
+        {
+            $this->assertArrayElementsAre([
+                new NewLineToken(PHP_EOL, 0, 1),
+                new NewLineToken(PHP_EOL, 2, 3),
+                new NewLineToken(PHP_EOL, 5, 6),
+                new NewLineToken(PHP_EOL, 9, 10),
+                new NewLineToken(PHP_EOL, 14, 15),
+            ], $this->tokenizer->tokenize(
+                "". // ignore phpstorm formatting
+                "\n"    . // 0, 1
+                "\t\n"   . // 2, 3
+                "  \n"  . // 5, 6
+                " \v \n" . // 9, 10
+                "    \n"  // 14, 15
+            ), [$this, 'verifyTokensWithNumbers']);
         }
     }
