@@ -10,6 +10,7 @@
     "require-dev": {
         "mikey179/vfsstream": "^1.6",
         "mockery/mockery": "^1.2",
+        "phpmetrics/phpmetrics": "^2.4",
         "phpunit/phpunit": "^8.2",
         "symfony/var-dumper": "^4.3"
     },
