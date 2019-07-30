@@ -10,6 +10,8 @@
     use PsychoB\Framework\Assert\Constraints\IsEqualAssert;
     use PsychoB\Framework\Assert\Constraints\IsFalseAssert;
     use PsychoB\Framework\Assert\Constraints\IsTrueAssert;
+    use PsychoB\Framework\Assert\Constraints\TypeAssert;
+    use PsychoB\Framework\Assert\Constraints\TypeRequirementAssert;
     use PsychoB\Framework\Assert\Exception\AssertNotFoundException;
     use PsychoB\Framework\Utility\Arr;
 
@@ -26,6 +28,8 @@
             'isTrue' => IsTrueAssert::class,
             'isFalse' => IsFalseAssert::class,
             'isEqual' => IsEqualAssert::class,
+            'typeRequirements' => TypeRequirementAssert::class,
+            'hasType' => TypeAssert::class,
         ];
 
         protected static function add(string $name, string $class): void
