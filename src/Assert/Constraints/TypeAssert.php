@@ -29,17 +29,19 @@
                 } else {
                     foreach ($type as $element) {
                         if (Str::is($element)) {
-                            if (!static::matchStringType($obj, $element)) {
-                                throw new TypeDoesntMatchException($obj, $type, $message);
+                            if (static::matchStringType($obj, $element)) {
+                                return;
                             }
                         } else if (Arr::hasMultiple($element, 'type', 'class') && Arr::len($type) === 2) {
-                            if (!static::matchOneArray($obj, $element)) {
-                                throw new TypeDoesntMatchException($obj, $type, $message);
+                            if (static::matchOneArray($obj, $element)) {
+                                return;
                             }
                         } else {
                             throw new TypeDoesntMatchException($obj, $type, $message);
                         }
                     }
+
+                    throw new TypeDoesntMatchException($obj, $type, $message);
                 }
             } else {
                 throw new TypeDoesntMatchException($obj, $type, $message);
