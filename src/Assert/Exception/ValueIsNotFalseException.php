@@ -9,21 +9,13 @@
 
     class ValueIsNotFalseException extends AssertionException
     {
-        protected $value;
-
         public function __construct($value, ?string $message = NULL, \Throwable $previous = NULL)
         {
-            $this->value = $value;
-
-            parent::__construct("is-false", 'ValueIsNotFalseException', $message ?? 'Value does not equal to false',
+            parent::__construct($value,
+                'is-false',
+                'ValueIsNotFalseException',
+                'Value does not equal to false',
+                $message,
                 $previous);
-        }
-
-        /**
-         * @return mixed
-         */
-        public function getValue()
-        {
-            return $this->value;
         }
     }

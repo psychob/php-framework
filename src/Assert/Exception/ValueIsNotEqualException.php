@@ -12,40 +12,31 @@
     class ValueIsNotEqualException extends AssertionException
     {
         /** @var mixed */
-        protected $left;
-
-        /** @var mixed */
-        protected $right;
+        protected $compare;
 
         /**
          * ValueIsNotEqualException constructor.
          *
-         * @param mixed          $left
-         * @param mixed          $right
+         * @param mixed          $value
+         * @param mixed          $toCompare
          * @param string|null    $message
          * @param Throwable|null $previous
          */
-        public function __construct($left, $right, ?string $message = NULL, Throwable $previous = NULL)
+        public function __construct($value, $toCompare, ?string $message = NULL, Throwable $previous = NULL)
         {
-            $this->left = $left;
-            $this->right = $right;
+            $this->compare = $toCompare;
 
-            parent::__construct("is-equal", 'ValueIsNotEqualException', $message ?? 'Values are not equal', $previous);
+            parent::__construct($value,
+                'is-equal',
+                'ValueIsNotEqualException',
+                'Values are not equals',
+                $message,
+                $previous);
         }
 
-        /**
-         * @return mixed
-         */
-        public function getLeft()
+        /** @return mixed */
+        public function getCompare()
         {
-            return $this->left;
-        }
-
-        /**
-         * @return mixed
-         */
-        public function getRight()
-        {
-            return $this->right;
+            return $this->compare;
         }
     }

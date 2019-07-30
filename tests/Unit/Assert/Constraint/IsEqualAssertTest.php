@@ -72,8 +72,8 @@
                 IsEqualAssert::ensure($left, $right);
             } catch (ValueIsNotEqualException $e) {
                 $this->assertInstanceOf(AssertionException::class, $e);
-                $this->assertSame($left, $e->getLeft());
-                $this->assertSame($right, $e->getRight());
+                $this->assertSame($left, $e->getValue());
+                $this->assertSame($right, $e->getCompare());
 
                 $catch = true;
             }
