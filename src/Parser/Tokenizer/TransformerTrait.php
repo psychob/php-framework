@@ -7,6 +7,8 @@
 
     namespace PsychoB\Framework\Parser\Tokenizer;
 
+    use PsychoB\Framework\Assert\Assert;
+    use PsychoB\Framework\Assert\Constraints\TypeAssert;
     use PsychoB\Framework\Parser\Transformers\TransformerInterface;
     use PsychoB\Framework\Utility\Str;
 
@@ -17,10 +19,12 @@
 
         public function addPass($class): void
         {
-//            AssertArgument::hasType($class, [
-//                AssertArgumentType::TYPE_STRING,
-//                AssertArgumentType::implementsInterface(TransformerInterface::class),
-//            ], 1, 'class');
+            Assert::arguments('Class must be one of the following: string or class implements TransformerInterface',
+                'class', 1)
+                  ->hasType($class, [
+                      TypeAssert::TYPE_STRING,
+                      TypeAssert::implements(TransformerInterface::class),
+                  ]);
 
             $this->transformers[] = $class;
         }

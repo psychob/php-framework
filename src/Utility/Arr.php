@@ -235,4 +235,9 @@
         {
             return is_array($obj) || $obj instanceof ArrayAccess;
         }
+
+        public static function len($arr): int
+        {
+            return count($arr);
+        }
     }
