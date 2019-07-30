@@ -25,12 +25,7 @@
         {
             $this->types = $types;
 
-            parent::__construct($obj,
-                'type-match',
-                'TypeDoesntMatchException',
-                'Type didnt match specification',
-                $message,
-                $previous);
+            parent::__construct($obj, 'type-match', 'Type didnt match specification', $message, $previous);
         }
 
         /**

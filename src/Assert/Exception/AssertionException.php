@@ -26,7 +26,6 @@
 
         public function __construct($obj,
             string $assertionType,
-            string $exceptionClass,
             string $exceptionMessage,
             ?string $customMessage = NULL,
             Throwable $previous = NULL)
@@ -34,7 +33,8 @@
             $this->assertionType = $assertionType;
             $this->value = $obj;
 
-            parent::__construct(sprintf('%s: %s %s', $exceptionClass, $exceptionMessage, $customMessage), 0, $previous);
+            parent::__construct(sprintf('%s%s', $exceptionMessage, $customMessage ? ' : ' . $customMessage : ''),
+                0, $previous);
         }
 
         /** @return string */

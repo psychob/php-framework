@@ -11,11 +11,6 @@
     {
         public function __construct($value, ?string $message = NULL, \Throwable $previous = NULL)
         {
-            parent::__construct($value,
-                'is-false',
-                'ValueIsNotFalseException',
-                'Value does not equal to false',
-                $message,
-                $previous);
+            parent::__construct($value, 'is-false', 'Value does not equal to false', $message, $previous);
         }
     }

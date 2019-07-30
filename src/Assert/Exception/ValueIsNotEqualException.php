@@ -26,12 +26,7 @@
         {
             $this->compare = $toCompare;
 
-            parent::__construct($value,
-                'is-equal',
-                'ValueIsNotEqualException',
-                'Values are not equals',
-                $message,
-                $previous);
+            parent::__construct($value, 'is-equal', 'Values are not equals', $message, $previous);
         }
 
         /** @return mixed */
