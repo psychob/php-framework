@@ -9,6 +9,7 @@
 
     use PsychoB\Framework\Utility\Arr;
     use PsychoB\Framework\Validation\Asserts\Exception\AssertionNotFoundException;
+    use PsychoB\Framework\Validation\Asserts\PropertyIsEqual;
     use PsychoB\Framework\Validation\Asserts\IsEqual;
     use PsychoB\Framework\Validation\Asserts\IsTrue;
 
@@ -33,7 +34,8 @@
             'isFalse' => IsFalse::class,
             'typeRequirements' => TypeRequirements::class,
             'exactType' => ExactType::class,
-            'hasProps' => HasProp::class,
+            'hasProps' => HasProps::class,
+            'propEqual' => PropertyIsEqual::class,
         ];
 
         public static function __callStatic($name, $arguments)

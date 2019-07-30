@@ -217,4 +217,22 @@
 
             return $arr;
         }
+
+        public static function toIterator($obj): \Iterator
+        {
+            if ($obj instanceof \Iterator) {
+                return $obj;
+            }
+
+            if (is_array($obj)) {
+                return new \ArrayIterator($obj);
+            }
+
+            return $obj;
+        }
+
+        public static function is($obj): bool
+        {
+            return is_array($obj) || $obj instanceof ArrayAccess;
+        }
     }
