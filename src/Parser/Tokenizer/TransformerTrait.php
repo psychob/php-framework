@@ -28,7 +28,7 @@
         protected function addTransformations($input)
         {
             foreach ($this->transformers as $transformer) {
-                if (Str::isStr($transformer)) {
+                if (Str::is($transformer)) {
                     $transformer = $this->resolver->resolve($transformer);
                 }
 

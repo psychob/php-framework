@@ -175,7 +175,7 @@
             return $left_sub === $right_sub;
         }
 
-        public static function isStr($str): bool
+        public static function is($str): bool
         {
             return is_string($str);
         }
