@@ -8,22 +8,22 @@
     namespace PsychoB\Framework\Validation;
 
     /**
-     * Class Assert
+     * Class Validate
      *
      * @author Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
      * @since  0.1
      *
-     * @method static isEqual($left, $right, string $message = ''): void
-     * @method static isTrue($obj, string $message = ''): void
-     * @method static propIsEqual($obj, string $property, $value, string $message = ''): void
-     * @method static propRequirement($obj, string $properties, string $message = ''): void
+     * @method static isEqual($left, $right): bool
+     * @method static isTrue($obj): bool
+     * @method static propIsEqual($obj, string $property, $value): bool
+     * @method static propRequirement($obj, string $properties): bool
      */
-    class Assert
+    class Validate
     {
         use AssertDatabaseTrait;
 
         public static function __callStatic($name, $arguments)
         {
-            return call_user_func_array([static::get($name), 'ensure'], $arguments);
+            return call_user_func_array([static::get($name), 'validate'], $arguments);
         }
     }
