@@ -15,6 +15,7 @@
      *
      * @method static isTrue($obj, ?string $message = NULL): void
      * @method static isFalse($obj, ?string $message = NULL): void
+     * @method static isEqual(mixed $left, mixed $right, ?string $message = NULL): void
      */
     final class Assert extends AssertDatabase
     {

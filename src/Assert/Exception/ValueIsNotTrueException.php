@@ -15,7 +15,7 @@
         {
             $this->value = $value;
 
-            parent::__construct("is-false", 'ValueIsNotTrueException', $message ?? 'Value does not equal to true',
+            parent::__construct("is-true", 'ValueIsNotTrueException', $message ?? 'Value does not equal to true',
                 $previous);
         }
 

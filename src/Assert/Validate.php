@@ -17,6 +17,7 @@
      *
      * @method static isTrue($obj): void
      * @method static isFalse($obj): void
+     * @method static isEqual(mixed $left, mixed $right): void
      */
     final class Validate
     {
