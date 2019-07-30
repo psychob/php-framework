@@ -12,7 +12,7 @@
     use PsychoB\Framework\Parser\Tokens\TokenInterface;
     use PsychoB\Framework\Parser\Tokens\WhitespaceToken;
     use PsychoB\Framework\Utility\Arr;
-    use PsychoB\Framework\Utility\Assert;
+    use PsychoB\Framework\Validation\Assert;
     use PsychoB\Framework\Utility\Str;
 
     trait TokenizerTrait
@@ -105,8 +105,7 @@
                             }
                         }
                     } else {
-                        Assert::isTrue($isWholeSymbol, LogicParserException::class,
-                            'Symbol must be whole, if it can not be continue');
+                        Assert::isTrue($isWholeSymbol, 'Symbol must be whole, if it can not be continue');
 
                         $tok = $this->pushToken($currentType, $current, $type, $canCombine, $chr, $startIt, $it);
                         if ($tok !== NULL) {

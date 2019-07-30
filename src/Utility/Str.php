@@ -174,4 +174,35 @@
 
             return $left_sub === $right_sub;
         }
+
+        public static function isStr($str): bool
+        {
+            return is_string($str);
+        }
+
+        public static function contains(string $str, string $toFind): bool
+        {
+            return Str::findFirst($str, $toFind) !== false;
+        }
+
+        public static function findFirst(string $str, string $toFind, int $offset = 0)
+        {
+            return strpos($str, $toFind, $offset);
+        }
+
+        public static function substr(string $str, int $start, ?int $len = NULL): string
+        {
+            if ($len === NULL) {
+                return substr($str, $start);
+            }
+
+            return substr($str, $start, $len);
+        }
+
+        public static function endsWith(string $string, string $end): bool
+        {
+            $substr = substr($string, -strlen($end));
+
+            return $substr === $end;
+        }
     }

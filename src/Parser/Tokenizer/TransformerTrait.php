@@ -9,8 +9,6 @@
 
     use PsychoB\Framework\Parser\Transformers\TransformerInterface;
     use PsychoB\Framework\Utility\Str;
-    use PsychoB\Framework\Validation\Asserts\AssertArgument;
-    use PsychoB\Framework\Validation\Asserts\AssertArgumentType;
 
     trait TransformerTrait
     {
@@ -19,10 +17,10 @@
 
         public function addPass($class): void
         {
-            AssertArgument::hasType($class, [
-                AssertArgumentType::TYPE_STRING,
-                AssertArgumentType::implementsInterface(TransformerInterface::class),
-            ], 1, 'class');
+//            AssertArgument::hasType($class, [
+//                AssertArgumentType::TYPE_STRING,
+//                AssertArgumentType::implementsInterface(TransformerInterface::class),
+//            ], 1, 'class');
 
             $this->transformers[] = $class;
         }
