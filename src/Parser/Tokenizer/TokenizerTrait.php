@@ -7,12 +7,12 @@
 
     namespace PsychoB\Framework\Parser\Tokenizer;
 
+    use PsychoB\Framework\Assert\Assert;
     use PsychoB\Framework\Exception\BaseException;
     use PsychoB\Framework\Parser\Tokens\LiteralToken;
     use PsychoB\Framework\Parser\Tokens\TokenInterface;
     use PsychoB\Framework\Parser\Tokens\WhitespaceToken;
     use PsychoB\Framework\Utility\Arr;
-    use PsychoB\Framework\Validation\Assert;
     use PsychoB\Framework\Utility\Str;
 
     trait TokenizerTrait

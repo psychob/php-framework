@@ -7,13 +7,13 @@
 
     namespace PsychoB\Framework\Router;
 
+    use PsychoB\Framework\Assert\Assert;
     use PsychoB\Framework\Parser\Tokenizer;
     use PsychoB\Framework\Parser\Tokens\KeywordToken;
     use PsychoB\Framework\Parser\Tokens\SymbolToken;
     use PsychoB\Framework\Parser\Transformers\StringTransformer;
     use PsychoB\Framework\Parser\Transformers\StripWhitespacesButNewLinesTransformer;
     use PsychoB\Framework\Router\Tokens\ExecutorToken;
-    use PsychoB\Framework\Validation\Assert;
 
     class RouteFileParser
     {
