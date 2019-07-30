@@ -12,6 +12,7 @@
     use PsychoB\Framework\Validation\Asserts\PropertyIsEqual;
     use PsychoB\Framework\Validation\Asserts\IsEqual;
     use PsychoB\Framework\Validation\Asserts\IsTrue;
+    use PsychoB\Framework\Validation\Asserts\PropertyRequirements;
 
     /**
      * Class Assert
@@ -34,7 +35,7 @@
             'isFalse' => IsFalse::class,
             'typeRequirements' => TypeRequirements::class,
             'exactType' => ExactType::class,
-            'hasProps' => HasProps::class,
+            'propRequirements' => PropertyRequirements::class,
             'propEqual' => PropertyIsEqual::class,
         ];
 
