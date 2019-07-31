@@ -198,7 +198,7 @@
                 }
             }
 
-            $this->routes[] = $route;
+            $this->routes[] = new Route('', $route['url'], $route['methods'], $route['middlewares'], $route['execute']);
         }
 
         protected function mergeUrl($prefix, $url): string
