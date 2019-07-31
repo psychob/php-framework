@@ -17,6 +17,7 @@
     use PsychoB\Framework\Router\Http\Request;
     use PsychoB\Framework\Router\Http\RequestFactory;
     use PsychoB\Framework\Router\Middleware\MiddlewareInterface;
+    use PsychoB\Framework\Utility\Arr;
 
     class RouteManager
     {
@@ -28,6 +29,9 @@
 
         /**  @var DirectoryDiscoveryInterface */
         protected $discovery;
+
+        /** @var mixed[] */
+        protected $routes = [];
 
         /**
          * RouteManager constructor.
@@ -69,8 +73,7 @@
 
         private function loadFile($path)
         {
-            $content = $this->resolver->resolve(RouteFileParser::class)->parse($path);
-            dump($content);
+            $this->routes = Arr::appendValues($this->resolver->resolve(RouteFileParser::class)->parse($path), $this->routes);
         }
     }
 

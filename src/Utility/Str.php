@@ -205,4 +205,19 @@
 
             return $substr === $end;
         }
+
+        public static function first(string $str): string
+        {
+            return $str[0];
+        }
+
+        public static function last(string $str): string
+        {
+            return $str[Str::len($str) - 1];
+        }
+
+        private static function len(string $str): int
+        {
+            return strlen($str);
+        }
     }

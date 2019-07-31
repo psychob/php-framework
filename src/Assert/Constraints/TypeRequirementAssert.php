@@ -8,7 +8,7 @@
     namespace PsychoB\Framework\Assert\Constraints;
 
     use PsychoB\Framework\Assert\Exception\AssertionException;
-    use PsychoB\Framework\Assert\Exception\ValueIsNotTrueException;
+    use PsychoB\Framework\Assert\Exception\TypeRequirementException;
 
     class TypeRequirementAssert
     {
@@ -18,7 +18,7 @@
                 TypeAssert::ensure($obj, $type);
                 ObjectPropertiesAssert::ensure($obj, $props);
             } catch (AssertionException $e) {
-                throw new TypeRequirementException($obj, $type, $props, $message);
+                throw new TypeRequirementException($obj, $type, $props, $message, $e);
             }
         }
     }

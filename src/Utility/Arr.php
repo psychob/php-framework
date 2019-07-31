@@ -8,6 +8,7 @@
     namespace PsychoB\Framework\Utility;
 
     use ArrayAccess;
+    use phpDocumentor\Reflection\Types\Static_;
 
     class Arr
     {
@@ -239,5 +240,28 @@
         public static function len($arr): int
         {
             return count($arr);
+        }
+
+        public static function reverse(array $arr)
+        {
+            return array_reverse($arr);
+        }
+
+        public static function appendValues(array $first, array ...$second): array
+        {
+            return iterator_to_array(static::lazyAppendValues($first, ...$second));
+        }
+
+        public static function lazyAppendValues(array $first, array ...$second)
+        {
+            foreach ($first as $value) {
+                yield $value;
+            }
+
+            foreach ($second as $arrays) {
+                foreach ($arrays as $value) {
+                    yield $value;
+                }
+            }
         }
     }

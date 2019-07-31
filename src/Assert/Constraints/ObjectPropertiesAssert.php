@@ -8,6 +8,7 @@
     namespace PsychoB\Framework\Assert\Constraints;
 
     use PsychoB\Framework\Assert\Exception\AssertionException;
+    use PsychoB\Framework\Assert\Exception\ObjectPropertiesDoesntMatchException;
 
     class ObjectPropertiesAssert
     {
@@ -18,7 +19,7 @@
                     PropertyIsEqualAssert::ensure($obj, $name, $value);
                 }
             } catch (AssertionException $a) {
-                throw new ObjectPropertiesDosentMatchException($obj, $props, $message, $a);
+                throw new ObjectPropertiesDoesntMatchException($obj, $props, $message, $a);
             }
         }
     }
