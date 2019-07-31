@@ -19,6 +19,7 @@
      * @method static typeRequirements(mixed $obj, array|string $type, mixed[] $properties, ?string $message = NULL)
      * @method static hasType($obj, mixed|string $type, ?string $message = NULL)
      * @method static isNotEmpty($obj, ?string $message = NULL)
+     * @method static unreachable(?string $message = NULL)
      */
     final class Assert extends AssertDatabase
     {
