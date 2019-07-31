@@ -61,7 +61,7 @@
                         $found = false;
 
                         foreach (Arr::sortValues($symbols, Str::COMPARE_LENGTH_REVERSE) as $symbol) {
-                            $len = Str::length($symbol);
+                            $len = Str::len($symbol);
 
                             if (Str::equalsPart($content, $it, $len, $symbol, 0, $len)) {
                                 $found = $symbol;
@@ -78,17 +78,17 @@
                                 $current = $found;
                                 $currentType = $type;
                                 $startIt = $it;
-                                $it += Str::length($found) - 1;
+                                $it += Str::len($found) - 1;
                             } else {
                                 if ($canCombine) {
                                     $current .= $found;
-                                    $it += Str::length($found) - 1;
+                                    $it += Str::len($found) - 1;
                                 } else {
                                     yield $this->newToken($currentType, $current, $startIt, $it);
                                     $current = $found;
                                     $currentType = $type;
                                     $startIt = $it;
-                                    $it += Str::length($found) - 1;
+                                    $it += Str::len($found) - 1;
                                 }
                             }
                         } else {

@@ -11,7 +11,8 @@
     {
         const COMPARE_LENGTH_REVERSE = [Str::class, 'cmpLengthReverse'];
 
-        use StringManipulation\StrInfoTrait;
+        use StringManipulation\StrInfoTrait,
+            StringManipulation\StrCompareTrait;
 
         /**
          * Convert $element to string, while also preserving some information about type
@@ -145,31 +146,9 @@
             return strtolower($string);
         }
 
-        public static function equals(string $left, string $right, ?int $length = NULL): bool
-        {
-            if ($length === NULL) {
-                return $left === $right;
-            } else {
-                return strncmp($left, $right, $length) === 0;
-            }
-        }
-
         public static function cmpLengthReverse(string $left, string $right): int
         {
             return -(Str::len($left) <=> Str::len($right));
-        }
-
-        public static function equalsPart(string $left,
-            int $leftStart,
-            int $leftLength,
-            string $right,
-            int $rightStart,
-            int $rightLength): bool
-        {
-            $left_sub = substr($left, $leftStart, $leftLength);
-            $right_sub = substr($right, $rightStart, $rightLength);
-
-            return $left_sub === $right_sub;
         }
 
         public static function contains(string $str, string $toFind): bool
@@ -197,6 +176,7 @@
 
             return $substr === $end;
         }
+
         public static function toUpper(string $str): string
         {
             return strtoupper($str);
