@@ -5,6 +5,7 @@ php:
 env:
   global:
     - CC_TEST_REPORTER_ID=7d7f8090bc8b67fc08ed87841ba79a162c2a980b6a941bb864a9dd6400c22688
+    - CODECOV_TOKEN="c275d384-d3bf-4664-be3d-2504c7964d85"
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
@@ -17,6 +18,9 @@ script:
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 
 cache:
   directories:
