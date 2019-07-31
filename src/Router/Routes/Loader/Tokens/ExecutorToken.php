@@ -5,7 +5,7 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Router\Tokens;
+    namespace PsychoB\Framework\Router\Routes\Loader\Tokens;
 
     use PsychoB\Framework\Parser\Tokens\AbstractToken;
 

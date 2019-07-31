@@ -18,6 +18,7 @@
     use PsychoB\Framework\Router\Http\RequestFactory;
     use PsychoB\Framework\Router\Middleware\Executor\MiddlewareExecutor;
     use PsychoB\Framework\Router\Middleware\MiddlewareInterface;
+    use PsychoB\Framework\Router\Routes\Loader\RouteFileLoader;
     use PsychoB\Framework\Router\Routes\MatchedRoute;
     use PsychoB\Framework\Router\Routes\Route;
     use PsychoB\Framework\Utility\Arr;
@@ -83,8 +84,9 @@
 
         private function loadFile($path)
         {
-            $this->routes = Arr::appendValues($this->resolver->resolve(RouteFileParser::class)->parse($path),
-                $this->routes);
+            $this->routes = Arr::appendValues($this->resolver->resolve(RouteFileLoader::class, [
+                'path' => $path,
+            ])->parse(), $this->routes);
         }
 
         protected function findCorrectRoute(Request $request): ?Route
@@ -94,8 +96,6 @@
                     dump($matchedRoute);
                 }
             }
-
-            dump($request);
 
             return NULL;
         }

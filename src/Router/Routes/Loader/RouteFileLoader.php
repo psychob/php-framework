@@ -5,23 +5,27 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Router;
+    namespace PsychoB\Framework\Router\Routes\Loader;
 
     use PsychoB\Framework\Assert\Assert;
+    use PsychoB\Framework\Assert\Constraints\TypeAssert;
     use PsychoB\Framework\Assert\Validate;
+    use PsychoB\Framework\Config\ConfigManagerInterface;
     use PsychoB\Framework\DependencyInjection\Resolver\Tag\ResolverNeverCache;
     use PsychoB\Framework\Parser\Tokenizer;
     use PsychoB\Framework\Parser\Tokens\KeywordToken;
+    use PsychoB\Framework\Parser\Tokens\LiteralToken;
     use PsychoB\Framework\Parser\Tokens\NewLineToken;
     use PsychoB\Framework\Parser\Tokens\SymbolToken;
+    use PsychoB\Framework\Parser\Tokens\TokenInterface;
     use PsychoB\Framework\Parser\Transformers\StringTransformer;
     use PsychoB\Framework\Parser\Transformers\StripWhitespacesButNewLinesTransformer;
+    use PsychoB\Framework\Router\Routes\Loader\Tokens\ExecutorToken;
     use PsychoB\Framework\Router\Routes\Route;
-    use PsychoB\Framework\Router\Tokens\ExecutorToken;
     use PsychoB\Framework\Utility\Arr;
     use PsychoB\Framework\Utility\Str;
 
-    class RouteFileParser implements ResolverNeverCache
+    class RouteFileLoader implements ResolverNeverCache
     {
         /** @var Tokenizer */
         private $tokenizer;
@@ -29,31 +33,43 @@
         /** @var mixed[] */
         protected $current = [];
 
+        /** @var Route[] */
         protected $routes = [];
+
+        /** @var string */
+        protected $file;
+
+        /** @var string[] */
+        protected $allowedMethods = [];
+
+        /** @var string[] */
+        protected $allowedExecutors = ['execute', 'view', 'prefix', 'middleware', 'name'];
 
         /**
          * RouteFileParser constructor.
          *
-         * @param Tokenizer $tokenizer
+         * @param Tokenizer              $tokenizer
+         * @param ConfigManagerInterface $config
+         * @param string                 $path
          */
-        public function __construct(Tokenizer $tokenizer)
+        public function __construct(Tokenizer $tokenizer, ConfigManagerInterface $config, string $path)
         {
+            $this->allowedMethods = $config->get('routes.methods', []);
+
             $this->tokenizer = $tokenizer;
-            $this->tokenizer->addGroup('symbols', ['"', ':', ',', '{', '}', '->', '.', '::'], SymbolToken::class,
-                false);
-            $this->tokenizer->addGroup('keywords', ['GET', 'POST', 'PUT', 'OPTIONS', 'DELETE'], KeywordToken::class,
-                false);
-            $this->tokenizer->addGroup('executors', ['execute', 'view', 'prefix', 'middleware'], ExecutorToken::class,
-                false);
+            $this->tokenizer->addGroup('symbols', ['"', ':', ',', '->', '::'], SymbolToken::class, false);
+            $this->tokenizer->addGroup('keywords', $this->allowedMethods, KeywordToken::class, false);
+            $this->tokenizer->addGroup('executors', $this->allowedExecutors, ExecutorToken::class, false);
 
             $this->tokenizer->addPass(StringTransformer::class);
             $this->tokenizer->addPass(StripWhitespacesButNewLinesTransformer::class);
+
+            $this->file = $path;
         }
 
-        public function parse(string $path)
+        public function parse()
         {
-            $tokens = $this->tokenizer->tokenizeFile($path);
-
+            $tokens = $this->tokenizer->tokenizeFile($this->file);
             $this->parseRoot(iterator_to_array($tokens));
 
             return $this->routes;
@@ -62,24 +78,26 @@
         protected function parseRoot(array $tokens)
         {
             for ($it = 0; $it < count($tokens); ++$it) {
-                $this->parseInstruction($tokens, $it);
+                $it = $this->parseInstruction($tokens, $it);
             }
         }
 
-        protected function parseInstruction(array &$tokens, int &$it, int $intend = 0): void
+        protected function parseInstruction(array &$tokens, int $it, int $intend = 0): int
         {
             if ($tokens[$it] instanceof KeywordToken) {
-                $this->parseRoute($tokens, $it, $intend);
+                $it = $this->parseRoute($tokens, $it, $intend);
             } else if ($tokens[$it] instanceof ExecutorToken) {
-                $this->parseTree($tokens, $it, $intend);
+                $it = $this->parseTree($tokens, $it, $intend);
             } else {
                 throw new InvalidRouteInstructionException($tokens, $it);
             }
+
+            return $it;
         }
 
-        private function parseRoute(array &$tokens, int &$it, int $intend)
+        protected function parseRoute(array &$tokens, int $it, int $intend)
         {
-            Assert::hasType($tokens[$it], KeywordToken::class);
+            $this->assertType(KeywordToken::class, $tokens[$it], $tokens, $it);
 
             $methods = [$tokens[$it]->getToken()];
             $url = $tokens[$it + 1]->getToken();
@@ -94,8 +112,14 @@
                     break;
                 }
 
+                $this->assertType(ExecutorToken::class, $tokens[$it], $tokens, $it);
+
                 switch ($tokens[$it]->getToken()) {
                     case 'execute':
+                        $this->assertType(LiteralToken::class, $tokens[$it + 1], $tokens, $it + 1);
+                        $this->assertType(SymbolToken::class, $tokens[$it + 2], $tokens, $it + 2);
+                        $this->assertType(LiteralToken::class, $tokens[$it + 3], $tokens, $it + 3);
+
                         $execute = [
                             $tokens[$it + 1]->getToken(),
                             $tokens[$it + 2]->getToken(),
@@ -116,17 +140,15 @@
                         break;
 
                     default:
-                        dump($tokens[$it]);
-                        throw new \Exception();
+                        $this->unknownExceutor($tokens[$it]->getToken(), $tokens[$it], $tokens, $it);
                 }
             }
-
             $this->pushRoute($methods, $url, $execute, $name, $view);
 
-//            throw new \Exception();
+            return $it;
         }
 
-        private function parseTree(array &$tokens, int &$it, int $intend)
+        private function parseTree(array &$tokens, int $it, int $intend)
         {
             Assert::hasType($tokens[$it], ExecutorToken::class);
             switch ($tokens[$it]->getToken()) {
@@ -150,10 +172,12 @@
 
             $nextIntend = $tokens[$it]->getStart() - $end;
             if ($nextIntend > $intend) {
-                $this->parseInstruction($tokens, $it, $nextIntend);
+                $it = $this->parseInstruction($tokens, $it, $nextIntend);
             } else {
                 $this->pushCurrent($intend);
             }
+
+            return $it;
         }
 
         protected function parsePrefix(array &$tokens, int &$it, int $intend)
@@ -234,4 +258,18 @@
             return $prefix . $url;
         }
 
+        protected function assertType($element, TokenInterface $currentToken, array $tokens, int $idx): void
+        {
+            Assert::hasType($element, [TypeAssert::TYPE_STRING, TypeAssert::TYPE_ARRAY]);
+
+            if (Str::is($element)) {
+                if (!Validate::hasType($currentToken, $element)) {
+                    throw new InvalidTokenException($element, $currentToken, $tokens, $idx);
+                }
+
+                return;
+            }
+
+            Assert::unreachable();
+        }
     }

@@ -14,6 +14,7 @@
     class TypeAssert
     {
         public const TYPE_STRING = '*string';
+        public const TYPE_ARRAY  = '*array';
 
         public static function ensure($obj, $type, ?string $message = NULL): void
         {

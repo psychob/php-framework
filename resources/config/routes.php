@@ -29,5 +29,12 @@
 
         'param_types' => [
             'str' => StringValidator::class,
-        ]
+        ],
+
+        'methods' => [
+            'GET',
+            'POST',
+            'PUT',
+            'DELETE',
+        ],
     ];

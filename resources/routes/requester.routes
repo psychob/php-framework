@@ -1,4 +1,4 @@
 prefix "/__pbfw/":
     middleware Api, Cors, Thorttle:
-        GET "/fetch/{{model:str}}/{{search:encrypted_str}}"   execute PsychoB\Entity\Provider->fetch    name "pbfw.requester.fetch"
-        POST "/put/{{model:str}}/{{search:encrypted_str}}"    execute PsychoB\Entity\Provider->push     name "pbfw.requester.put"
+        GET "/fetch/{model:str}/{search:encrypted_str}"   execute PsychoB\Entity\Provider->fetch    name "pbfw.requester.fetch"
+        POST "/put/{model:str}/{search:encrypted_str}"    execute PsychoB\Entity\Provider->push     name "pbfw.requester.put"
