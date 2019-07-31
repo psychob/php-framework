@@ -7,6 +7,8 @@
 
     namespace PsychoB\Framework\Router\Http;
 
+    use PsychoB\Framework\Utility\Str;
+
     class Request
     {
         public const METHOD_GET     = 'GET';
@@ -45,10 +47,15 @@
                                     ParameterContainer $get,
                                     ParameterContainer $post)
         {
-            $this->method = $method;
+            $this->method = Str::toUpper($method);
             $this->url = $url;
             $this->headers = $headers;
             $this->get = $get;
             $this->post = $post;
+        }
+
+        public function getMethod(): string
+        {
+            return $this->method;
         }
     }

@@ -5,21 +5,16 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Router\Middleware;
+    namespace PsychoB\Framework\Router\Middleware\Executor;
 
-    use PsychoB\Framework\Router\MiddlewareExecutor;
+    use PsychoB\Framework\Router\Middleware\MiddlewareInterface;
 
-    abstract class AbstractMiddleware implements MiddlewareInterface
+    abstract class AbstractMiddleware implements MiddlewareInterface, UseMiddlewareExecutorTag
     {
         /** @var MiddlewareExecutor */
         protected $executor = NULL;
 
-        /**
-         * AbstractMiddleware constructor.
-         *
-         * @param MiddlewareExecutor $executor
-         */
-        public function __construct(MiddlewareExecutor $executor)
+        public function setMiddlewareExecutor(MiddlewareExecutor $executor): void
         {
             $this->executor = $executor;
         }
@@ -31,6 +26,6 @@
 
         public static function getPriority(): ?int
         {
-            return null;
+            return NULL;
         }
     }

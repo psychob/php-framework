@@ -16,6 +16,7 @@
     use PsychoB\Framework\Parser\Tokens\SymbolToken;
     use PsychoB\Framework\Parser\Transformers\StringTransformer;
     use PsychoB\Framework\Parser\Transformers\StripWhitespacesButNewLinesTransformer;
+    use PsychoB\Framework\Router\Routes\Route;
     use PsychoB\Framework\Router\Tokens\ExecutorToken;
     use PsychoB\Framework\Utility\Arr;
     use PsychoB\Framework\Utility\Str;
@@ -38,7 +39,7 @@
         public function __construct(Tokenizer $tokenizer)
         {
             $this->tokenizer = $tokenizer;
-            $this->tokenizer->addGroup('symbols', ['"', ':', '@', ',', '{', '}', '->', '.', '::'], SymbolToken::class,
+            $this->tokenizer->addGroup('symbols', ['"', ':', ',', '{', '}', '->', '.', '::'], SymbolToken::class,
                 false);
             $this->tokenizer->addGroup('keywords', ['GET', 'POST', 'PUT', 'OPTIONS', 'DELETE'], KeywordToken::class,
                 false);
@@ -83,6 +84,8 @@
             $methods = [$tokens[$it]->getToken()];
             $url = $tokens[$it + 1]->getToken();
             $execute = [];
+            $name = NULL;
+            $view = NULL;
 
             $it += 2;
 
@@ -101,10 +104,26 @@
 
                         $it += 3;
                         break;
+
+                    case 'name':
+                        $name = $tokens[$it + 1]->getToken();
+                        $it += 1;
+                        break;
+
+                    case 'view':
+                        $view = $tokens[$it + 1]->getToken();
+                        $it += 1;
+                        break;
+
+                    default:
+                        dump($tokens[$it]);
+                        throw new \Exception();
                 }
             }
 
-            $this->pushRoute($methods, $url, $execute);
+            $this->pushRoute($methods, $url, $execute, $name, $view);
+
+//            throw new \Exception();
         }
 
         private function parseTree(array &$tokens, int &$it, int $intend)
@@ -177,13 +196,15 @@
             $it++;
         }
 
-        protected function pushRoute(array $methods, $url, array $execute): void
+        protected function pushRoute(array $methods, $url, array $execute, ?string $name, ?string $view): void
         {
             $route = [
                 'methods' => $methods,
                 'url' => $url,
                 'execute' => $execute,
                 'middlewares' => [],
+                'name' => $name,
+                'view' => $view,
             ];
 
             foreach (Arr::reverse($this->current) as $value) {
@@ -198,7 +219,10 @@
                 }
             }
 
-            $this->routes[] = new Route('', $route['url'], $route['methods'], $route['middlewares'], $route['execute']);
+            $this->routes[] = new Route($route['name'] ?? sprintf('anonymous_%s',
+                    hash('sha256', implode('-', $route['methods']) . $route['url'])),
+                $route['url'], $route['methods'], $route['middlewares'], $route['execute'],
+                $route['view']);
         }
 
         protected function mergeUrl($prefix, $url): string

@@ -16,8 +16,12 @@
     use PsychoB\Framework\Router\Http\ParameterContainer;
     use PsychoB\Framework\Router\Http\Request;
     use PsychoB\Framework\Router\Http\RequestFactory;
+    use PsychoB\Framework\Router\Middleware\Executor\MiddlewareExecutor;
     use PsychoB\Framework\Router\Middleware\MiddlewareInterface;
+    use PsychoB\Framework\Router\Routes\MatchedRoute;
+    use PsychoB\Framework\Router\Routes\Route;
     use PsychoB\Framework\Utility\Arr;
+    use PsychoB\Framework\Utility\Str;
 
     class RouteManager
     {
@@ -33,6 +37,9 @@
         /** @var mixed[] */
         protected $routes = [];
 
+        /** @var mixed[] */
+        protected $middlewareAliases = [];
+
         /**
          * RouteManager constructor.
          *
@@ -41,12 +48,13 @@
          * @param ResolverInterface           $resolver
          */
         public function __construct(DirectoryDiscoveryInterface $discovery,
-                                    ConfigManagerInterface $config,
-                                    ResolverInterface $resolver)
+            ConfigManagerInterface $config,
+            ResolverInterface $resolver)
         {
             $this->discovery = $discovery;
             $this->resolver = $resolver;
             $this->middlewares = $config->get('routes.middlewares.default', []);
+            $this->middlewareAliases = $config->get('routes.middlewares.aliases', []);
         }
 
         public function run()
@@ -54,8 +62,10 @@
             $this->ensureRoutesAreLoaded();
             $request = $this->createRequestFromGlobal();
 
+            $route = $this->findCorrectRoute($request);
+
             /** @var MiddlewareExecutor $passThrough */
-            $passThrough = $this->resolver->resolve(MiddlewareExecutor::class, [$this->middlewares]);
+            $passThrough = $this->resolver->resolve(MiddlewareExecutor::class, [$this->middlewares, $route]);
             $response = $passThrough->handle($request, $passThrough->next());
         }
 
@@ -73,7 +83,35 @@
 
         private function loadFile($path)
         {
-            $this->routes = Arr::appendValues($this->resolver->resolve(RouteFileParser::class)->parse($path), $this->routes);
+            $this->routes = Arr::appendValues($this->resolver->resolve(RouteFileParser::class)->parse($path),
+                $this->routes);
+        }
+
+        protected function findCorrectRoute(Request $request): ?Route
+        {
+            foreach ($this->routes as $route) {
+                if ($matchedRoute = $this->match($route, $request)) {
+                    dump($matchedRoute);
+                }
+            }
+
+            dump($request);
+
+            return NULL;
+        }
+
+        protected function match(Route $route, Request $request): ?MatchedRoute
+        {
+            if (Arr::contains($route->getMethods(), $request->getMethod())) {
+                $regExp = $this->generateRegexpFromUrl($route->getUrl());
+            }
+
+            return NULL;
+        }
+
+        private function generateRegexpFromUrl(string $getUrl): string
+        {
+            return '';
         }
     }
 

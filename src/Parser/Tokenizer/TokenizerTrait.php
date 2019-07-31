@@ -63,7 +63,7 @@
                         foreach (Arr::sortValues($symbols, Str::COMPARE_LENGTH_REVERSE) as $symbol) {
                             $len = Str::len($symbol);
 
-                            if (Str::equalsPart($content, $it, $len, $symbol, 0, $len)) {
+                            if (Str::equals($content, $symbol, $len, $it, 0)) {
                                 $found = $symbol;
                                 break;
                             }

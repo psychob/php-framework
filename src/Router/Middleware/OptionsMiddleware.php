@@ -9,6 +9,7 @@
 
     use PsychoB\Framework\Router\Http\Request;
     use PsychoB\Framework\Router\Http\Response;
+    use PsychoB\Framework\Router\Middleware\Executor\AbstractMiddleware;
 
     class OptionsMiddleware extends AbstractMiddleware
     {

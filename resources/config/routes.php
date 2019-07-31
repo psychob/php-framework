@@ -11,7 +11,7 @@
     use PsychoB\Framework\Router\Middleware\TrustedProxyMiddleware;
 
     return [
-        'root' => '/',
+        'basePath' => '/',
 
         'middlewares' => [
             'default' => [
@@ -26,4 +26,8 @@
                 'DisableCache' => DisableCacheMiddleware::class,
             ],
         ],
+
+        'param_types' => [
+            'str' => StringValidator::class,
+        ]
     ];

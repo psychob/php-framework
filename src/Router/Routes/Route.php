@@ -5,7 +5,7 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Router;
+    namespace PsychoB\Framework\Router\Routes;
 
     class Route
     {
@@ -24,22 +24,27 @@
         /** @var string[] */
         protected $execute = [];
 
+        /** @var string */
+        protected $view;
+
         /**
          * Route constructor.
          *
-         * @param string   $name
-         * @param string   $url
-         * @param string[] $methods
-         * @param string[] $middleware
-         * @param string[] $execute
+         * @param string      $name
+         * @param string      $url
+         * @param string[]    $methods
+         * @param string[]    $middleware
+         * @param string[]    $execute
+         * @param string|null $view
          */
-        public function __construct(string $name, string $url, array $methods, array $middleware, array $execute)
+        public function __construct(string $name, string $url, array $methods, array $middleware, array $execute, ?string $view)
         {
             $this->name = $name;
             $this->url = $url;
             $this->methods = $methods;
             $this->middleware = $middleware;
             $this->execute = $execute;
+            $this->view = $view;
         }
 
         /**
