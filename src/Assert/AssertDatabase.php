@@ -9,6 +9,7 @@
 
     use PsychoB\Framework\Assert\Constraints\IsEqualAssert;
     use PsychoB\Framework\Assert\Constraints\IsFalseAssert;
+    use PsychoB\Framework\Assert\Constraints\IsNotEmptyAssert;
     use PsychoB\Framework\Assert\Constraints\IsTrueAssert;
     use PsychoB\Framework\Assert\Constraints\ObjectPropertiesAssert;
     use PsychoB\Framework\Assert\Constraints\PropertyIsEqualAssert;
@@ -34,6 +35,7 @@
             'hasType' => TypeAssert::class,
             'isPropertyEqual' => PropertyIsEqualAssert::class,
             'hasProperties' => ObjectPropertiesAssert::class,
+            'isNotEmpty' => IsNotEmptyAssert::class,
         ];
 
         protected static function add(string $name, string $class): void

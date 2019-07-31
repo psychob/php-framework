@@ -20,6 +20,7 @@
      * @method static isEqual(mixed $left, mixed $right)
      * @method static typeRequirements(mixed $obj, array|string $type, mixed[] $properties, ?string $message = NULL)
      * @method static hasType($obj, mixed|string $type, ?string $message = NULL)
+     * @method static isNotEmpty($obj)
      */
     final class Validate
     {
