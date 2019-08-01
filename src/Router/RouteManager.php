@@ -66,7 +66,11 @@
 
             $route = $this->findCorrectRoute($request);
 
-            $middlewares = $this->getMiddlewaresFor($route->getRoute());
+            if ($route !== NULL) {
+                $middlewares = $this->getMiddlewaresFor($route->getRoute());
+            } else {
+                $middlewares = $this->middlewares;
+            }
 
             /** @var MiddlewareExecutor $passThrough */
             $passThrough = $this->resolver->resolve(MiddlewareExecutor::class, [$middlewares, $route]);
