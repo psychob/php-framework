@@ -5,6 +5,8 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
+    use PsychoB\Framework\Router\Middleware\DebugModeMiddleware;
+    use PsychoB\Framework\Router\Middleware\DisableCacheMiddleware;
     use PsychoB\Framework\Router\Middleware\ExecuteControllerMiddleware;
     use PsychoB\Framework\Router\Middleware\HandleExceptionMiddleware;
     use PsychoB\Framework\Router\Middleware\OptionsMiddleware;

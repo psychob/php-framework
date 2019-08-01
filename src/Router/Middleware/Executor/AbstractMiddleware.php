@@ -26,6 +26,6 @@
 
         public static function getPriority(): ?int
         {
-            return NULL;
+            return 10;
         }
     }

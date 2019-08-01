@@ -264,4 +264,21 @@
                 }
             }
         }
+
+        public static function sortByCustom(array $arr, callable $sorter, bool $desc = false): array
+        {
+            $customArr = [];
+            foreach ($arr as $key => $value) {
+                $customArr[$key] = $sorter($value, $key);
+            }
+
+            asort($customArr, $desc ? SORT_DESC : SORT_ASC);
+
+            $ret = [];
+            foreach ($customArr as $key => $value) {
+                $ret[] = $arr[$key];
+            }
+
+            return $ret;
+        }
     }

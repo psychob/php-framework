@@ -26,4 +26,20 @@
             $this->route = $route;
             $this->matchedArguments = $matchedArguments;
         }
+
+        /**
+         * @return Route
+         */
+        public function getRoute(): Route
+        {
+            return $this->route;
+        }
+
+        /**
+         * @return mixed[]
+         */
+        public function getMatchedArguments(): array
+        {
+            return $this->matchedArguments;
+        }
     }

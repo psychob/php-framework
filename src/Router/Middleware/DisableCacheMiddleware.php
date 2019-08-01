@@ -11,15 +11,10 @@
     use PsychoB\Framework\Router\Http\Response;
     use PsychoB\Framework\Router\Middleware\Executor\AbstractMiddleware;
 
-    class HandleExceptionMiddleware extends AbstractMiddleware
+    class DisableCacheMiddleware extends AbstractMiddleware
     {
         public function handle(Request $request, MiddlewareInterface $next): Response
         {
             return $next->handle($request, $this->next());
-        }
-
-        public static function getPriority(): ?int
-        {
-            return PHP_INT_MIN;
         }
     }

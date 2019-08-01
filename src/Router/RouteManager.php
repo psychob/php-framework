@@ -66,8 +66,10 @@
 
             $route = $this->findCorrectRoute($request);
 
+            $middlewares = $this->getMiddlewaresFor($route->getRoute());
+
             /** @var MiddlewareExecutor $passThrough */
-            $passThrough = $this->resolver->resolve(MiddlewareExecutor::class, [$this->middlewares, $route]);
+            $passThrough = $this->resolver->resolve(MiddlewareExecutor::class, [$middlewares, $route]);
             $response = $passThrough->handle($request, $passThrough->next());
         }
 
@@ -99,6 +101,19 @@
             }
 
             return NULL;
+        }
+
+        private function getMiddlewaresFor(Route $route): array
+        {
+            $middlewareClasses = $this->middlewares;
+
+            foreach ($route->getMiddleware() as $middleware) {
+                $middlewareClasses[] = $this->middlewareAliases[$middleware];
+            }
+
+            return Arr::sortByCustom($middlewareClasses, function ($el) {
+                return call_user_func([$el, 'getPriority']);
+            }, false);
         }
     }
 

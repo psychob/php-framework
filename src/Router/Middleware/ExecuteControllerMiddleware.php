@@ -42,7 +42,7 @@
                 throw new Http404($request);
             }
 
-            dump($this);
+            dump($this->route);
         }
 
         public static function getPriority(): ?int
