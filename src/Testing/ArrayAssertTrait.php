@@ -81,4 +81,37 @@
                 Assert::assertContains($item, $expected);
             }
         }
+
+        protected static function assertArrayElementsStartsWithValues($expected,
+            $current,
+            bool $strict = true,
+            ?int $limit = NULL,
+            ?string $message = NULL): void
+        {
+            $eIt = Arr::toIterator($expected);
+            $cIt = Arr::toIterator($current);
+            $eKey = $eLast = $cKey = $cLast = NULL;
+
+            for ($eIt->rewind(), $cIt->rewind(); ; $eIt->next(), $cIt->next()) {
+                if ($limit === NULL && !$eIt->valid()) {
+                    return; // we no longer have expected values
+                }
+
+                if ($limit === 0) {
+                    return; // we no longer have expected values
+                }
+
+                // verify if we have current element in both arrays
+                if ($eIt->valid() && $cIt->valid()) {
+                    $eLast = $eIt->current();
+                    $cLast = $cIt->current();
+
+                    if ($strict) {
+                        Assert::assertSame($eLast, $cLast);
+                    } else {
+                        Assert::assertEquals($eLast, $cLast);
+                    }
+                }
+            }
+        }
     }

@@ -116,6 +116,15 @@
                 case self::STATE_FINISHED:
                     return Arr::has($this->container, $this->outsideIterator);
 
+                case self::STATE_PAUSED:
+                    if ($this->outsideIterator === $this->insideIterator) {
+                        $this->state = self::STATE_RUNNING;
+
+                        return $this->valid();
+                    } else {
+                        return Arr::has($this->container, $this->outsideIterator);
+                    }
+
                 default:
                     Assert::unreachable('Iterator state not supported in valid');
             }

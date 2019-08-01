@@ -47,4 +47,17 @@
                 $this->assertSame($e, $c, 'Bad element at: ' . $ek);
             });
         }
+
+        public function testMultipleItemsIteratorRewindable()
+        {
+            $iterator = new CacheableIterator((function () {
+                yield 1;
+                yield 2;
+                yield 3;
+            })());
+
+            $this->assertArrayElementsStartsWithValues([1], $iterator);
+            $this->assertArrayElementsStartsWithValues([1, 2], $iterator);
+            $this->assertArrayElementsStartsWithValues([1, 2, 3], $iterator);
+        }
     }
