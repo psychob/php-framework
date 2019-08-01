@@ -9,5 +9,21 @@
 
     class MatchedRoute
     {
+        /** @var Route */
+        protected $route;
 
+        /** @var mixed[] */
+        protected $matchedArguments = [];
+
+        /**
+         * MatchedRoute constructor.
+         *
+         * @param Route   $route
+         * @param mixed[] $matchedArguments
+         */
+        public function __construct(Route $route, array $matchedArguments)
+        {
+            $this->route = $route;
+            $this->matchedArguments = $matchedArguments;
+        }
     }

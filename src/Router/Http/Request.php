@@ -58,4 +58,9 @@
         {
             return $this->method;
         }
+
+        public function getUrl()
+        {
+            return $this->url;
+        }
     }

@@ -21,6 +21,7 @@
     use PsychoB\Framework\Router\Routes\Loader\RouteFileLoader;
     use PsychoB\Framework\Router\Routes\MatchedRoute;
     use PsychoB\Framework\Router\Routes\Route;
+    use PsychoB\Framework\Router\Routes\RouteMatcher;
     use PsychoB\Framework\Utility\Arr;
     use PsychoB\Framework\Utility\Str;
 
@@ -89,29 +90,15 @@
             ])->parse(), $this->routes);
         }
 
-        protected function findCorrectRoute(Request $request): ?Route
+        private function findCorrectRoute(Request $request): ?MatchedRoute
         {
             foreach ($this->routes as $route) {
-                if ($matchedRoute = $this->match($route, $request)) {
-                    dump($matchedRoute);
+                if ($matched = $this->resolver->resolve(RouteMatcher::class, [$route])->isMatched($request)) {
+                    return $matched;
                 }
             }
 
             return NULL;
-        }
-
-        protected function match(Route $route, Request $request): ?MatchedRoute
-        {
-            if (Arr::contains($route->getMethods(), $request->getMethod())) {
-                $regExp = $this->generateRegexpFromUrl($route->getUrl());
-            }
-
-            return NULL;
-        }
-
-        private function generateRegexpFromUrl(string $getUrl): string
-        {
-            return '';
         }
     }
 

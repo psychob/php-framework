@@ -37,4 +37,9 @@
             'PUT',
             'DELETE',
         ],
+
+        'validators' => [
+            'str' => StrValidator::class,
+            'encrypted_str' => EncryptedStrValidator::class,
+        ],
     ];

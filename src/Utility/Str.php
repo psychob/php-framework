@@ -12,7 +12,8 @@
         const COMPARE_LENGTH_REVERSE = [Str::class, 'cmpLengthReverse'];
 
         use StringManipulation\StrInfoTrait,
-            StringManipulation\StrCompareTrait;
+            StringManipulation\StrCompareTrait,
+            StringManipulation\StrRegularExpressionTrait;
 
         /**
          * Convert $element to string, while also preserving some information about type
