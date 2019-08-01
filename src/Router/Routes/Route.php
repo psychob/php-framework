@@ -37,7 +37,12 @@
          * @param string[]    $execute
          * @param string|null $view
          */
-        public function __construct(string $name, string $url, array $methods, array $middleware, array $execute, ?string $view)
+        public function __construct(string $name,
+            string $url,
+            array $methods,
+            array $middleware,
+            array $execute,
+            ?string $view)
         {
             $this->name = $name;
             $this->url = $url;
@@ -77,5 +82,21 @@
         public function getMiddleware(): array
         {
             return $this->middleware;
+        }
+
+        /**
+         * @return string[]
+         */
+        public function getExecute(): array
+        {
+            return $this->execute;
+        }
+
+        /**
+         * @return string|null
+         */
+        public function getView(): ?string
+        {
+            return $this->view;
         }
     }

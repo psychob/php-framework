@@ -7,6 +7,8 @@
 
     namespace PsychoB\Framework\Router\Middleware;
 
+    use PsychoB\Framework\Assert\Assert;
+    use PsychoB\Framework\DependencyInjection\Injector\InjectorInterface;
     use PsychoB\Framework\DependencyInjection\Resolver\ResolverInterface;
     use PsychoB\Framework\Router\Http\Request;
     use PsychoB\Framework\Router\Http\Response;
@@ -42,7 +44,31 @@
                 throw new Http404($request);
             }
 
-            dump($this->route);
+            $view = $this->route->getRoute()->getView();
+            $execute = $this->route->getRoute()->getExecute();
+
+            if ($execute) {
+                $response = NULL;
+                $injector = $this->resolver->resolve(InjectorInterface::class);
+
+                switch ($execute[1]) {
+                    case '::':
+                        $response = $injector->inject([$execute[1], $execute[2]]);
+                        break;
+
+                    case '->':
+                        $class = $this->resolver->resolve($execute[0]);
+                        $response = $injector->inject([$class, $execute[2]]);
+                        break;
+
+                    default:
+                        Assert::unreachable();
+                }
+
+                return $response;
+            }
+
+            dump($this);
         }
 
         public static function getPriority(): ?int
