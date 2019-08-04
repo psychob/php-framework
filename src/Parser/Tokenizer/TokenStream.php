@@ -9,8 +9,13 @@
 
     class TokenStream extends AbstractTokenStream
     {
+        protected $str;
+
         protected function loadMoreContent(): ?string
         {
-            // TODO: Implement loadMoreContent() method.
+            $ret = NULL;
+            [$this->str, $ret] = [$ret, $this->str];
+
+            return $ret;
         }
     }
