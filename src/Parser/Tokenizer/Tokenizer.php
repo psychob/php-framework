@@ -10,7 +10,9 @@
     use PsychoB\Framework\Assert\Assert;
     use PsychoB\Framework\DependencyInjection\Resolver\Tag\ResolverNeverCache;
     use PsychoB\Framework\Parser\Tokenizer\Tokens\LiteralToken;
+    use PsychoB\Framework\Parser\Tokenizer\Tokens\NewLineToken;
     use PsychoB\Framework\Parser\Tokenizer\Tokens\TokenInterface;
+    use PsychoB\Framework\Parser\Tokenizer\Tokens\WhitespaceToken;
     use PsychoB\Framework\Utility\Arr;
 
     class Tokenizer implements ResolverNeverCache
@@ -53,11 +55,24 @@
 
         public function addDefaultGroups(): void
         {
+            $this->groups['whitespace'] = [
+                'name' => 'whitespace',
+                'symbols' => [' ', "\t", "\r", "\v"],
+                'class' => WhitespaceToken::class,
+                'allow_combining' => true,
+            ];
+
+            $this->groups['new_line'] = [
+                'name' => 'whitespace',
+                'symbols' => ["\n"],
+                'class' => NewLineToken::class,
+                'allow_combining' => false,
+            ];
         }
 
-        public function tokenizeFile(string $path): TokenFileStream
+        public function tokenizeFile(string $path, ?int $chunks = NULL): TokenFileStream
         {
-            return new TokenFileStream($path, $this->groups);
+            return new TokenFileStream($path, $this->groups, $chunks);
         }
 
         public function tokenize(string $content): TokenStream

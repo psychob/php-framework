@@ -11,8 +11,22 @@
     {
         protected $fileName;
         protected $filePointer = NULL;
-        protected $fileChunk = 1024;
+        protected $fileChunk = 10240;
         protected $fileEof = false;
+
+        /**
+         * TokenFileStream constructor.
+         *
+         * @param string $fileName
+         * @param array  $groups
+         * @param int    $fileChunk
+         */
+        public function __construct(string $fileName, array $groups, ?int $fileChunk)
+        {
+            $this->fileName = $fileName;
+            $this->groups = $groups;
+            $this->fileChunk = $fileChunk ?? 10240;
+        }
 
         protected function loadMoreContent(): ?string
         {

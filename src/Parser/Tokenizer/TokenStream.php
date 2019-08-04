@@ -11,6 +11,18 @@
     {
         protected $str;
 
+        /**
+         * TokenStream constructor.
+         *
+         * @param string $str
+         * @param array  $groups
+         */
+        public function __construct(string $str, array $groups)
+        {
+            $this->str = $str;
+            $this->groups = $groups;
+        }
+
         protected function loadMoreContent(): ?string
         {
             $ret = NULL;

@@ -8,19 +8,20 @@
     namespace Tests\PsychoB\Framework\Mock\Parser\Tokenizer;
 
     use PsychoB\Framework\Parser\Tokenizer\TokenFileStream;
+    use PsychoB\Framework\Parser\Tokenizer\Tokens\LiteralToken;
 
     class TokenFileStreamMock extends TokenFileStream
     {
-        /**
-         * TokenFileStreamMock constructor.
-         *
-         * @param string $fileName
-         * @param int    $fileChunk
-         */
-        public function __construct(string $fileName, int $fileChunk = 10 * 1024)
+        public function __construct(string $fileName, ?int $fileChunk = NULL)
         {
-            $this->fileName = $fileName;
-            $this->fileChunk = $fileChunk;
+            parent::__construct($fileName, [
+                'literal' => [
+                    'name' => 'literal',
+                    'symbols' => [],
+                    'class' => LiteralToken::class,
+                    'allow_combining' => true,
+                ],
+            ], $fileChunk);
         }
 
         public function getMore(): ?string

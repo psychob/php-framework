@@ -7,18 +7,21 @@
 
     namespace Tests\PsychoB\Framework\Mock\Parser\Tokenizer;
 
+    use PsychoB\Framework\Parser\Tokenizer\Tokens\LiteralToken;
     use PsychoB\Framework\Parser\Tokenizer\TokenStream;
 
     class TokenStreamMock extends TokenStream
     {
-        /**
-         * TokenStreamMock constructor.
-         *
-         * @param $str
-         */
-        public function __construct($str)
+        public function __construct(string $str)
         {
-            $this->str = $str;
+            parent::__construct($str, [
+                'literal' => [
+                    'name' => 'literal',
+                    'symbols' => [],
+                    'class' => LiteralToken::class,
+                    'allow_combining' => true,
+                ],
+            ]);
         }
 
         public function getMoreContent(): ?string
