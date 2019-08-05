@@ -7,6 +7,8 @@
 
     namespace PsychoB\Framework\Utility;
 
+    use PsychoB\Framework\Assert\Assert;
+
     class Path
     {
         public static function realpath(string $path): string
@@ -16,7 +18,29 @@
 
         public static function join(string ...$paths): string
         {
-            return implode(DIRECTORY_SEPARATOR, $paths);
+            Assert::arguments()->isNotEmpty($paths);
+
+            switch (Arr::len($paths)) {
+                case 1:
+                    return $paths[0];
+
+                default:
+                    $ret = $paths[0];
+
+                    foreach (Arr::slice($paths, 1) as $value) {
+                        if (Str::last($ret) === DIRECTORY_SEPARATOR &&
+                            Str::first($value) === DIRECTORY_SEPARATOR) {
+                            $ret .= Str::substr($value, 1);
+                        } else if (Str::last($ret) !== DIRECTORY_SEPARATOR &&
+                            Str::first($value) !== DIRECTORY_SEPARATOR) {
+                            $ret .= DIRECTORY_SEPARATOR . $value;
+                        } else {
+                            $ret .= $value;
+                        }
+                    }
+
+                    return $ret;
+            }
         }
 
         public static function fileExists(string $path): bool
