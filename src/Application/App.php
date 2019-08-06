@@ -7,9 +7,6 @@
 
     namespace PsychoB\Framework\Application;
 
-    use PsychoB\Framework\Application\Directories\DirectoryAdderInterface;
-    use PsychoB\Framework\Application\Directories\DirectoryDiscoveryInterface;
-    use PsychoB\Framework\Application\Directories\DirectoryManagerTrait;
     use PsychoB\Framework\Commands\CommandManager;
     use PsychoB\Framework\Config\ConfigManager;
     use PsychoB\Framework\Config\ConfigManagerInterface;
@@ -22,11 +19,16 @@
     use PsychoB\Framework\DependencyInjection\Resolver\ResolverInterface;
     use PsychoB\Framework\FrameworkSource;
     use PsychoB\Framework\Router\RouteManager;
+    use PsychoB\Framework\Template\TemplateFactory;
+    use PsychoB\Framework\Template\TemplateResolveInterface;
     use PsychoB\Framework\Utility\Path;
 
-    class App implements AppInterface, DirectoryAdderInterface, DirectoryDiscoveryInterface
+    class App implements AppInterface,
+                         Directories\DirectoryDiscoveryInterface,
+                         Directories\DirectoryAdderInterface,
+                         Directories\DirectoryPathResolverInterface
     {
-        use DirectoryManagerTrait;
+        use Directories\DirectoryManagerTrait;
 
         /** @var ContainerInterface */
         protected $container;
@@ -60,10 +62,12 @@
             $this->container = new Container();
             $this->container->add(App::class, $this);
             $this->container->add(AppInterface::class, $this);
-            $this->container->add(DirectoryDiscoveryInterface::class, $this);
-            $this->container->add(DirectoryAdderInterface::class, $this);
+            $this->container->add(Directories\DirectoryDiscoveryInterface::class, $this);
+            $this->container->add(Directories\DirectoryAdderInterface::class, $this);
+            $this->container->add(Directories\DirectoryPathResolverInterface::class, $this);
 
             $this->setupResolver();
+            $this->setupTemplate();
         }
 
         protected function setupResolver(): void
@@ -81,6 +85,12 @@
             $this->container->add(ResolverInterface::class, $resolver);
             $this->container->add(ConfigManager::class, $config);
             $this->container->add(ConfigManagerInterface::class, $config);
+        }
+
+        protected function setupTemplate(): void
+        {
+            $template = $this->resolve(TemplateFactory::class);
+            $this->container->add(TemplateResolveInterface::class, $template);
         }
 
         public function resolve(string $class, array $arguments = [])

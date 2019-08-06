@@ -178,4 +178,9 @@
         {
             return strtoupper($str);
         }
+
+        public static function trim(string $str): string
+        {
+            return trim($str);
+        }
     }

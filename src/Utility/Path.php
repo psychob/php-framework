@@ -47,4 +47,9 @@
         {
             return file_exists($path);
         }
+
+        public static function getExtension(string $path): string
+        {
+            return pathinfo($path, PATHINFO_EXTENSION);
+        }
     }
