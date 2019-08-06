@@ -9,6 +9,7 @@
 
     use PsychoB\Framework\Utility\Arr;
     use PsychoB\Framework\Utility\Path;
+    use PsychoB\Framework\Utility\Str;
     use Symfony\Component\Finder\Finder;
 
     /**
@@ -19,6 +20,7 @@
      *
      * @mixin DirectoryDiscoveryInterface
      * @mixin DirectoryAdderInterface
+     * @mixin DirectoryPathResolverInterface
      */
     trait DirectoryManagerTrait
     {
@@ -82,5 +84,31 @@
         public function getModuleDirectories(string $module): array
         {
             return $this->pathClassifications[$module] ?? [];
+        }
+
+        public function resolvePath(string $path, string $subDir = ''): string
+        {
+            switch ($path[0]) {
+                case '+':
+                    if ($subDir) {
+                        return Path::join($this->frameworkBasePath, $subDir, Str::substr($path, 1));
+                    } else {
+                        return Path::join($this->frameworkBasePath, Str::substr($path, 1));
+                    }
+
+                case '@':
+                    if ($subDir) {
+                        return Path::join($this->appBasePath, $subDir, Str::substr($path, 1));
+                    } else {
+                        return Path::join($this->appBasePath, Str::substr($path, 1));
+                    }
+
+                default:
+                    if ($subDir) {
+                        return Path::join($subDir, $path);
+                    } else {
+                        return $path;
+                    }
+            }
         }
     }
