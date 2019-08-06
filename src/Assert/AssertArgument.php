@@ -22,6 +22,8 @@
      * @method static typeRequirements(mixed $obj, array|string $type, mixed[] $properties)
      * @method static hasType($obj, mixed|string $type)
      * @method static isNotEmpty($obj)
+     * @method static isSmallerOrEqual($left, $right)
+     * @method static isGreaterOrEqual($left, $right)
      */
     class AssertArgument
     {
