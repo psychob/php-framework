@@ -25,27 +25,9 @@
          *
          * @return int|bool
          */
-        public static function findFirstNot(string $input, $toFind, int $offset = 0)
+        public static function findFirstNotOf(string $input, $toFind, int $offset = 0)
         {
-            Assert::arguments('find must be array or string', 'toFind', 2)
-                  ->hasType($toFind, [
-                      TypeAssert::TYPE_STRING,
-                      TypeAssert::TYPE_ARRAY,
-                  ]);
-
-            $inLen = Str::len($input);
-
-            Assert::arguments('offset must be smaller then input string length', 'offset', 3)
-                  ->isSmallerOrEqual($offset, $inLen);
-
-            if ($offset < 0) {
-                Assert::arguments('relative offset must be smaller then input string length', 'offset', 3)
-                      ->isGreaterOrEqual($offset, -$inLen);
-            }
-
-            if ($offset < 0) {
-                $offset += $inLen;
-            }
+            $offset = self::findFirst_ensureArguments($input, $toFind, $offset);
 
             if (Arr::is($toFind)) {
                 return self::findFirstNot_Array($input, $toFind, $offset);
@@ -92,5 +74,86 @@
             }
 
             return false;
+        }
+
+        public static function findFirstOf(string $input, $toFind, int $offset = 0)
+        {
+            $offset = self::findFirst_ensureArguments($input, $toFind, $offset);
+
+            if (Arr::is($toFind)) {
+                return self::findFirst_Array($input, $toFind, $offset);
+            } else {
+                return self::findFirst_Str($input, $toFind, $offset);
+            }
+        }
+
+        /**
+         * @param string   $input
+         * @param string[] $chrs
+         * @param int      $offset
+         *
+         * @return int|bool
+         */
+        private static function findFirst_Array(string $input, array $chrs, int $offset)
+        {
+            for ($it = $offset, $len = Str::len($input); $it < $len; ++$it) {
+                if (Arr::contains($chrs, $input[$it])) {
+                    return $it;
+                }
+            }
+
+            return false;
+        }
+
+        /**
+         * @param string $input
+         * @param string $characters
+         * @param int    $offset
+         *
+         * @return int|bool
+         */
+        private static function findFirst_Str(string $input, string $characters, int $offset)
+        {
+            for ($it = $offset, $inLen = Str::len($input), $chrLen = Str::len($characters); $it < $inLen; ++$it) {
+                for ($jt = 0; $jt < $chrLen; ++$jt) {
+                    if ($input[$it] === $characters[$jt]) {
+                        return $it;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /**
+         * @param string $input
+         * @param        $toFind
+         * @param int    $offset
+         *
+         * @return int
+         */
+        private static function findFirst_ensureArguments(string $input, $toFind, int $offset): int
+        {
+            Assert::arguments('find must be array or string', 'toFind', 2)
+                  ->hasType($toFind, [
+                      TypeAssert::TYPE_STRING,
+                      TypeAssert::TYPE_ARRAY,
+                  ]);
+
+            $inLen = Str::len($input);
+
+            Assert::arguments('offset must be smaller then input string length', 'offset', 3)
+                  ->isSmallerOrEqual($offset, $inLen);
+
+            if ($offset < 0) {
+                Assert::arguments('relative offset must be smaller then input string length', 'offset', 3)
+                      ->isGreaterOrEqual($offset, -$inLen);
+            }
+
+            if ($offset < 0) {
+                $offset += $inLen;
+            }
+
+            return $offset;
         }
     }

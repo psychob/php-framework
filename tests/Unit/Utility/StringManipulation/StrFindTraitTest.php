@@ -25,6 +25,26 @@
         /** @dataProvider provideFindFirstNot */
         public function testFindFirstNot(string $input, $toFind, ?int $offset, $result): void
         {
-            $this->assertSame($result, Str::findFirstNot($input, $toFind, $offset ?? 0));
+            $this->assertSame($result, Str::findFirstNotOf($input, $toFind, $offset ?? 0));
+        }
+
+        public function provideFindFirst()
+        {
+            return [
+                ['aabbcc', 'ab', NULL, 0],
+                ['aabbcc', 'abc', NULL, 0],
+                ['aabbcc', ['a', 'b'], NULL, 0],
+                ['aabbcc', ['a', 'b', 'c'], NULL, 0],
+                ['aabbcc', 'c', NULL, 4],
+                ['aabbcc', 'd', NULL, false],
+                ['aabbcc', ['c', 'd'], NULL, 4],
+                ['aabbcc', ['d', 'e', 'f'], NULL, false],
+            ];
+        }
+
+        /** @dataProvider provideFindFirst */
+        public function testFindFirst(string $input, $toFind, ?int $offset, $result): void
+        {
+            $this->assertSame($result, Str::findFirstOf($input, $toFind, $offset ?? 0));
         }
     }

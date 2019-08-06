@@ -21,7 +21,7 @@
                     $tok = $token->getToken();
                     $offset = 0;
 
-                    while (($it = Str::findFirst($tok, "\n")) !== false) {
+                    while (($it = Str::findFirstOf($tok, "\n")) !== false) {
                         $start = $token->getStart() + $offset + $it;
                         $end = $token->getStart() + $offset + $it + 1;
                         yield new NewLineToken("\n", $token->getStart() + $offset + $it,
