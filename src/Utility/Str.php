@@ -13,7 +13,8 @@
 
         use StringManipulation\StrInfoTrait,
             StringManipulation\StrCompareTrait,
-            StringManipulation\StrRegularExpressionTrait;
+            StringManipulation\StrRegularExpressionTrait,
+            StringManipulation\StrFindTrait;
 
         /**
          * Convert $element to string, while also preserving some information about type
