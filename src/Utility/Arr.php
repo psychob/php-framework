@@ -170,7 +170,7 @@
             return current($branches);
         }
 
-        private static function last(array $branches)
+        public static function last(array $branches)
         {
             end($branches);
 

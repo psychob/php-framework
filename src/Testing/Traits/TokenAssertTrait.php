@@ -15,7 +15,8 @@
         protected static function assertTokenType($expected, $current): void
         {
             Assert::assertInstanceOf(TokenInterface::class, $current, 'Token is not extension of TokenInterface');
-            Assert::assertSame(get_class($expected), get_class($current), 'Token doesnt have proper class '.$current->getToken());
+            Assert::assertSame(get_class($expected), get_class($current),
+                'Token doesnt have proper class ' . $current->getToken());
         }
 
         protected static function assertTokenTypeAndContent($expected, $current): void
@@ -27,5 +28,17 @@
              * @var TokenInterface $current
              */
             Assert::assertSame($expected->getToken(), $current->getToken(), 'Miss matching token content');
+        }
+
+        protected static function assertTokenTypeContentAndLocation($expected, $current): void
+        {
+            static::assertTokenTypeAndContent($expected, $current);
+
+            /**
+             * @var TokenInterface $expected
+             * @var TokenInterface $current
+             */
+            Assert::assertSame([$expected->getStart(), $expected->getEnd()],
+                [$current->getStart(), $current->getEnd()], 'Miss matching token location');
         }
     }

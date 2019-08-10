@@ -124,4 +124,46 @@
                 new NewLineToken(PHP_EOL),
             ], $mock, [$this, 'assertTokenTypeAndContent']);
         }
+
+        public function testLiteralsWithWhitespacesAndLocations()
+        {
+            $mock = \Mockery::mock(AbstractTokenStreamMock::class, [
+                [
+                    'literal' => [
+                        'name' => 'literal',
+                        'symbols' => [],
+                        'class' => LiteralToken::class,
+                        'allow_combining' => true,
+                    ],
+                    'whitespace' => [
+                        'name' => 'whitespace',
+                        'symbols' => [' ', "\t", "\r", "\v"],
+                        'class' => WhitespaceToken::class,
+                        'allow_combining' => true,
+                    ],
+                    'new_line' => [
+                        'name' => 'whitespace',
+                        'symbols' => ["\n"],
+                        'class' => NewLineToken::class,
+                        'allow_combining' => false,
+                    ],
+                ],
+            ]);
+            $mock->makePartial()->shouldAllowMockingProtectedMethods();
+            $mock->shouldReceive('loadMoreContent')
+                 ->andReturns('words for words' . PHP_EOL, 'foo bar' . PHP_EOL, NULL);
+
+            $this->assertArrayElementsAre([
+                new LiteralToken('words', 0, 5),
+                new WhitespaceToken(' ', 5, 6),
+                new LiteralToken('for', 6, 9),
+                new WhitespaceToken(' ', 9, 10),
+                new LiteralToken('words', 10, 15),
+                new NewLineToken(PHP_EOL, 15, 16),
+                new LiteralToken('foo', 16, 19),
+                new WhitespaceToken(' ', 19, 20),
+                new LiteralToken('bar', 20, 23),
+                new NewLineToken(PHP_EOL, 23, 24),
+            ], $mock, [$this, 'assertTokenTypeContentAndLocation']);
+        }
     }
