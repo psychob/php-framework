@@ -10,23 +10,21 @@
     use PsychoB\Framework\Template\Generic\BlockInterface;
     use PsychoB\Framework\Template\TemplateState;
 
-    class ExtendsBlock implements BlockInterface
+    class IfBlock implements BlockInterface
     {
         public function getOutputType(): int
         {
-            return self::OUTPUT_PHP;
+            // TODO: Implement getOutputType() method.
         }
 
         public static function getArgumentTypeHint(): array
         {
-            return [
-                'file' => self::ARG_REQUIRED | self::ARG_PATH_TEMPLATE,
-            ];
+            // TODO: Implement getArgumentTypeHint() method.
         }
 
         public static function getImpliedBlockEnd(): int
         {
-            return self::IMPLIED_END_AT_BLOCK;
+            // TODO: Implement getImpliedBlockEnd() method.
         }
 
         public function execute(TemplateState $state): string
@@ -41,6 +39,6 @@
 
         public static function getHeaderPreference(): int
         {
-            return self::PREFERENCE_ARGUMENTS;
+            return self::PREFERENCE_TOKENS;
         }
     }

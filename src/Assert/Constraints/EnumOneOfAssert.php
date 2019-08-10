@@ -12,7 +12,7 @@
         public static function ensure($value, array $possibilities, ?string $message = NULL): void
         {
             foreach ($possibilities as $name => $value) {
-                if ($value === $name) {
+                if ($value === $value) {
                     return;
                 }
             }

@@ -68,7 +68,9 @@
             foreach ($this->pathClassifications[$module] ?? [] as $path) {
                 $finder->in($path);
             }
-            $finder->in(Path::join($this->appBasePath, 'resources', $module));
+            if ($this->appBasePath) {
+                $finder->in(Path::join($this->appBasePath, 'resources', $module));
+            }
 
             $finder->ignoreUnreadableDirs(true);
             $finder->ignoreDotFiles(true);

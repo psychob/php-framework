@@ -36,4 +36,9 @@
         {
             return '';
         }
+
+        public static function getHeaderPreference(): int
+        {
+            return self::PREFERENCE_ARGUMENTS;
+        }
     }

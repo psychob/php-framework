@@ -27,7 +27,7 @@
     {
         use TemplateEngineExecutorTrait;
 
-        private const SYMBOLS = '.:"\'{}|';
+        private const SYMBOLS    = '.:"\'{}|';
         private const WHITESPACE = " \t\r\n\v";
 
         /** @var TemplateBlockRepository */
@@ -176,7 +176,7 @@
                         continue 2;
 
                     default:
-                        Assert::unreachable();
+                        return $this->fetchExpression_Block($stream);
                 }
             }
 
@@ -244,5 +244,52 @@
                         return new PrintVariableBlock($instructions[0]);
                 }
             }
+        }
+
+        private function fetchExpression_Block(TokenStream $stream): array
+        {
+            $block = $stream->current()->getToken();
+            $class = $this->blockRepository->get($block);
+
+            $perf = call_user_func([$class, 'getHeaderPreference']);
+            Assert::enumOneOf($perf, [
+                'BlockInterface::PREFERENCE_TOKENS' => BlockInterface::PREFERENCE_TOKENS,
+                'BlockInterface::PREFERENCE_ARGUMENTS' => BlockInterface::PREFERENCE_ARGUMENTS,
+            ]);
+
+            switch ($perf) {
+                case BlockInterface::PREFERENCE_ARGUMENTS:
+                    return $this->fetchExpression_Block_Arguments($stream, $block);
+
+                case BlockInterface::PREFERENCE_TOKENS:
+                    return $this->fetchExpression_Block_Tokens($stream, $block);
+
+                default:
+                    Assert::unreachable();
+            }
+        }
+
+        private function fetchExpression_Block_Arguments(TokenStream $stream, string $class): array
+        {
+            dump($stream->current());
+        }
+
+        private function fetchExpression_Block_Tokens(TokenStream $stream, string $block): array
+        {
+            $this->skipSymbolAndWhitespace($stream);
+            $tokens = [];
+
+            for (; $stream->valid();) {
+                $token = $stream->current();
+
+                if (Validate::typeRequirements($stream->current(), SymbolToken::class, ['token' => '}}'])) {
+                    break;
+                }
+
+                $tokens[] = $token;
+                $this->skipSymbolAndWhitespace($stream);
+            }
+
+            return [$this->blockRepository->resolve($block, [$tokens]), $stream->current()->getEnd()];
         }
     }

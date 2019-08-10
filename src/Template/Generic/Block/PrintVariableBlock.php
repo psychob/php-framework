@@ -86,4 +86,9 @@
         {
             return htmlspecialchars(Arr::recursiveGet($state, $this->var->getAccessors()));
         }
+
+        public static function getHeaderPreference(): int
+        {
+            return self::PREFERENCE_ARGUMENTS;
+        }
     }

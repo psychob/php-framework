@@ -35,6 +35,11 @@
 
         public static function getImpliedBlockEnd(): int;
 
+        public const PREFERENCE_ARGUMENTS = 0;
+        public const PREFERENCE_TOKENS    = 1;
+
+        public static function getHeaderPreference(): int;
+
         public function execute(TemplateState $state): string;
 
         public function serialize(int $type): string;

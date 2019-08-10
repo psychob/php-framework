@@ -31,6 +31,9 @@
             if (Ref::hasTrait($this, EnableSeparateConfigurationInTestCaseTrait::class, true)) {
                 $config = $this->_pbfw__config;
                 $container->add(ConfigManagerInterface::class, $config, ContainerInterface::ADD_IGNORE);
+            } else if (Ref::hasTrait($this, EnableFrameworkConfigurationInTestCaseTrait::class, true)) {
+                $config = $this->_pbfw__config;
+                $container->add(ConfigManagerInterface::class, $config, ContainerInterface::ADD_IGNORE);
             } else {
                 $config = \Mockery::mock(ConfigManagerInterface::class);
             }

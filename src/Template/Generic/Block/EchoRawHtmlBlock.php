@@ -49,4 +49,9 @@
         {
             return $this->txt;
         }
+
+        public static function getHeaderPreference(): int
+        {
+            return self::PREFERENCE_ARGUMENTS;
+        }
     }
