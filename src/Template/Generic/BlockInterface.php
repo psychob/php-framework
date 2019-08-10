@@ -7,9 +7,10 @@
 
     namespace PsychoB\Framework\Template\Generic;
 
+    use PsychoB\Framework\DependencyInjection\Resolver\Tag\ResolverNeverCache;
     use PsychoB\Framework\Template\TemplateState;
 
-    interface BlockInterface
+    interface BlockInterface extends ResolverNeverCache
     {
         /** @var int Output content as PHP */
         public const OUTPUT_PHP = 0b001;
@@ -21,6 +22,11 @@
         public const OUTPUT_RAW_HTML = 0b100;
 
         public function getOutputType(): int;
+
+        public const ARG_OPTIONAL      = 0b000000001;
+        public const ARG_REQUIRED      = 0b000000001;
+        public const ARG_TYPE_PATH     = 0b000000010;
+        public const ARG_PATH_TEMPLATE = 0b100000000 | self::ARG_TYPE_PATH;
 
         public static function getArgumentTypeHint(): array;
 
