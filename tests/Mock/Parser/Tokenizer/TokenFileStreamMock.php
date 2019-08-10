@@ -21,7 +21,7 @@
                     'class' => LiteralToken::class,
                     'allow_combining' => true,
                 ],
-            ], $fileChunk);
+            ], [], $fileChunk);
         }
 
         public function getMore(): ?string

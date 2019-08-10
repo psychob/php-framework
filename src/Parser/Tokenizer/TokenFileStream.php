@@ -19,13 +19,15 @@
          *
          * @param string $fileName
          * @param array  $groups
+         * @param array  $transformers
          * @param int    $fileChunk
          */
-        public function __construct(string $fileName, array $groups, ?int $fileChunk)
+        public function __construct(string $fileName, array $groups, array $transformers, ?int $fileChunk)
         {
             $this->fileName = $fileName;
             $this->groups = $groups;
             $this->fileChunk = $fileChunk ?? 10240;
+            $this->transformers = $transformers;
         }
 
         protected function loadMoreContent(): ?string

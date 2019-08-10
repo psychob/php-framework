@@ -16,11 +16,13 @@
          *
          * @param string $str
          * @param array  $groups
+         * @param array  $transformers
          */
-        public function __construct(string $str, array $groups)
+        public function __construct(string $str, array $groups, array $transformers)
         {
             $this->str = $str;
             $this->groups = $groups;
+            $this->transformers = $transformers;
         }
 
         protected function loadMoreContent(): ?string

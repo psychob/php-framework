@@ -27,6 +27,8 @@
             ],
         ];
 
+        protected $transformers = [];
+
         public function addGroup(string $name, array $symbols, string $class, bool $allowCombining): void
         {
             Assert::arguments('Group already exists', $name, 1)
@@ -72,11 +74,11 @@
 
         public function tokenizeFile(string $path, ?int $chunks = NULL): TokenFileStream
         {
-            return new TokenFileStream($path, $this->groups, $chunks);
+            return new TokenFileStream($path, $this->groups, $this->transformers, $chunks);
         }
 
         public function tokenize(string $content): TokenStream
         {
-            return new TokenStream($content, $this->groups);
+            return new TokenStream($content, $this->groups, $this->transformers);
         }
     }
