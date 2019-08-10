@@ -70,4 +70,11 @@
                 return $t->getName();
             }), $class);
         }
+
+        public static function implementsInterface($obj, string $interface): bool
+        {
+            $ref = new \ReflectionClass($obj);
+
+            return Arr::contains($ref->getInterfaceNames(), $interface);
+        }
     }

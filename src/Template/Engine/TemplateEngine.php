@@ -12,6 +12,8 @@
     use PsychoB\Framework\Template\Generic\Block\EmptyBlock;
     use PsychoB\Framework\Template\Generic\Block\RawHtmlBlock;
     use PsychoB\Framework\Template\Generic\Block\VariableBlock;
+    use PsychoB\Framework\Template\TemplateBlockRepository;
+    use PsychoB\Framework\Utility\Ref;
     use PsychoB\Framework\Utility\Str;
 
     class TemplateEngine implements TemplateEngineInterface
@@ -20,6 +22,19 @@
 
         private const SYMBOLS    = '.:"\'{}|';
         private const WHITESPACE = " \t\r\n\v";
+
+        /** @var TemplateBlockRepository */
+        protected $blockRepository;
+
+        /**
+         * TemplateEngine constructor.
+         *
+         * @param TemplateBlockRepository $blockRepository
+         */
+        public function __construct(TemplateBlockRepository $blockRepository)
+        {
+            $this->blockRepository = $blockRepository;
+        }
 
         public function execute(string $content, array $variables = []): string
         {
@@ -209,5 +224,13 @@
 
         protected function fetchBlock(string $content, int $startIt): array
         {
+            [$name, $it] = $this->fetchSimpleToken($content, $startIt);
+            $class = $this->blockRepository->get($name);
+
+            if (Ref::implementsInterface($class, TokensBlockInterface::class)) {
+                return $this->fetchBlockWithCustomTokens($content, $it, $name, $class);
+            } else {
+                return $this->fetchBlockWithStandardTokens($content, $it, $name, $class);
+            }
         }
     }

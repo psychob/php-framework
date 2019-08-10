@@ -28,10 +28,17 @@
                 'template' => [
                     'blocks' => [
                         'extends' => ExtendsBlock::class,
+                        'if' => IfBlock::class,
+                        'assign' => AssignBlock::class,
                     ],
                 ],
             ]);
             $this->tpl = $this->resolve(TemplateEngine::class);
+        }
+
+        public function testEmptyString()
+        {
+            $this->assertSame('', $this->tpl->execute(''));
         }
 
         public function testFileWithoutSpecialBlocks()
@@ -47,10 +54,10 @@ OUTPUT;
             $this->assertSame($testStr, $this->tpl->execute($testStr));
         }
 
-        public function provideSimpleExpressions()
+        public function provideExpressions(): array
         {
             return [
-                [' ', ' ', []],
+                // variables
                 ['42', '{{$abc}}', ['abc' => 42]],
                 [' 42', ' {{$abc}}', ['abc' => 42]],
                 ['42 ', '{{$abc}} ', ['abc' => 42]],
@@ -64,18 +71,28 @@ OUTPUT;
                 ['42', '{{$abc. def}}', ['abc' => ['def' => 42]]],
                 ['42', '{{$abc . def }}', ['abc' => ['def' => 42]]],
                 ['&lt;&gt;', '{{$abc}}', ['abc' => '<>']],
+
+                // comments
                 ['', '{{* foo bar *}}'],
                 [' ', '{{* foo bar *}} {{* baz faz *}}'],
                 ['', '{{+ {{* foo bar *}} {{* baz faz *}}   +}}'],
                 ['', '{{+ {{* foo bar {{+ *}} {{* +}} baz faz *}}   +}}'],
                 ['', '{{+ foo bar +}}'],
                 [' ', '{{+ foo bar +}} {{+ baz faz +}}'],
+
+                // if block
+                ['1', '{{if true}}1{{/if}}'],
+                ['', '{{if false}}1{{/if}}'],
+
+                // assign block
+                ['4', '{{assign name="var" value=4}}{{$var}}', ['var' => 3]],
+                ['4', '{{assign $var=4}}{{$var}}', ['var' => 3]],
             ];
         }
 
-        /** @dataProvider provideSimpleExpressions */
-        public function testSimpleExpressions(string $out, string $in, array $variables = []): void
+        /** @dataProvider provideExpressions */
+        public function testExpression(string $out, string $in, array $args = []): void
         {
-            $this->assertSame($out, $this->tpl->execute($in, $variables));
+            $this->assertSame($out, $this->tpl->execute($in, $args));
         }
     }

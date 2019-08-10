@@ -16,7 +16,7 @@
     {
         public function getOutputType(): int
         {
-            // TODO: Implement getOutputType() method.
+            return self::OUTPUT_PHP;
         }
 
         public function execute(TemplateState $state): string
