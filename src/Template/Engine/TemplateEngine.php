@@ -8,12 +8,18 @@
     namespace PsychoB\Framework\Template\Engine;
 
     use PsychoB\Framework\Assert\Assert;
+    use PsychoB\Framework\Assert\Validate;
     use PsychoB\Framework\Parser\Tokenizer\Tokenizer;
     use PsychoB\Framework\Parser\Tokenizer\Tokens\SymbolToken;
     use PsychoB\Framework\Parser\Tokenizer\Tokens\WhitespaceToken;
-    use PsychoB\Framework\Template\Generic\Block\EmptyBlock;
-    use PsychoB\Framework\Template\Generic\Block\RawHtmlBlock;
+    use PsychoB\Framework\Parser\Tokenizer\TokenStream;
+    use PsychoB\Framework\Template\Generic\Block\EchoRawHtmlBlock;
+    use PsychoB\Framework\Template\Generic\Block\NullBlock;
+    use PsychoB\Framework\Template\Generic\Block\PrintVariableBlock;
+    use PsychoB\Framework\Template\Generic\BlockInterface;
+    use PsychoB\Framework\Template\Generic\Builtin\Variable;
     use PsychoB\Framework\Template\TemplateBlockRepository;
+    use PsychoB\Framework\Utility\Arr;
     use PsychoB\Framework\Utility\Str;
 
     class TemplateEngine implements TemplateEngineInterface
@@ -39,7 +45,8 @@
             $this->blockRepository = $blockRepository;
 
             $this->tokenizer = new Tokenizer();
-            $this->tokenizer->addGroup('symbols', ['$', '}}', '{{'], SymbolToken::class, false);
+            $this->tokenizer->addGroup('symbols', ['$', '}}', '{{', '.', '|', ':', '?', '"', '=', '@'],
+                SymbolToken::class, false);
             $this->tokenizer->addGroup('whitespace', [' ', "\t", "\r", "\n", "\v"], WhitespaceToken::class, true);
         }
 
@@ -55,10 +62,10 @@
             $ret = [];
             $startIt = $it = 0;
 
-            while (($currentIt = Str::findFirstOf($content, '{{', $it)) !== false) {
+            while ($it < Str::len($content) && ($currentIt = Str::findFirstOf($content, '{{', $it)) !== false) {
                 if ($startIt !== $currentIt) {
                     // we have raw text in front of our block
-                    $ret[] = new RawHtmlBlock(Str::substr($content, $startIt, $currentIt - $startIt));
+                    $ret[] = new EchoRawHtmlBlock(Str::substr($content, $startIt, $currentIt - $startIt));
                 }
 
                 $it = $currentIt + 2;
@@ -71,7 +78,7 @@
 
             $rest = Str::substr($content, $startIt);
             if ($rest !== '') {
-                $ret[] = new RawHtmlBlock($rest);
+                $ret[] = new EchoRawHtmlBlock($rest);
             }
 
             return $ret;
@@ -106,7 +113,7 @@
         {
             $closeTag = Str::findFirst($content, '*}}', $startIt);
 
-            return [new EmptyBlock(), $closeTag + 3];
+            return [new NullBlock(), $closeTag + 3];
         }
 
         private function fetchExtendedCommentInstruction(string $content, int $startIt): array
@@ -123,7 +130,7 @@
                         break;
 
                     case '+}}':
-                        return [new EmptyBlock(), $closeTag + 3];
+                        return [new NullBlock(), $closeTag + 3];
                 }
 
                 $it = $closeTag;
@@ -132,4 +139,86 @@
             Assert::unreachable();
         }
 
+        private function fetchExpression(string $content, int $startIt): array
+        {
+            $stream = $this->tokenizer->tokenize(Str::substr($content, $startIt));
+            $instructions = [];
+            $lastIt = 0;
+
+            for ($stream->rewind(); $stream->valid(); $lastIt = $stream->current()->getEnd()) {
+                $token = $stream->current();
+
+                switch (get_class($token)) {
+                    case SymbolToken::class:
+                        switch ($token->getToken()) {
+                            case '$':
+                                $instructions[] = $this->fetchExpression_FullVariable($stream);
+                                break 2;
+
+                            case '}}':
+                                break 3;
+
+                            default:
+                                Assert::unreachable();
+                        }
+
+                        break;
+
+                    case WhitespaceToken::class:
+                        $stream->next();
+                        continue 2;
+
+                    default:
+                        Assert::unreachable();
+                }
+            }
+
+            return [$this->fetchExpression_PrepareInstructions($instructions), $lastIt + $startIt];
+        }
+
+        private function fetchExpression_FullVariable(TokenStream $stream)
+        {
+            $names = [];
+            do {
+                if ($this->skipSymbolAndWhitespace($stream)) {
+                    break;
+                }
+
+                $names[] = $stream->current()->getToken();
+
+                if ($this->skipSymbolAndWhitespace($stream)) {
+                    break;
+                }
+            } while (Validate::typeRequirements($stream->current(), SymbolToken::class, ['token' => '.']));
+
+            return new Variable($names);
+        }
+
+        private function skipSymbolAndWhitespace(TokenStream $stream): bool
+        {
+            $stream->next();
+            if (!$stream->valid()) {
+                return true;
+            }
+
+            if ($stream->current() instanceof WhitespaceToken) {
+                $stream->next();
+
+                if (!$stream->valid()) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private function fetchExpression_PrepareInstructions(array $instructions): BlockInterface
+        {
+            if (Arr::len($instructions) === 1) {
+                switch (get_class($instructions[0])) {
+                    case Variable::class:
+                        return new PrintVariableBlock($instructions[0]);
+                }
+            }
+        }
     }

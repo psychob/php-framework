@@ -10,19 +10,19 @@
     use PsychoB\Framework\Template\Generic\BlockInterface;
     use PsychoB\Framework\Template\TemplateState;
 
-    class RawHtmlBlock implements BlockInterface
+    class EchoRawHtmlBlock implements BlockInterface
     {
         /** @var string */
-        protected $text;
+        protected $txt;
 
         /**
-         * RawHtmlBlock constructor.
+         * EchoRawHtmlBlock constructor.
          *
-         * @param string $text
+         * @param string $txt
          */
-        public function __construct(string $text)
+        public function __construct(string $txt)
         {
-            $this->text = $text;
+            $this->txt = $txt;
         }
 
         public function getOutputType(): int
@@ -30,13 +30,23 @@
             return self::OUTPUT_RAW_HTML;
         }
 
+        public static function getArgumentTypeHint(): array
+        {
+            return [];
+        }
+
+        public static function getImpliedBlockEnd(): int
+        {
+            return self::IMPLIED_END_AT_BLOCK;
+        }
+
         public function execute(TemplateState $state): string
         {
-            return $this->text;
+            return $this->txt;
         }
 
         public function serialize(int $type): string
         {
-            return $this->text;
+            return $this->txt;
         }
     }

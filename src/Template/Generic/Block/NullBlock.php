@@ -10,11 +10,21 @@
     use PsychoB\Framework\Template\Generic\BlockInterface;
     use PsychoB\Framework\Template\TemplateState;
 
-    class EmptyBlock implements BlockInterface
+    class NullBlock implements BlockInterface
     {
         public function getOutputType(): int
         {
-            return self::OUTPUT_RAW_HTML | self::OUTPUT_PHP | self::OUTPUT_HTML;
+            return self::OUTPUT_PHP;
+        }
+
+        public static function getArgumentTypeHint(): array
+        {
+            return [];
+        }
+
+        public static function getImpliedBlockEnd(): int
+        {
+            return self::IMPLIED_END_AT_INSTRUCTION;
         }
 
         public function execute(TemplateState $state): string
