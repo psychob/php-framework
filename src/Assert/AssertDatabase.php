@@ -7,6 +7,8 @@
 
     namespace PsychoB\Framework\Assert;
 
+    use PsychoB\Framework\Assert\Constraints\ClassImplementsAssert;
+    use PsychoB\Framework\Assert\Constraints\HasNoKeyAssert;
     use PsychoB\Framework\Assert\Constraints\IsEqualAssert;
     use PsychoB\Framework\Assert\Constraints\IsFalseAssert;
     use PsychoB\Framework\Assert\Constraints\IsGreaterOrEqualAssert;
@@ -42,6 +44,8 @@
             'unreachable' => UnreachableAssert::class,
             'isSmallerOrEqual' => IsSmallerOrEqualAssert::class,
             'isGreaterOrEqual' => IsGreaterOrEqualAssert::class,
+            'hasNoKey' => HasNoKeyAssert::class,
+            'classImplements' => ClassImplementsAssert::class,
         ];
 
         protected static function add(string $name, string $class): void
