@@ -8,7 +8,6 @@
     namespace PsychoB\Framework\Utility;
 
     use Jawira\CaseConverter\Convert;
-    use function foo\func;
 
     class Ref
     {
@@ -71,7 +70,7 @@
             }), $class);
         }
 
-        public static function implementsInterface($obj, string $interface): bool
+        public static function implements($obj, string $interface): bool
         {
             $ref = new \ReflectionClass($obj);
 
