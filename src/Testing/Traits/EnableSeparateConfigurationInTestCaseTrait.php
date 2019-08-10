@@ -7,12 +7,14 @@
 
     namespace PsychoB\Framework\Testing\Traits;
 
+    use PsychoB\Framework\Config\ArrayConfigManager;
     use PsychoB\Framework\Config\ConfigManagerInterface;
     use PsychoB\Framework\Utility\Ref;
     use Tests\PsychoB\Framework\Mock\Config\ArrayConfigManagerMock;
 
     trait EnableSeparateConfigurationInTestCaseTrait
     {
+        /** @var ArrayConfigManagerMock|ArrayConfigManager */
         protected $_pbfw__config = NULL;
 
         public function EnableSeparateConfigurationInTestCaseTrait_setUp(): void
@@ -33,5 +35,10 @@
         public function EnableSeparateConfigurationInTestCaseTrait_priority(): int
         {
             return 5;
+        }
+
+        protected function configSet(array $inner): void
+        {
+            $this->_pbfw__config->setInnerArray($inner);
         }
     }
