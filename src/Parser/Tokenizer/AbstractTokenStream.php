@@ -23,7 +23,7 @@
         /** @var string */
         private $tokenType = '';
         /** @var int */
-        private $tokenStart = '';
+        private $tokenStart = 0;
         /** @var string */
         private $tokenClass = '';
         /** @var string */
@@ -66,7 +66,9 @@
             }
 
             for ($it = 0; $it < strlen($content);) {
-                $groups = $this->getPotentialGroupsFor($content[$it]);
+                $element = $content[$it];
+                $currentIt = $it;
+                $groups = $this->getPotentialGroupsFor($element);
 
                 if (empty($groups)) {
                     // there is no valid character
@@ -85,6 +87,7 @@
                     if ($this->tokenType !== $name || $this->tokenCombine === false) {
                         yield $this->newToken($this->tokenCache, $this->tokenType, $this->tokenStart);
                         $this->tokenCache = '';
+                        $this->tokenStart = $offsetIt + $currentIt;
                     }
                 }
 
@@ -92,8 +95,9 @@
                 $this->tokenType = $name;
                 $this->tokenClass = $class;
                 $this->tokenCombine = $combine;
-                $this->tokenStart = $offsetIt + $it;
             }
+
+            $offsetIt += strlen($content);
         }
 
         private function hasOnlyOneUnlimitedGroup(): bool
