@@ -13,9 +13,11 @@
     use PsychoB\Framework\DependencyInjection\Injector\CustomInjectionInterface;
     use PsychoB\Framework\DependencyInjection\Injector\Lookup\GetPropertyFromResolve;
     use PsychoB\Framework\DependencyInjection\Resolver\ResolverInterface;
+    use PsychoB\Framework\Router\Http\Headers\ContentTypeHeader;
     use PsychoB\Framework\Router\Http\ParameterContainer;
     use PsychoB\Framework\Router\Http\Request;
     use PsychoB\Framework\Router\Http\RequestFactory;
+    use PsychoB\Framework\Router\Http\Response;
     use PsychoB\Framework\Router\Middleware\Executor\MiddlewareExecutor;
     use PsychoB\Framework\Router\Middleware\MiddlewareInterface;
     use PsychoB\Framework\Router\Routes\Loader\RouteFileLoader;
@@ -75,6 +77,8 @@
             /** @var MiddlewareExecutor $passThrough */
             $passThrough = $this->resolver->resolve(MiddlewareExecutor::class, [$middlewares, $route]);
             $response = $passThrough->handle($request, $passThrough->next());
+
+            $this->executeResponse($response);
         }
 
         private function createRequestFromGlobal()
@@ -118,6 +122,21 @@
             return Arr::sortByCustom($middlewareClasses, function ($el) {
                 return call_user_func([$el, 'getPriority']);
             }, false);
+        }
+
+        private function executeResponse(Response $response): void
+        {
+            http_response_code($response->getStatus());
+
+            if (!$response->hasContentType()) {
+                ContentTypeHeader::get(ContentTypeHeader::MIME_HTML)->emit();
+            }
+
+            foreach ($response->getHeaders() as $header) {
+                $header->emit();
+            }
+
+            echo $response->getBody();
         }
     }
 

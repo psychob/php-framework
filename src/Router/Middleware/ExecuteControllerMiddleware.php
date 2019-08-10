@@ -11,6 +11,7 @@
     use PsychoB\Framework\DependencyInjection\Injector\InjectorInterface;
     use PsychoB\Framework\DependencyInjection\Resolver\ResolverInterface;
     use PsychoB\Framework\Router\Exception\EmptyRouteException;
+    use PsychoB\Framework\Router\Http\GenericResponse;
     use PsychoB\Framework\Router\Http\Request;
     use PsychoB\Framework\Router\Http\Response;
     use PsychoB\Framework\Router\Http\ResponseFailures\Http404;

@@ -14,5 +14,6 @@
         public function getCanonicalName(): string;
 
         public function getOriginalName(): string;
+
         public function getOriginalValue(): string;
     }
