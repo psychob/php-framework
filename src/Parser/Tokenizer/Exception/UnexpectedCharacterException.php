@@ -5,9 +5,10 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Parser\Exception;
+    namespace PsychoB\Framework\Parser\Tokenizer\Exception;
 
-    class InvalidTokenException
+    use PsychoB\Framework\Exception\BaseException;
+
+    class UnexpectedCharacterException extends BaseException
     {
-
     }

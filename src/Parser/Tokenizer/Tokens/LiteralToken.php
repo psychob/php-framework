@@ -5,9 +5,8 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Parser\Transformers;
+    namespace PsychoB\Framework\Parser\Tokenizer\Tokens;
 
-    interface TransformerInterface
+    class LiteralToken extends AbstractToken implements TokenInterface
     {
-        public function transform($input);
     }

@@ -7,14 +7,12 @@
 
     namespace Tests\PsychoB\Framework\Mock\Parser\Tokenizer;
 
-    use PsychoB\Framework\Parser\Tokenizer\TokenizerTrait;
+    use PsychoB\Framework\Parser\Tokenizer\AbstractTokenStream;
 
-    class TokenizerTraitMock
+    abstract class AbstractTokenStreamMock extends AbstractTokenStream
     {
-        use TokenizerTrait;
-
-        public function tokenize(string $content)
+        public function __construct(array $groups = [])
         {
-            return $this->tokenizeImpl($content);
+            $this->groups = $groups;
         }
     }
