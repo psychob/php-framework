@@ -19,6 +19,7 @@
     use PsychoB\Framework\Template\Generic\BlockInterface;
     use PsychoB\Framework\Template\Generic\Builtin\Variable;
     use PsychoB\Framework\Template\TemplateBlockRepository;
+    use PsychoB\Framework\Template\TemplateFilterRepository;
     use PsychoB\Framework\Utility\Arr;
     use PsychoB\Framework\Utility\Str;
 
@@ -26,7 +27,7 @@
     {
         use TemplateEngineExecutorTrait;
 
-        private const SYMBOLS    = '.:"\'{}|';
+        private const SYMBOLS = '.:"\'{}|';
         private const WHITESPACE = " \t\r\n\v";
 
         /** @var TemplateBlockRepository */
@@ -35,14 +36,20 @@
         /** @var Tokenizer */
         protected $tokenizer;
 
+        /**  @var TemplateFilterRepository */
+        private $filterRepository;
+
         /**
          * TemplateEngine constructor.
          *
-         * @param TemplateBlockRepository $blockRepository
+         * @param TemplateBlockRepository  $blockRepository
+         * @param TemplateFilterRepository $filterRepository
          */
-        public function __construct(TemplateBlockRepository $blockRepository)
+        public function __construct(TemplateBlockRepository $blockRepository,
+            TemplateFilterRepository $filterRepository)
         {
             $this->blockRepository = $blockRepository;
+            $this->filterRepository = $filterRepository;
 
             $this->tokenizer = new Tokenizer();
             $this->tokenizer->addGroup('symbols', ['$', '}}', '{{', '.', '|', ':', '?', '"', '=', '@'],
@@ -54,7 +61,7 @@
         {
             $blocks = $this->fetch($content);
 
-            return $this->executeBlocks($blocks, $variables);
+            return $this->executeBlocks($blocks, $variables, $this->filterRepository);
         }
 
         private function fetch(string $content): array
@@ -179,6 +186,8 @@
         private function fetchExpression_FullVariable(TokenStream $stream)
         {
             $names = [];
+            $filters = [];
+
             do {
                 if ($this->skipSymbolAndWhitespace($stream)) {
                     break;
@@ -191,7 +200,22 @@
                 }
             } while (Validate::typeRequirements($stream->current(), SymbolToken::class, ['token' => '.']));
 
-            return new Variable($names);
+            while (Validate::typeRequirements($stream->current(), SymbolToken::class, ['token' => '|'])) {
+                if ($this->skipSymbolAndWhitespace($stream)) {
+                    break;
+                }
+
+                $func = $stream->current()->getToken();
+                $args = [];
+
+                if ($this->skipSymbolAndWhitespace($stream)) {
+                    break;
+                }
+
+                $filters[] = ['name' => $func, 'args' => $args];
+            }
+
+            return new Variable($names, $filters);
         }
 
         private function skipSymbolAndWhitespace(TokenStream $stream): bool

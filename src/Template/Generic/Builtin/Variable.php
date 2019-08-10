@@ -12,18 +12,28 @@
         /** @var string[] */
         protected $access;
 
+        /** @var mixed[] */
+        protected $filters;
+
         /**
          * Variable constructor.
          *
          * @param string[] $access
+         * @param array    $filters
          */
-        public function __construct(array $access)
+        public function __construct(array $access, array $filters)
         {
             $this->access = $access;
+            $this->filters = $filters;
         }
 
-        public function getAccessors()
+        public function getAccessors(): array
         {
             return $this->access;
+        }
+
+        public function getFilters(): array
+        {
+            return $this->filters;
         }
     }

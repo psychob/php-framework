@@ -29,7 +29,7 @@
 
         public function getOutputType(): int
         {
-            return self::OUTPUT_RAW_HTML | self::OUTPUT_HTML | self::OUTPUT_PHP;
+            return self::OUTPUT_RAW_HTML | self::OUTPUT_PHP;
         }
 
         public static function getArgumentTypeHint(): array
@@ -44,11 +44,46 @@
 
         public function execute(TemplateState $state): string
         {
-            return Arr::recursiveGet($state, $this->var->getAccessors());
+            if (!empty($this->var->getFilters())) {
+                return $this->executeWithFilters($state);
+            } else {
+                return $this->executeWithoutFilters($state);
+            }
         }
 
         public function serialize(int $type): string
         {
             // TODO: Implement serialize() method.
+        }
+
+        private function executeWithFilters(TemplateState $state): string
+        {
+            [$value, $has] = Arr::recursiveGet($state, $this->var->getAccessors(), NULL, true);
+            $raw = false;
+
+            foreach ($this->var->getFilters() as $filter) {
+                $f = $state->getFilter($filter['name']);
+
+                if (!$has) {
+                    if ($f->supportsEmpty()) {
+                        [$value, $has, $raw] = $f->executeEmpty();
+                    } else {
+                        throw new EmptyValueException();
+                    }
+                } else {
+                    [$value, $has, $raw] = $f->execute($value);
+                }
+            }
+
+            if ($raw) {
+                return $value;
+            } else {
+                return htmlspecialchars($value);
+            }
+        }
+
+        private function executeWithoutFilters(TemplateState $state): string
+        {
+            return htmlspecialchars(Arr::recursiveGet($state, $this->var->getAccessors()));
         }
     }

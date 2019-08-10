@@ -9,6 +9,7 @@
 
     use PsychoB\Framework\Template\Engine\TemplateEngine;
     use PsychoB\Framework\Template\Generic\Block\ExtendsBlock;
+    use PsychoB\Framework\Template\Generic\Filter\RawFilter;
     use PsychoB\Framework\Testing\Traits\EnableSeparateConfigurationInTestCaseTrait;
     use PsychoB\Framework\Testing\Traits\EnableResolveInTestCaseTrait;
     use PsychoB\Framework\Testing\UnitTestCase;
@@ -30,6 +31,9 @@
                         'extends' => ExtendsBlock::class,
                         'if' => IfBlock::class,
                         'assign' => AssignBlock::class,
+                    ],
+                    'filters' => [
+                        'raw' => RawFilter::class,
                     ],
                 ],
             ]);
@@ -71,6 +75,9 @@ OUTPUT;
                 ['42', '{{$abc. def}}', ['abc' => ['def' => 42]]],
                 ['42', '{{$abc . def }}', ['abc' => ['def' => 42]]],
                 ['&lt;&gt;', '{{$abc}}', ['abc' => '<>']],
+
+                // variables with filters
+                ['<>', '{{$abc|raw}}', ['abc' => '<>']],
 
                 // comments
                 ['', '{{* foo bar *}}'],

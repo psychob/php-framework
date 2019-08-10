@@ -76,17 +76,25 @@
             return $default;
         }
 
-        public static function recursiveGet($container, array $elements, $default = NULL)
+        public static function recursiveGet($container, array $elements, $default = NULL, bool $returnExistence = false)
         {
             foreach ($elements as $idx) {
                 if (Arr::has($container, $idx)) {
                     $container = $container[$idx];
                 } else {
-                    return $default;
+                    if ($returnExistence) {
+                        return [$default, false];
+                    } else {
+                        return $default;
+                    }
                 }
             }
 
-            return $container;
+            if ($returnExistence) {
+                return [$container, true];
+            } else {
+                return $container;
+            }
         }
 
         public static function merge(int $type, array ...$arrays): array

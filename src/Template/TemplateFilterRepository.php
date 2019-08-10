@@ -10,10 +10,10 @@
     use PsychoB\Framework\Config\ConfigManagerInterface;
     use PsychoB\Framework\DependencyInjection\Resolver\ResolverInterface;
 
-    class TemplateBlockRepository extends AbstractRepository
+    class TemplateFilterRepository extends AbstractRepository
     {
         public function __construct(ConfigManagerInterface $config, ResolverInterface $resolver)
         {
-            parent::__construct($config, $resolver, 'template.blocks');
+            parent::__construct($config, $resolver, 'template.filters');
         }
     }
