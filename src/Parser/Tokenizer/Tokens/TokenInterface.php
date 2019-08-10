@@ -5,9 +5,13 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Parser\Tokens;
+    namespace PsychoB\Framework\Parser\Tokenizer\Tokens;
 
     interface TokenInterface
     {
         public function getToken(): string;
+
+        public function getStart(): int;
+
+        public function getEnd(): int;
     }

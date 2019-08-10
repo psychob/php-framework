@@ -5,7 +5,7 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Parser\Tokens;
+    namespace PsychoB\Framework\Parser\Tokenizer\Tokens;
 
     class NewLineToken extends WhitespaceToken
     {

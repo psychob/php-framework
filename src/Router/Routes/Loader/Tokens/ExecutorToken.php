@@ -7,9 +7,7 @@
 
     namespace PsychoB\Framework\Router\Routes\Loader\Tokens;
 
-    use PsychoB\Framework\Parser\Tokens\AbstractToken;
-
-    class ExecutorToken extends AbstractToken
+    class ExecutorToken
     {
 
     }
