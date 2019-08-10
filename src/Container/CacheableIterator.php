@@ -47,6 +47,7 @@
         public function current()
         {
             switch ($this->state) {
+                case self::STATE_EMPTY:
                 case self::STATE_RUNNING:
                     return $this->internalIterator->current();
 

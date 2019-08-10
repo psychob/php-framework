@@ -60,4 +60,15 @@
             $this->assertArrayElementsStartsWithValues([1, 2], $iterator);
             $this->assertArrayElementsStartsWithValues([1, 2, 3], $iterator);
         }
+
+        public function testCurrentAfterIteratorCreation()
+        {
+            $iterator = new CacheableIterator((function () {
+                yield 1;
+                yield 2;
+                yield 3;
+            })());
+
+            $this->assertSame(1, $iterator->current());
+        }
     }
