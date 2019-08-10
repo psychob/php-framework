@@ -30,9 +30,9 @@
             $offset = self::findFirst_ensureArguments($input, $toFind, $offset);
 
             if (Arr::is($toFind)) {
-                return self::findFirstNot_Array($input, $toFind, $offset);
+                return self::findFirstNotOf_Array($input, $toFind, $offset);
             } else {
-                return self::findFirstNot_Str($input, $toFind, $offset);
+                return self::findFirstNotOf_Str($input, $toFind, $offset);
             }
         }
 
@@ -43,7 +43,7 @@
          *
          * @return int|bool
          */
-        private static function findFirstNot_Array(string $input, array $chrs, int $offset)
+        private static function findFirstNotOf_Array(string $input, array $chrs, int $offset)
         {
             for ($it = $offset, $len = Str::len($input); $it < $len; ++$it) {
                 if (!Arr::contains($chrs, $input[$it])) {
@@ -61,7 +61,7 @@
          *
          * @return int|bool
          */
-        private static function findFirstNot_Str(string $input, string $characters, int $offset)
+        private static function findFirstNotOf_Str(string $input, string $characters, int $offset)
         {
             for ($it = $offset, $inLen = Str::len($input), $chrLen = Str::len($characters); $it < $inLen; ++$it) {
                 for ($jt = 0; $jt < $chrLen; ++$jt) {
@@ -81,9 +81,9 @@
             $offset = self::findFirst_ensureArguments($input, $toFind, $offset);
 
             if (Arr::is($toFind)) {
-                return self::findFirst_Array($input, $toFind, $offset);
+                return self::findFirstOf_Array($input, $toFind, $offset);
             } else {
-                return self::findFirst_Str($input, $toFind, $offset);
+                return self::findFirstOf_Str($input, $toFind, $offset);
             }
         }
 
@@ -94,7 +94,7 @@
          *
          * @return int|bool
          */
-        private static function findFirst_Array(string $input, array $chrs, int $offset)
+        private static function findFirstOf_Array(string $input, array $chrs, int $offset)
         {
             for ($it = $offset, $len = Str::len($input); $it < $len; ++$it) {
                 if (Arr::contains($chrs, $input[$it])) {
@@ -112,7 +112,7 @@
          *
          * @return int|bool
          */
-        private static function findFirst_Str(string $input, string $characters, int $offset)
+        private static function findFirstOf_Str(string $input, string $characters, int $offset)
         {
             for ($it = $offset, $inLen = Str::len($input), $chrLen = Str::len($characters); $it < $inLen; ++$it) {
                 for ($jt = 0; $jt < $chrLen; ++$jt) {
