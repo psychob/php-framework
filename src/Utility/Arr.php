@@ -300,4 +300,9 @@
                 next($arrIt);
             }
         }
+
+        public static function implode(array $config, string $glue): string
+        {
+            return implode($glue, $config);
+        }
     }

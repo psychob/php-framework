@@ -8,6 +8,7 @@
     namespace PsychoB\Framework\Template\Engine;
 
     use PsychoB\Framework\Assert\Assert;
+    use PsychoB\Framework\Template\Generic\Block\AppConfigBlock;
     use PsychoB\Framework\Template\Generic\Block\EmptyBlock;
     use PsychoB\Framework\Template\Generic\Block\RawHtmlBlock;
     use PsychoB\Framework\Template\Generic\Block\VariableBlock;
@@ -143,6 +144,13 @@
             // $name ['accessor']
             // $name [$accessor]
 
+            [$variable, $it] = $this->fetchFullVariable($content, $it);
+
+            return [new VariableBlock($variable), $it + 2];
+        }
+
+        private function fetchFullVariable(string $content, int $it): array
+        {
             $variable = [
                 'name' => '',
                 'accessors' => [],
@@ -178,7 +186,7 @@
             }
             $it = $this->skipWhitespacesFrom($content, $it);
 
-            return [new VariableBlock($variable), $it + 2];
+            return [$variable, $it];
         }
 
         private function fetchSimpleToken(string $content, int $startIt): array
@@ -187,5 +195,15 @@
             $last = Str::findFirstOf($content, self::SYMBOLS . self::WHITESPACE, $it);
 
             return [Str::substr($content, $it, $last - $it), $last];
+        }
+
+        private function fetchApplicationBlock(string $content, int $startIt): array
+        {
+            [$variable, $it] = $this->fetchFullVariable($content, $startIt);
+
+            switch ($variable['name']) {
+                case 'config':
+                    return [new AppConfigBlock($variable['accessors'], $variable['filters']), $it];
+            }
         }
     }

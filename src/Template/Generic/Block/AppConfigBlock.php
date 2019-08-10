@@ -7,40 +7,44 @@
 
     namespace PsychoB\Framework\Template\Generic\Block;
 
+    use PsychoB\Framework\Application\App;
     use PsychoB\Framework\Template\Generic\BlockInterface;
     use PsychoB\Framework\Template\TemplateState;
     use PsychoB\Framework\Utility\Arr;
 
-    class VariableBlock implements BlockInterface
+    class AppConfigBlock implements BlockInterface
     {
-        /** @var string */
-        protected $name;
-
         /** @var string[] */
-        protected $accessors;
+        protected $config;
 
         /** @var mixed[] */
         protected $filters;
 
-        public function __construct(array $variable)
+        /**
+         * AppConfigBlock constructor.
+         *
+         * @param string[] $config
+         * @param mixed[]  $filters
+         */
+        public function __construct(array $config, array $filters)
         {
-            $this->name = $variable['name'];
-            $this->accessors = $variable['accessors'];
-            $this->filters = $variable['filters'];
+            $this->config = $config;
+            $this->filters = $filters;
         }
 
         public function getOutputType(): int
         {
-            return self::OUTPUT_HTML | self::OUTPUT_PHP | self::OUTPUT_RAW_HTML;
+            return self::OUTPUT_RAW_HTML | self::OUTPUT_HTML | self::OUTPUT_PHP;
         }
 
         public function execute(TemplateState $state): string
         {
-            return htmlspecialchars(Arr::recursiveGet($state[$this->name], $this->accessors));
+            return config(Arr::implode($this->config, '.'));
         }
 
         public function serialize(int $type): string
         {
             // TODO: Implement serialize() method.
         }
+
     }
