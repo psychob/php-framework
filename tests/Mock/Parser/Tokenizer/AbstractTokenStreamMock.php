@@ -11,8 +11,9 @@
 
     abstract class AbstractTokenStreamMock extends AbstractTokenStream
     {
-        public function __construct(array $groups = [])
+        public function __construct(array $groups = [], array $transformers = [])
         {
             $this->groups = $groups;
+            $this->transformers = $transformers;
         }
     }

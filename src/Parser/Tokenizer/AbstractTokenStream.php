@@ -11,6 +11,7 @@
     use PsychoB\Framework\Container\AbstractCacheableGenerator;
     use PsychoB\Framework\Parser\Tokenizer\Exception\UnexpectedCharacterException;
     use PsychoB\Framework\Parser\Tokenizer\Tokens\TokenInterface;
+    use PsychoB\Framework\Parser\Tokenizer\Transformers\TransformerInterface;
     use PsychoB\Framework\Utility\Arr;
     use PsychoB\Framework\Utility\Str;
 
@@ -18,6 +19,8 @@
     {
         /** @var mixed[] */
         protected $groups = [];
+        /** @var TransformerInterface[] */
+        protected $transformers = [];
         /** @var string */
         private $tokenCache = '';
         /** @var string */
@@ -33,7 +36,13 @@
 
         protected function getGenerator(): Generator
         {
-            return $this->parseContent();
+            $tokens =  $this->parseContent();
+
+            foreach ($this->transformers as $transformer) {
+                $tokens = $transformer->transform($tokens);
+            }
+
+            return $tokens;
         }
 
         private function parseContent(): Generator
