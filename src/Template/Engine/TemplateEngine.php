@@ -206,4 +206,8 @@
                     return [new AppConfigBlock($variable['accessors'], $variable['filters']), $it];
             }
         }
+
+        protected function fetchBlock(string $content, int $startIt): array
+        {
+        }
     }
