@@ -8,6 +8,7 @@
     namespace PsychoB\Framework\Utility;
 
     use Jawira\CaseConverter\Convert;
+    use function foo\func;
 
     class Ref
     {
@@ -59,5 +60,14 @@
                     return $prop->invoke($object);
                 };
             }
+        }
+
+        public static function hasTrait($obj, string $class): bool
+        {
+            $ref = new \ReflectionClass($obj);
+
+            return Arr::contains(Arr::map($ref->getTraits(), function ($t) {
+                return $t->getName();
+            }), $class);
         }
     }
