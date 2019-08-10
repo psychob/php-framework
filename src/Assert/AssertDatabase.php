@@ -7,9 +7,13 @@
 
     namespace PsychoB\Framework\Assert;
 
+    use PsychoB\Framework\Assert\Constraints\ClassImplementsAssert;
+    use PsychoB\Framework\Assert\Constraints\HasNoKeyAssert;
     use PsychoB\Framework\Assert\Constraints\IsEqualAssert;
     use PsychoB\Framework\Assert\Constraints\IsFalseAssert;
+    use PsychoB\Framework\Assert\Constraints\IsGreaterOrEqualAssert;
     use PsychoB\Framework\Assert\Constraints\IsNotEmptyAssert;
+    use PsychoB\Framework\Assert\Constraints\IsSmallerOrEqualAssert;
     use PsychoB\Framework\Assert\Constraints\IsTrueAssert;
     use PsychoB\Framework\Assert\Constraints\ObjectPropertiesAssert;
     use PsychoB\Framework\Assert\Constraints\PropertyIsEqualAssert;
@@ -38,6 +42,10 @@
             'hasProperties' => ObjectPropertiesAssert::class,
             'isNotEmpty' => IsNotEmptyAssert::class,
             'unreachable' => UnreachableAssert::class,
+            'isSmallerOrEqual' => IsSmallerOrEqualAssert::class,
+            'isGreaterOrEqual' => IsGreaterOrEqualAssert::class,
+            'hasNoKey' => HasNoKeyAssert::class,
+            'classImplements' => ClassImplementsAssert::class,
         ];
 
         protected static function add(string $name, string $class): void

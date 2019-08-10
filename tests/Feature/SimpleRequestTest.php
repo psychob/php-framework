@@ -11,14 +11,20 @@
     use PsychoB\Framework\Kernel;
     use PsychoB\Framework\Testing\UnitTestCase;
 
-    /** @runTestsInSeparateProcesses  */
+    /** @runTestsInSeparateProcesses */
     class SimpleRequestTest extends UnitTestCase
     {
         public function test()
         {
-            $vfs = vfsStream::setup('framework');
+            $vfs = $this->prepareVirtualFileSystem([
+                'framework' => [
+                    'resources/config' => [
 
-            $kernel = Kernel::make($vfs->url());
+                    ],
+                ],
+            ]);
+
+            $kernel = Kernel::make($vfs->url() . '/framework');
             $kernel->init();
             $app = $kernel->createApp();
 

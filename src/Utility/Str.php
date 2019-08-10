@@ -13,7 +13,8 @@
 
         use StringManipulation\StrInfoTrait,
             StringManipulation\StrCompareTrait,
-            StringManipulation\StrRegularExpressionTrait;
+            StringManipulation\StrRegularExpressionTrait,
+            StringManipulation\StrFindTrait;
 
         /**
          * Convert $element to string, while also preserving some information about type
@@ -154,12 +155,7 @@
 
         public static function contains(string $str, string $toFind): bool
         {
-            return Str::findFirst($str, $toFind) !== false;
-        }
-
-        public static function findFirst(string $str, string $toFind, int $offset = 0)
-        {
-            return strpos($str, $toFind, $offset);
+            return Str::findFirstOf($str, $toFind) !== false;
         }
 
         public static function substr(string $str, int $start, ?int $len = NULL): string
@@ -181,5 +177,10 @@
         public static function toUpper(string $str): string
         {
             return strtoupper($str);
+        }
+
+        public static function trim(string $str): string
+        {
+            return trim($str);
         }
     }

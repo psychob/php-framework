@@ -10,6 +10,8 @@
     use PsychoB\Framework\Assert\Assert;
     use PsychoB\Framework\DependencyInjection\Injector\InjectorInterface;
     use PsychoB\Framework\DependencyInjection\Resolver\ResolverInterface;
+    use PsychoB\Framework\Router\Exception\EmptyRouteException;
+    use PsychoB\Framework\Router\Http\GenericResponse;
     use PsychoB\Framework\Router\Http\Request;
     use PsychoB\Framework\Router\Http\Response;
     use PsychoB\Framework\Router\Http\ResponseFailures\Http404;
@@ -18,6 +20,7 @@
     use PsychoB\Framework\Router\Middleware\Executor\UseRouteInformationTag;
     use PsychoB\Framework\Router\Routes\MatchedRoute;
     use PsychoB\Framework\Router\Routes\Route;
+    use PsychoB\Framework\Template\TemplateResolveInterface;
 
     class ExecuteControllerMiddleware extends AbstractMiddleware implements UseRouteInformationTag
     {
@@ -46,14 +49,18 @@
 
             $view = $this->route->getRoute()->getView();
             $execute = $this->route->getRoute()->getExecute();
+            /** @var InjectorInterface $injector */
+            $injector = $this->resolver->resolve(InjectorInterface::class);
 
+            if (!$view && !$execute) {
+                throw new EmptyRouteException("Route executor and view is empty");
+            }
+
+            $response = null;
             if ($execute) {
-                $response = NULL;
-                $injector = $this->resolver->resolve(InjectorInterface::class);
-
                 switch ($execute[1]) {
                     case '::':
-                        $response = $injector->inject([$execute[1], $execute[2]]);
+                        $response = $injector->inject([$execute[0], $execute[2]]);
                         break;
 
                     case '->':
@@ -64,11 +71,23 @@
                     default:
                         Assert::unreachable();
                 }
-
-                return $response;
             }
 
-            dump($this);
+            if ($view) {
+                if ($response === null) {
+                    $response = [];
+                }
+
+                /** @var TemplateResolveInterface $templateEngine */
+                $templateEngine = $this->resolver->resolve(TemplateResolveInterface::class);
+                $response = $templateEngine->render($view, $response);
+            }
+
+            if ($response instanceof Response) {
+                return $response;
+            } else {
+                return new GenericResponse($response);
+            }
         }
 
         public static function getPriority(): ?int

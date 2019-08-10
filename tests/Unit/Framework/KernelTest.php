@@ -13,6 +13,7 @@
     use PsychoB\Framework\Kernel;
     use PsychoB\Framework\Testing\UnitTestCase;
 
+    /** @runTestsInSeparateProcesses   */
     class KernelTest extends UnitTestCase
     {
         private function inspectCurrentErrorHandler()

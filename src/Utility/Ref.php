@@ -60,4 +60,11 @@
                 };
             }
         }
+
+        public static function implements($obj, string $interface): bool
+        {
+            $ref = new \ReflectionClass($obj);
+
+            return Arr::contains($ref->getInterfaceNames(), $interface);
+        }
     }

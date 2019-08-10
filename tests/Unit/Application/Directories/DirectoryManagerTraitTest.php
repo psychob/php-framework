@@ -49,4 +49,22 @@
             $this->assertArrayElementsContainsValues(['bar'], $this->discovery->getBaseDirectories());
             $this->assertArrayElementsContainsValues(['bar'], $this->discovery->getModuleDirectories('foo'));
         }
+
+        public function provideResolvePath(): array
+        {
+            return [
+                ['vfs:///app/foo', '@/foo'],
+                ['vfs:///app/resources/views/foo', '@/foo', 'resources/views'],
+                ['vfs:///framework/foo', '+/foo'],
+                ['vfs:///framework/resources/view/foo', '+/foo', 'resources/view'],
+                ['foo', 'foo'],
+                ['resources/view/foo', 'foo', 'resources/view'],
+            ];
+        }
+
+        /** @dataProvider provideResolvePath */
+        public function testResolvePath(string $result, string $base, ?string $sub = '')
+        {
+            $this->assertSame($result, $this->discovery->resolvePath($base, $sub));
+        }
     }

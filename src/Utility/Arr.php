@@ -8,7 +8,7 @@
     namespace PsychoB\Framework\Utility;
 
     use ArrayAccess;
-    use phpDocumentor\Reflection\Types\Static_;
+    use Generator;
 
     class Arr
     {
@@ -182,7 +182,7 @@
             return iterator_to_array(static::lazyFilter($arr, $callback));
         }
 
-        public static function lazyFilter(array $arr, $callback): \Generator
+        public static function lazyFilter(array $arr, $callback): Generator
         {
             foreach ($arr as $key => $value) {
                 if (call_user_func($callback, $value, $key)) {
@@ -196,7 +196,7 @@
             return iterator_to_array(static::lazyPluck($arr, $key));
         }
 
-        public static function lazyPluck($arr, string $getter): \Generator
+        public static function lazyPluck($arr, string $getter): Generator
         {
             foreach ($arr as $key => $value) {
                 if (method_exists($value, $getter)) {
@@ -280,5 +280,29 @@
             }
 
             return $ret;
+        }
+
+        public static function slice($arr, int $start, ?int $length = NULL): array
+        {
+            if ($length !== NULL) {
+                return array_slice($arr, $start, $length);
+            } else {
+                return array_slice($arr, $start);
+            }
+        }
+
+        public static function lazySlice($arr, int $start, ?int $length = NULL)
+        {
+            $arrIt = Arr::toIterator($arr);
+
+            // ignore first 0...$start elements
+            for ($it = 0; $it < $start; ++$it) {
+                next($arrIt);
+            }
+        }
+
+        public static function implode(array $config, string $glue): string
+        {
+            return implode($glue, $config);
         }
     }

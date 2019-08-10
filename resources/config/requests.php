@@ -5,14 +5,16 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
+    use PsychoB\Framework\Router\Http\Headers\ContentTypeHeader;
     use PsychoB\Framework\Router\Http\Headers\GenericHeader;
     use PsychoB\Framework\Router\Http\Headers\HostHeader;
     use PsychoB\Framework\Router\Http\Headers\UserAgentHeader;
 
     return [
         'header-parsers' => [
-            '*'          => GenericHeader::class,
-            'Host'       => HostHeader::class,
+            '*' => GenericHeader::class,
+            'Host' => HostHeader::class,
             'User-Agent' => UserAgentHeader::class,
+            'Content-Type' => ContentTypeHeader::class,
         ],
     ];
