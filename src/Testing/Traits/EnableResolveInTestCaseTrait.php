@@ -28,7 +28,7 @@
             $deferred = new DeferredResolver();
             $injector = new Injector($container, $deferred);
 
-            if (Ref::hasTrait($this, EnableSeparateConfigurationInTestCaseTrait::class)) {
+            if (Ref::hasTrait($this, EnableSeparateConfigurationInTestCaseTrait::class, true)) {
                 $config = $this->_pbfw__config;
                 $container->add(ConfigManagerInterface::class, $config, ContainerInterface::ADD_IGNORE);
             } else {

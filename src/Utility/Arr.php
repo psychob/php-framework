@@ -323,4 +323,15 @@
         {
             return array_map($map, $arr);
         }
+
+        public static function exists($iterable, $callable): bool
+        {
+            foreach ($iterable as $key => $value) {
+                if ($callable($value, $key)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }

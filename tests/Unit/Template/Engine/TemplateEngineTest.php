@@ -7,39 +7,11 @@
 
     namespace Tests\PsychoB\Framework\Unit\Template\Engine;
 
-    use PsychoB\Framework\Template\Engine\TemplateEngine;
-    use PsychoB\Framework\Template\Generic\Block\ExtendsBlock;
-    use PsychoB\Framework\Template\Generic\Filter\RawFilter;
-    use PsychoB\Framework\Testing\Traits\EnableSeparateConfigurationInTestCaseTrait;
     use PsychoB\Framework\Testing\Traits\EnableResolveInTestCaseTrait;
-    use PsychoB\Framework\Testing\UnitTestCase;
+    use PsychoB\Framework\Testing\Traits\EnableSeparateConfigurationInTestCaseTrait;
 
-    class TemplateEngineTest extends UnitTestCase
+    class TemplateEngineTest extends TemplateEngineTestCase
     {
-        use EnableResolveInTestCaseTrait, EnableSeparateConfigurationInTestCaseTrait;
-
-        /** @var TemplateEngine */
-        protected $tpl;
-
-        protected function setUp(): void
-        {
-            parent::setUp();
-
-            $this->configSet([
-                'template' => [
-                    'blocks' => [
-                        'extends' => ExtendsBlock::class,
-                        'if' => IfBlock::class,
-                        'assign' => AssignBlock::class,
-                    ],
-                    'filters' => [
-                        'raw' => RawFilter::class,
-                    ],
-                ],
-            ]);
-            $this->tpl = $this->resolve(TemplateEngine::class);
-        }
-
         public function testEmptyString()
         {
             $this->assertSame('', $this->tpl->execute(''));

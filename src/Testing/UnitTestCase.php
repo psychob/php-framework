@@ -9,6 +9,7 @@
 
     use PHPUnit\Framework\TestCase as PhpUnitTestCase;
     use PsychoB\Framework\Utility\Arr;
+    use PsychoB\Framework\Utility\Ref;
     use PsychoB\Framework\Utility\Str;
 
     class UnitTestCase extends PhpUnitTestCase
@@ -21,16 +22,16 @@
         {
             parent::setUpBeforeClass();
 
-            $reflection = new \ReflectionClass(static::class);
-            foreach ($reflection->getTraits() as $trait) {
-                if (Str::endsWith($trait->getName(), 'TestCaseTrait')) {
+            foreach (Ref::lazyRecursiveTraits(static::class) as $trait) {
+                if (Str::endsWith($trait->getShortName(), 'TestCaseTrait')) {
                     self::$_pbfw_traits_to_set_up__[] = $trait->getShortName();
                 }
             }
 
-            self::$_pbfw_traits_to_set_up__ = Arr::sortByCustom(self::$_pbfw_traits_to_set_up__, function (string $trait): int {
-                return call_user_func([static::class, sprintf('%s_priority', $trait)]);
-            });
+            self::$_pbfw_traits_to_set_up__ = Arr::sortByCustom(self::$_pbfw_traits_to_set_up__,
+                function (string $trait): int {
+                    return call_user_func([static::class, sprintf('%s_priority', $trait)]);
+                });
         }
 
         public static function tearDownAfterClass(): void

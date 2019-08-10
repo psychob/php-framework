@@ -21,7 +21,7 @@
         {
             $this->_pbfw__config = new ArrayConfigManagerMock([]);
 
-            if (Ref::hasTrait($this, EnableContainerInTestCaseTrait::class)) {
+            if (Ref::hasTrait($this, EnableContainerInTestCaseTrait::class, true)) {
                 /** @var $this EnableContainerInTestCaseTrait|EnableSeparateConfigurationInTestCaseTrait */
                 $this->_pbfw__container->add(ConfigManagerInterface::class, $this->_pbfw__config);
             }
