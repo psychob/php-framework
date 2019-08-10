@@ -5,23 +5,24 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Template\Block;
+    namespace PsychoB\Framework\Template\Generic\Block;
 
+    use PsychoB\Framework\Template\Generic\BlockInterface;
     use PsychoB\Framework\Template\TemplateState;
 
-    class EchoRawHtmlBlock implements BlockInterface
+    class RawHtmlBlock implements BlockInterface
     {
         /** @var string */
-        protected $content;
+        protected $text;
 
         /**
-         * EchoRawHtmlBlock constructor.
+         * RawHtmlBlock constructor.
          *
-         * @param string $content
+         * @param string $text
          */
-        public function __construct(string $content)
+        public function __construct(string $text)
         {
-            $this->content = $content;
+            $this->text = $text;
         }
 
         public function getOutputType(): int
@@ -31,10 +32,11 @@
 
         public function execute(TemplateState $state): string
         {
-            return $this->content;
+            return $this->text;
         }
 
-        public function serialize(): string
+        public function serialize(int $type): string
         {
+            return $this->text;
         }
     }

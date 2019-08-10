@@ -7,15 +7,18 @@
 
     namespace PsychoB\Framework\Template\Engine;
 
-    use MongoDB\Driver\Monitoring\Subscriber;
     use PsychoB\Framework\Assert\Assert;
-    use PsychoB\Framework\Template\Block\EchoRawHtmlBlock;
-    use PsychoB\Framework\Template\Block\PrintVariableBlock;
+    use PsychoB\Framework\Template\Generic\Block\EmptyBlock;
+    use PsychoB\Framework\Template\Generic\Block\RawHtmlBlock;
+    use PsychoB\Framework\Template\Generic\Block\VariableBlock;
     use PsychoB\Framework\Utility\Str;
 
     class TemplateEngine implements TemplateEngineInterface
     {
         use TemplateEngineExecutorTrait;
+
+        private const SYMBOLS    = '.:"\'{}|';
+        private const WHITESPACE = " \t\r\n\v";
 
         public function execute(string $content, array $variables = []): string
         {
@@ -32,7 +35,7 @@
             while (($currentIt = Str::findFirstOf($content, '{{', $it)) !== false) {
                 if ($startIt !== $currentIt) {
                     // we have raw text in front of our block
-                    $ret[] = new EchoRawHtmlBlock(Str::substr($content, $startIt, $currentIt - $startIt));
+                    $ret[] = new RawHtmlBlock(Str::substr($content, $startIt, $currentIt - $startIt));
                 }
 
                 $it = $currentIt + 2;
@@ -45,7 +48,7 @@
 
             $rest = Str::substr($content, $startIt);
             if ($rest !== '') {
-                $ret[] = new EchoRawHtmlBlock($rest);
+                $ret[] = new RawHtmlBlock($rest);
             }
 
             return $ret;
@@ -62,15 +65,9 @@
             // any other character will start normal block, that we need to fetch to get information about
 
             // we don't need to have our instruction started with 0th character, we might have some whitespace there
-            $it = $this->skipWhitespacesFrom($content, $startIt);
+            $it = $startIt;
 
             switch ($content[$it]) {
-                case '@':
-                    return $this->fetchAppInstruction($content, $it);
-
-                case '$':
-                    return $this->fetchVarInstruction($content, $it);
-
                 case '*':
                     return $this->fetchSimpleCommentInstruction($content, $it);
 
@@ -78,13 +75,13 @@
                     return $this->fetchExtendedCommentInstruction($content, $it);
 
                 default:
-                    return $this->fetchCustomInstruction($content, $it);
+                    return $this->fetchExpression($content, $it);
             }
         }
 
         private function skipWhitespacesFrom(string $content, int $startIt): int
         {
-            $ret = Str::findFirstNotOf($content, " \t\r\n\v", $startIt);
+            $ret = Str::findFirstNotOf($content, self::WHITESPACE, $startIt);
             if ($ret === false) {
                 /// TODO: Throw exception because there is no more non-whitespace characters
             }
@@ -92,62 +89,103 @@
             return $ret;
         }
 
-        private function fetchVarInstruction(string $content, int $startIt)
+        private function fetchSimpleCommentInstruction(string $content, int $startIt): array
         {
-            // var can have following format:
-            // $name[.sub]+ [| filter[:arg]+]+
+            $closeTag = Str::findFirst($content, '*}}', $startIt);
 
-            $variable = '';
-            $accessors = [];
-            $filters = [];
-            $it = $startIt + 1;
+            return [new EmptyBlock(), $closeTag + 3];
+        }
 
-            $nextIt = Str::findFirstOf($content, '.|}', $it);
-            $variable = Str::trim(Str::substr($content, $it, $nextIt - $it));
+        private function fetchExtendedCommentInstruction(string $content, int $startIt): array
+        {
+            $it = $startIt;
+            do {
+                $closeTag = Str::findFirst($content, [
+                    '{{+', '+}}',
+                ], $it);
 
-            $it = $nextIt;
+                switch (Str::substr($content, $closeTag, 3)) {
+                    case '{{+':
+                        [, $closeTag] = $this->fetchExtendedCommentInstruction($content, $closeTag + 3);
+                        break;
 
-            if ($content[$it] === '.') {
-                do {
-                    $dotStart = $it + 1;
-                    $it = Str::findFirstOf($content, '.|}', $dotStart);
-                    $acc = Str::substr($content, $dotStart, $it - $dotStart);
-                    $accessors[] = Str::trim($acc);
-                } while ($content[$it] === '.');
-
-                $nextIt = $it;
-            }
-
-            if ($content[$it] === '|') {
-                do {
-                    $fncStart = $it + 1;
-                    $it = Str::findFirstOf($content, '|:}', $fncStart);
-                    $fnc = Str::substr($content, $fncStart, $it - $fncStart);
-                    $fnc = Str::trim($fnc);
-                    $arguments = [];
-
-                    if ($content[$it] === ':') {
-                        do {
-                            $argStart = $it + 1;
-                            $it = Str::findFirstOf($content, '.|}', $argStart);
-                            $arg = Str::substr($content, $argStart, $it - $argStart);
-                            $arguments[] = Str::trim($arg);
-                        } while ($content[$it] === '.');
-                    }
-
-                    $filters[] = ['name' => $fnc, 'arguments' => $arguments];
-                    $nextIt = $it;
-                } while ($content[$it] === '|');
-            }
-
-            if ($content[$nextIt] === '}') {
-                if ($content[$nextIt + 1] === '}') {
-                    return [new PrintVariableBlock($variable, $accessors, $filters), $it + 2];
-                } else {
-                    $this->throwSyntaxError('{ is not followed by {', $it);
+                    case '+}}':
+                        return [new EmptyBlock(), $closeTag + 3];
                 }
+
+                $it = $closeTag;
+            } while (true);
+
+            Assert::unreachable();
+        }
+
+        private function fetchExpression(string $content, int $startIt): array
+        {
+            $it = $this->skipWhitespacesFrom($content, $startIt);
+
+            switch ($content[$it]) {
+                case '$':
+                    return $this->fetchVariableBlock($content, $it);
+
+                case '@':
+                    return $this->fetchApplicationBlock($content, $it);
+
+                default:
+                    return $this->fetchBlock($content, $it);
+            }
+        }
+
+        private function fetchVariableBlock(string $content, int $it): array
+        {
+            // variable syntax is:
+            // $name [. accessor]+ [|filter[: arg]+]+
+            // it can also use alternative syntax:
+            // $name ['accessor']
+            // $name [$accessor]
+
+            $variable = [
+                'name' => '',
+                'accessors' => [],
+                'filters' => [],
+            ];
+
+            [$variable['name'], $it] = $this->fetchSimpleToken($content, $it + 1);
+
+            $it = $this->skipWhitespacesFrom($content, $it);
+            while ($content[$it] === '.') {
+                [$acc, $it] = $this->fetchSimpleToken($content, $it + 1);
+
+                $variable['accessors'][] = $acc;
             }
 
-            Assert::unreachable('Unknown format');
+            $it = $this->skipWhitespacesFrom($content, $it);
+            while ($content[$it] === '|') {
+                [$name, $it] = $this->fetchSimpleToken($content, $it + 1);
+                $it = $this->skipWhitespacesFrom($content, $it);
+
+                $args = [];
+                while ($content[$it] === ':') {
+                    [$arg, $it] = $this->fetchSimpleToken($content, $it + 1);
+                    $it = $this->skipWhitespacesFrom($content, $it);
+
+                    $args[] = $arg;
+                }
+
+                $variable['filters'][] = [
+                    'name' => $name,
+                    'args' => $args,
+                ];
+            }
+            $it = $this->skipWhitespacesFrom($content, $it);
+
+            return [new VariableBlock($variable), $it + 2];
+        }
+
+        private function fetchSimpleToken(string $content, int $startIt): array
+        {
+            $it = $this->skipWhitespacesFrom($content, $startIt);
+            $last = Str::findFirstOf($content, self::SYMBOLS . self::WHITESPACE, $it);
+
+            return [Str::substr($content, $it, $last - $it), $last];
         }
     }

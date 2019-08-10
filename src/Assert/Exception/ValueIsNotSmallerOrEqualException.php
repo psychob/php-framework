@@ -27,7 +27,8 @@
             $this->left = $left;
             $this->right = $right;
 
-            parent::__construct($left, 'is-smaller-equal', 'Value is not smaller or equal', $message, $p);
+            parent::__construct($left, 'is-smaller-equal', 'Value: ' . $left . ' is not smaller or equal to ' . $right,
+                $message, $p);
         }
 
         /**

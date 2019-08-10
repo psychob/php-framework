@@ -156,4 +156,39 @@
 
             return $offset;
         }
+
+        public static function findFirst(string $input, $toFind, int $offset = 0)
+        {
+            $offset = self::findFirst_ensureArguments($input, $toFind, $offset);
+
+            if (Arr::is($toFind)) {
+                return self::findFirst_Array($input, $toFind, $offset);
+            } else {
+                return self::findFirst_Str($input, $toFind, $offset);
+            }
+        }
+
+        private static function findFirst_Array(string $input, array $what, int $offset)
+        {
+            $positions = [];
+
+            foreach ($what as $item) {
+                $tmp = self::findFirst_Str($input, $item, $offset);
+
+                if ($tmp !== false) {
+                    $positions[] = $tmp;
+                }
+            }
+
+            if (empty($positions)) {
+                return false;
+            }
+
+            return min($positions);
+        }
+
+        private static function findFirst_Str(string $input, string $what, int $offset)
+        {
+            return strpos($input, $what, $offset);
+        }
     }

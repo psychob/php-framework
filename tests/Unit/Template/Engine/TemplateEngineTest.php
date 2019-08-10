@@ -38,28 +38,35 @@ OUTPUT;
             $this->assertSame($testStr, $this->tpl->execute($testStr));
         }
 
-        public function provideSimpleVariables()
+        public function provideSimpleExpressions()
         {
             return [
-                ['42', '{{$abc}}', ['abc' => 42]],
-                [' 42', ' {{$abc}}', ['abc' => 42]],
-                ['42 ', '{{$abc}} ', ['abc' => 42]],
-                [' 42 ', ' {{$abc}} ', ['abc' => 42]],
-                [' 42 ', ' {{ $abc}} ', ['abc' => 42]],
-                [' 42 ', ' {{$abc }} ', ['abc' => 42]],
-                ['42', '{{$abc.def}}', ['abc' => ['def' => 42]]],
-                ['42', '{{$abc.def.ghi}}', ['abc' => ['def' => ['ghi' => 42]]]],
-                ['42', "{{\$abc\t.\tdef}}", ['abc' => ['def' => 42]]],
+//                [' ', ' ', []],
+//                ['42', '{{$abc}}', ['abc' => 42]],
+//                [' 42', ' {{$abc}}', ['abc' => 42]],
+//                ['42 ', '{{$abc}} ', ['abc' => 42]],
+//                [' 42 ', ' {{$abc}} ', ['abc' => 42]],
+//                [' 42 ', ' {{ $abc}} ', ['abc' => 42]],
+//                [' 42 ', ' {{$abc }} ', ['abc' => 42]],
+//                ['42', '{{$abc.def}}', ['abc' => ['def' => 42]]],
+//                ['42', '{{$abc.def.ghi}}', ['abc' => ['def' => ['ghi' => 42]]]],
+//                ['42', "{{\$abc\t.\tdef}}", ['abc' => ['def' => 42]]],
                 ['42', '{{$abc .def}}', ['abc' => ['def' => 42]]],
-                ['42', '{{$abc. def}}', ['abc' => ['def' => 42]]],
-                ['42', '{{$abc . def }}', ['abc' => ['def' => 42]]],
-                ['&lt;&gt;', '{{$abc}}', ['abc' => '<>']],
-                ['<>', '{{$abc|raw}}', ['abc' => '<>']],
+//                ['42', '{{$abc. def}}', ['abc' => ['def' => 42]]],
+//                ['42', '{{$abc . def }}', ['abc' => ['def' => 42]]],
+//                ['&lt;&gt;', '{{$abc}}', ['abc' => '<>']],
+//                ['<>', '{{$abc|raw}}', ['abc' => '<>']],
+//                ['', '{{* foo bar *}}'],
+//                [' ', '{{* foo bar *}} {{* baz faz *}}'],
+//                ['', '{{+ {{* foo bar *}} {{* baz faz *}}   +}}'],
+//                ['', '{{+ {{* foo bar {{+ *}} {{* +}} baz faz *}}   +}}'],
+//                ['', '{{+ foo bar +}}'],
+//                [' ', '{{+ foo bar +}} {{+ baz faz +}}'],
             ];
         }
 
-        /** @dataProvider provideSimpleVariables */
-        public function testSimpleVariables(string $out, string $in, array $variables = []): void
+        /** @dataProvider provideSimpleExpressions */
+        public function testSimpleExpressions(string $out, string $in, array $variables = []): void
         {
             $this->assertSame($out, $this->tpl->execute($in, $variables));
         }

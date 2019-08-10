@@ -7,7 +7,7 @@
 
     namespace PsychoB\Framework\Template\Engine;
 
-    use PsychoB\Framework\Template\Block\BlockInterface;
+    use PsychoB\Framework\Template\Generic\BlockInterface;
     use PsychoB\Framework\Template\TemplateState;
 
     trait TemplateEngineExecutorTrait
