@@ -51,7 +51,7 @@
             $this->_pbfw__resolver = NULL;
         }
 
-        public function EnableResolveInTestCaseTrait_priority(): int
+        public static function EnableResolveInTestCaseTrait_priority(): int
         {
             return 10;
         }

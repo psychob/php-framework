@@ -38,7 +38,7 @@
             $this->_pbfw__container = NULL;
         }
 
-        public function EnableContainerInTestCaseTrait_priority(): int
+        public static function EnableContainerInTestCaseTrait_priority(): int
         {
             return 0;
         }

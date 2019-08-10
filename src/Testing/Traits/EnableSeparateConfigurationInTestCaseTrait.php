@@ -32,7 +32,7 @@
             $this->_pbfw__config = NULL;
         }
 
-        public function EnableSeparateConfigurationInTestCaseTrait_priority(): int
+        public static function EnableSeparateConfigurationInTestCaseTrait_priority(): int
         {
             return 5;
         }
