@@ -305,4 +305,14 @@
         {
             return implode($glue, $config);
         }
+
+        public static function explode(string $str, string $deli): array
+        {
+            return explode($deli, $str);
+        }
+
+        public static function map(array $arr, $map)
+        {
+            return array_map($map, $arr);
+        }
     }

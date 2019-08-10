@@ -8,13 +8,14 @@
     namespace PsychoB\Framework\Testing;
 
     use PHPUnit\Framework\TestCase as PhpUnitTestCase;
+    use PsychoB\Framework\Utility\Arr;
     use PsychoB\Framework\Utility\Str;
 
     class UnitTestCase extends PhpUnitTestCase
     {
         use ArrayAssertTrait, VirtualSystemAssertTrait;
 
-        protected static $__traitsToSetUp = [];
+        private static $_pbfw_traits_to_set_up__ = [];
 
         public static function setUpBeforeClass(): void
         {
@@ -23,14 +24,18 @@
             $reflection = new \ReflectionClass(static::class);
             foreach ($reflection->getTraits() as $trait) {
                 if (Str::endsWith($trait->getName(), 'TestCaseTrait')) {
-                    self::$__traitsToSetUp[] = $trait->getShortName();
+                    self::$_pbfw_traits_to_set_up__[] = $trait->getShortName();
                 }
             }
+
+            self::$_pbfw_traits_to_set_up__ = Arr::sortByCustom(self::$_pbfw_traits_to_set_up__, function (string $trait): int {
+                return call_user_func([static::class, sprintf('%s_priority', $trait)]);
+            });
         }
 
         public static function tearDownAfterClass(): void
         {
-            self::$__traitsToSetUp = [];
+            self::$_pbfw_traits_to_set_up__ = [];
             parent::tearDownAfterClass();
         }
 
@@ -38,14 +43,14 @@
         {
             parent::setUp();
 
-            foreach (self::$__traitsToSetUp as $traitToSetUp) {
+            foreach (self::$_pbfw_traits_to_set_up__ as $traitToSetUp) {
                 call_user_func([$this, sprintf('%s_setUp', $traitToSetUp)]);
             }
         }
 
         protected function tearDown(): void
         {
-            foreach (self::$__traitsToSetUp as $traitToTearDown) {
+            foreach (self::$_pbfw_traits_to_set_up__ as $traitToTearDown) {
                 call_user_func([$this, sprintf('%s_tearDown', $traitToTearDown)]);
             }
 

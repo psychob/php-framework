@@ -15,37 +15,49 @@
     use PsychoB\Framework\DependencyInjection\Resolver\DeferredResolver;
     use PsychoB\Framework\DependencyInjection\Resolver\Resolver;
     use PsychoB\Framework\DependencyInjection\Resolver\ResolverInterface;
+    use PsychoB\Framework\Utility\Ref;
 
     trait EnableResolveInTestCaseTrait
     {
         /** @var ResolverInterface */
-        private $__resolver;
+        private $_pbfw__resolver;
 
-        public function EnableResolveInTestCaseTrait_setUp()
+        public function EnableResolveInTestCaseTrait_setUp(): void
         {
             $container = new Container();
             $deferred = new DeferredResolver();
             $injector = new Injector($container, $deferred);
-            $config = \Mockery::mock(ConfigManagerInterface::class);
 
-            $this->__resolver = new Resolver($container, $injector, $config);
-            $deferred->setResolver($this->__resolver);
+            if (Ref::hasTrait($this, EnableSeparateConfigurationInTestCaseTrait::class)) {
+                $config = $this->_pbfw__config;
+                $container->add(ConfigManagerInterface::class, $config, ContainerInterface::ADD_IGNORE);
+            } else {
+                $config = \Mockery::mock(ConfigManagerInterface::class);
+            }
+
+            $this->_pbfw__resolver = new Resolver($container, $injector, $config);
+            $deferred->setResolver($this->_pbfw__resolver);
 
             $container->add(ContainerInterface::class, $container);
             $container->add(Container::class, $container);
 
-            $container->add(ResolverInterface::class, $this->__resolver);
+            $container->add(ResolverInterface::class, $this->_pbfw__resolver);
             $container->add(InjectorInterface::class, $injector);
             $container->add(Injector::class, $injector);
         }
 
-        public function EnableResolveInTestCaseTrait_tearDown()
+        public function EnableResolveInTestCaseTrait_tearDown(): void
         {
-            $this->__resolver = NULL;
+            $this->_pbfw__resolver = NULL;
+        }
+
+        public function EnableResolveInTestCaseTrait_priority(): int
+        {
+            return 10;
         }
 
         protected function resolve(string $name, array $arguments = [])
         {
-            return $this->__resolver->resolve($name, $arguments);
+            return $this->_pbfw__resolver->resolve($name, $arguments);
         }
     }
