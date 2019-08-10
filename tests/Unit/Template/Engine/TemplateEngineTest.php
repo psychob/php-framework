@@ -8,12 +8,14 @@
     namespace Tests\PsychoB\Framework\Unit\Template\Engine;
 
     use PsychoB\Framework\Template\Engine\TemplateEngine;
+    use PsychoB\Framework\Template\Generic\Block\ExtendsBlock;
+    use PsychoB\Framework\Testing\Traits\EnableSeparateConfigurationInTestCaseTrait;
     use PsychoB\Framework\Testing\Traits\EnableResolveInTestCaseTrait;
     use PsychoB\Framework\Testing\UnitTestCase;
 
     class TemplateEngineTest extends UnitTestCase
     {
-        use EnableResolveInTestCaseTrait;
+        use EnableResolveInTestCaseTrait, EnableSeparateConfigurationInTestCaseTrait;
 
         /** @var TemplateEngine */
         protected $tpl;
@@ -22,6 +24,13 @@
         {
             parent::setUp();
 
+            $this->configSet([
+                'template' => [
+                    'blocks' => [
+                        'extends' => ExtendsBlock::class,
+                    ],
+                ],
+            ]);
             $this->tpl = $this->resolve(TemplateEngine::class);
         }
 

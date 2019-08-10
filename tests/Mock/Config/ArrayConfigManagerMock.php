@@ -20,4 +20,9 @@
         {
             $this->container = $container;
         }
+
+        public function setInnerArray(array $inner): void
+        {
+            $this->container = $inner;
+        }
     }
