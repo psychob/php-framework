@@ -8,12 +8,12 @@
     namespace PsychoB\Framework\Template\Engine;
 
     use PsychoB\Framework\Assert\Assert;
-    use PsychoB\Framework\Template\Generic\Block\AppConfigBlock;
+    use PsychoB\Framework\Parser\Tokenizer\Tokenizer;
+    use PsychoB\Framework\Parser\Tokenizer\Tokens\SymbolToken;
+    use PsychoB\Framework\Parser\Tokenizer\Tokens\WhitespaceToken;
     use PsychoB\Framework\Template\Generic\Block\EmptyBlock;
     use PsychoB\Framework\Template\Generic\Block\RawHtmlBlock;
-    use PsychoB\Framework\Template\Generic\Block\VariableBlock;
     use PsychoB\Framework\Template\TemplateBlockRepository;
-    use PsychoB\Framework\Utility\Ref;
     use PsychoB\Framework\Utility\Str;
 
     class TemplateEngine implements TemplateEngineInterface
@@ -26,6 +26,9 @@
         /** @var TemplateBlockRepository */
         protected $blockRepository;
 
+        /** @var Tokenizer */
+        protected $tokenizer;
+
         /**
          * TemplateEngine constructor.
          *
@@ -34,6 +37,10 @@
         public function __construct(TemplateBlockRepository $blockRepository)
         {
             $this->blockRepository = $blockRepository;
+
+            $this->tokenizer = new Tokenizer();
+            $this->tokenizer->addGroup('symbols', ['$', '}}', '{{'], SymbolToken::class, false);
+            $this->tokenizer->addGroup('whitespace', [' ', "\t", "\r", "\n", "\v"], WhitespaceToken::class, true);
         }
 
         public function execute(string $content, array $variables = []): string
@@ -95,16 +102,6 @@
             }
         }
 
-        private function skipWhitespacesFrom(string $content, int $startIt): int
-        {
-            $ret = Str::findFirstNotOf($content, self::WHITESPACE, $startIt);
-            if ($ret === false) {
-                /// TODO: Throw exception because there is no more non-whitespace characters
-            }
-
-            return $ret;
-        }
-
         private function fetchSimpleCommentInstruction(string $content, int $startIt): array
         {
             $closeTag = Str::findFirst($content, '*}}', $startIt);
@@ -135,102 +132,4 @@
             Assert::unreachable();
         }
 
-        private function fetchExpression(string $content, int $startIt): array
-        {
-            $it = $this->skipWhitespacesFrom($content, $startIt);
-
-            switch ($content[$it]) {
-                case '$':
-                    return $this->fetchVariableBlock($content, $it);
-
-                case '@':
-                    return $this->fetchApplicationBlock($content, $it);
-
-                default:
-                    return $this->fetchBlock($content, $it);
-            }
-        }
-
-        private function fetchVariableBlock(string $content, int $it): array
-        {
-            // variable syntax is:
-            // $name [. accessor]+ [|filter[: arg]+]+
-            // it can also use alternative syntax:
-            // $name ['accessor']
-            // $name [$accessor]
-
-            [$variable, $it] = $this->fetchFullVariable($content, $it);
-
-            return [new VariableBlock($variable), $it + 2];
-        }
-
-        private function fetchFullVariable(string $content, int $it): array
-        {
-            $variable = [
-                'name' => '',
-                'accessors' => [],
-                'filters' => [],
-            ];
-
-            [$variable['name'], $it] = $this->fetchSimpleToken($content, $it + 1);
-
-            $it = $this->skipWhitespacesFrom($content, $it);
-            while ($content[$it] === '.') {
-                [$acc, $it] = $this->fetchSimpleToken($content, $it + 1);
-
-                $variable['accessors'][] = $acc;
-            }
-
-            $it = $this->skipWhitespacesFrom($content, $it);
-            while ($content[$it] === '|') {
-                [$name, $it] = $this->fetchSimpleToken($content, $it + 1);
-                $it = $this->skipWhitespacesFrom($content, $it);
-
-                $args = [];
-                while ($content[$it] === ':') {
-                    [$arg, $it] = $this->fetchSimpleToken($content, $it + 1);
-                    $it = $this->skipWhitespacesFrom($content, $it);
-
-                    $args[] = $arg;
-                }
-
-                $variable['filters'][] = [
-                    'name' => $name,
-                    'args' => $args,
-                ];
-            }
-            $it = $this->skipWhitespacesFrom($content, $it);
-
-            return [$variable, $it];
-        }
-
-        private function fetchSimpleToken(string $content, int $startIt): array
-        {
-            $it = $this->skipWhitespacesFrom($content, $startIt);
-            $last = Str::findFirstOf($content, self::SYMBOLS . self::WHITESPACE, $it);
-
-            return [Str::substr($content, $it, $last - $it), $last];
-        }
-
-        private function fetchApplicationBlock(string $content, int $startIt): array
-        {
-            [$variable, $it] = $this->fetchFullVariable($content, $startIt);
-
-            switch ($variable['name']) {
-                case 'config':
-                    return [new AppConfigBlock($variable['accessors'], $variable['filters']), $it];
-            }
-        }
-
-        protected function fetchBlock(string $content, int $startIt): array
-        {
-            [$name, $it] = $this->fetchSimpleToken($content, $startIt);
-            $class = $this->blockRepository->get($name);
-
-            if (Ref::implementsInterface($class, TokensBlockInterface::class)) {
-                return $this->fetchBlockWithCustomTokens($content, $it, $name, $class);
-            } else {
-                return $this->fetchBlockWithStandardTokens($content, $it, $name, $class);
-            }
-        }
     }
