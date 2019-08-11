@@ -8,50 +8,46 @@
     namespace PsychoB\Framework\Template\Generic\Block;
 
     use PsychoB\Framework\Template\Generic\BlockInterface;
-    use PsychoB\Framework\Template\Generic\Builtin\Constant;
     use PsychoB\Framework\Template\TemplateState;
 
-    class PrintConstantBlock implements BlockInterface
+    class PrintExpressionBlock implements BlockInterface
     {
-        protected $constant;
+        /** @var mixed[] */
+        protected $instructions;
 
         /**
-         * PrintConstantBlock constructor.
+         * PrintExpressionBlock constructor.
          *
-         * @param $constant
+         * @param mixed[] $instructions
          */
-        public function __construct($constant)
+        public function __construct($instructions)
         {
-            $this->constant = $constant;
+            $this->instructions = $instructions;
         }
 
         public function getOutputType(): int
         {
-            return self::OUTPUT_RAW_HTML;
+            // TODO: Implement getOutputType() method.
         }
 
         public static function getArgumentTypeHint(): array
         {
-            return [];
+            // TODO: Implement getArgumentTypeHint() method.
         }
 
         public static function getImpliedBlockEnd(): int
         {
-            return self::IMPLIED_END_AT_INSTRUCTION;
+            // TODO: Implement getImpliedBlockEnd() method.
         }
 
         public static function getHeaderPreference(): int
         {
-            return self::PREFERENCE_ARGUMENTS;
+            // TODO: Implement getHeaderPreference() method.
         }
 
         public function execute(TemplateState $state): string
         {
-            if ($this->constant instanceof Constant) {
-                return htmlspecialchars($this->constant->getConstant());
-            } else {
-                return $this->constant;
-            }
+            return '';
         }
 
         public function serialize(int $type): string

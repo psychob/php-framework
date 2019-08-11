@@ -13,6 +13,7 @@
     use PsychoB\Framework\Parser\Tokenizer\Tokenizer;
     use PsychoB\Framework\Parser\Tokenizer\Tokens\KeywordToken;
     use PsychoB\Framework\Parser\Tokenizer\Tokens\LiteralToken;
+    use PsychoB\Framework\Parser\Tokenizer\Tokens\StringToken;
     use PsychoB\Framework\Parser\Tokenizer\Tokens\SymbolToken;
     use PsychoB\Framework\Parser\Tokenizer\Tokens\WhitespaceToken;
     use PsychoB\Framework\Parser\Tokenizer\Transformers\MergeIntoStringTransformer;
@@ -20,7 +21,11 @@
     use PsychoB\Framework\Template\Generic\Block\EchoRawHtmlBlock;
     use PsychoB\Framework\Template\Generic\Block\NullBlock;
     use PsychoB\Framework\Template\Generic\Block\PrintConstantBlock;
+    use PsychoB\Framework\Template\Generic\Block\PrintExpressionBlock;
+    use PsychoB\Framework\Template\Generic\Block\PrintVariableBlock;
     use PsychoB\Framework\Template\Generic\BlockInterface;
+    use PsychoB\Framework\Template\Generic\Builtin\Constant;
+    use PsychoB\Framework\Template\Generic\Builtin\Variable;
     use PsychoB\Framework\Template\TemplateBlockRepository;
     use PsychoB\Framework\Template\TemplateFilterRepository;
     use PsychoB\Framework\Template\TemplateState;
@@ -170,6 +175,19 @@
             return Str::findFirstNotOf($content, " \t\r\n\v", $it);
         }
 
+        private function skipWhitespaceToken(array $tokens, int $startIt): ?int
+        {
+            for ($it = $startIt; $it < Arr::len($tokens); ++$it) {
+                if ($tokens[$it] instanceof WhitespaceToken) {
+                    continue;
+                }
+
+                return $it;
+            }
+
+            return NULL;
+        }
+
         private function interpretTokens(array $tokens, int $startIt): array
         {
             // let's make sense of this maddness
@@ -183,15 +201,38 @@
                         $instructions[] = $current->getToken();
                         break;
 
+                    case StringToken::class:
+                    case LiteralToken::class:
+                        $instructions[] = new Constant($current->getToken())
+                        ;
+                        break;
+
                     case WhitespaceToken::class:
                         continue 2;
 
-                    case LiteralToken::class:
-                        dump($current);
+                    case SymbolToken::class:
+                        switch ($current->getToken()) {
+                            case '$':
+                                [$inst, $it] = $this->interpretTokensVariable($tokens, $it);
+                                $instructions[] = $inst;
+                                break;
+
+                            case '+':
+                            case '-':
+                            case '*':
+                            case '/':
+                            case '(':
+                            case ')':
+                                $instructions[] = $current->getToken();
+                                break;
+
+                            default:
+                                Assert::unreachable('unknown symbol');
+                        }
                         break;
 
                     default:
-                        Assert::unreachable();
+                        Assert::unreachable('unknown token');
                 }
             }
 
@@ -201,7 +242,37 @@
         private function prepareInstructions(array $instructions): BlockInterface
         {
             if (Arr::len($instructions) === 1) {
-                return new PrintConstantBlock($instructions[0]);
+                if ($instructions[0] instanceof Variable) {
+                    return new PrintVariableBlock($instructions[0]);
+                } else {
+                    return new PrintConstantBlock($instructions[0]);
+                }
+            } else {
+                return new PrintExpressionBlock($instructions);
             }
+        }
+
+        private function interpretTokensVariable(array $tokens, int $startIt): array
+        {
+            $it = $startIt + 1;
+
+            $names = [];
+            do {
+                $nextIt = $this->skipWhitespaceToken($tokens, $it);
+                if ($nextIt === NULL) {
+                    break;
+                }
+                $it = $nextIt;
+                $names[] = $tokens[$it]->getToken();
+                $it++;
+
+                $nextIt = $this->skipWhitespaceToken($tokens, $it);
+                if ($nextIt === NULL) {
+                    break;
+                }
+                $it = $nextIt;
+            } while (Validate::typeRequirements($tokens[$it], SymbolToken::class, ['token' => '.']));
+
+            return [new Variable($names, []), $it];
         }
     }
