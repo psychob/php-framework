@@ -203,8 +203,7 @@
 
                     case StringToken::class:
                     case LiteralToken::class:
-                        $instructions[] = new Constant($current->getToken())
-                        ;
+                        $instructions[] = new Constant($current->getToken());
                         break;
 
                     case WhitespaceToken::class:
@@ -248,7 +247,22 @@
                     return new PrintConstantBlock($instructions[0]);
                 }
             } else {
-                return new PrintExpressionBlock($instructions);
+                [$ret,] = $this->prepareInstructionsTree($instructions, 0);
+
+                return new PrintExpressionBlock($ret);
+            }
+        }
+
+        private function prepareInstructionsTree(array $instructions, int $startIt): array
+        {
+            $rootTree = new Tree();
+
+            for ($it = $startIt; $it < Arr::len($instructions); ++$it) {
+                $current = $instructions[$it];
+
+                if ($current instanceof Constant) {
+                    //
+                }
             }
         }
 
