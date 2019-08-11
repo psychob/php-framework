@@ -13,6 +13,7 @@
     use PsychoB\Framework\Parser\Tokenizer\Tokens\NewLineToken;
     use PsychoB\Framework\Parser\Tokenizer\Tokens\TokenInterface;
     use PsychoB\Framework\Parser\Tokenizer\Tokens\WhitespaceToken;
+    use PsychoB\Framework\Parser\Tokenizer\Transformers\TransformerInterface;
     use PsychoB\Framework\Utility\Arr;
 
     class Tokenizer implements ResolverNeverCache
@@ -80,5 +81,17 @@
         public function tokenize(string $content): TokenStream
         {
             return new TokenStream($content, $this->groups, $this->transformers);
+        }
+
+        public function addTransformer($transformer)
+        {
+            Assert::arguments('Class must implement interface TokenInterface', $transformer, 3)
+                  ->classImplements($transformer, TransformerInterface::class);
+
+            if (is_string($transformer)) {
+                $transformer = new $transformer();
+            }
+
+            $this->transformers[] = $transformer;
         }
     }

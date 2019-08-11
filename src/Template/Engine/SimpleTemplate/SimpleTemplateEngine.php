@@ -7,17 +7,24 @@
 
     namespace PsychoB\Framework\Template\Engine\SimpleTemplate;
 
+    use MongoDB\BSON\Symbol;
     use PsychoB\Framework\Assert\Assert;
+    use PsychoB\Framework\Assert\Validate;
     use PsychoB\Framework\Parser\Tokenizer\Tokenizer;
+    use PsychoB\Framework\Parser\Tokenizer\Tokens\KeywordToken;
+    use PsychoB\Framework\Parser\Tokenizer\Tokens\LiteralToken;
     use PsychoB\Framework\Parser\Tokenizer\Tokens\SymbolToken;
     use PsychoB\Framework\Parser\Tokenizer\Tokens\WhitespaceToken;
+    use PsychoB\Framework\Parser\Tokenizer\Transformers\MergeIntoStringTransformer;
     use PsychoB\Framework\Template\Engine\TemplateEngineInterface;
     use PsychoB\Framework\Template\Generic\Block\EchoRawHtmlBlock;
     use PsychoB\Framework\Template\Generic\Block\NullBlock;
+    use PsychoB\Framework\Template\Generic\Block\PrintConstantBlock;
     use PsychoB\Framework\Template\Generic\BlockInterface;
     use PsychoB\Framework\Template\TemplateBlockRepository;
     use PsychoB\Framework\Template\TemplateFilterRepository;
     use PsychoB\Framework\Template\TemplateState;
+    use PsychoB\Framework\Utility\Arr;
     use PsychoB\Framework\Utility\Str;
 
     class SimpleTemplateEngine implements TemplateEngineInterface
@@ -44,9 +51,11 @@
             $this->filterRepository = $filterRepository;
 
             $this->tokenizer = new Tokenizer();
-            $this->tokenizer->addGroup('symbols', ['$', '}}', '{{', '.', '|', ':', '?', '"', '=', '@'],
-                SymbolToken::class, false);
+            $this->tokenizer->addGroup('symbols', ['$', '}}', '{{', '.', '|', ':', '?', '"', '=', '@',
+                '+', '-', '*', '/', '(', ')'], SymbolToken::class, false);
+            $this->tokenizer->addGroup('keywords', ['true', 'false'], KeywordToken::class, false);
             $this->tokenizer->addGroup('whitespace', [' ', "\t", "\r", "\n", "\v"], WhitespaceToken::class, true);
+            $this->tokenizer->addTransformer(MergeIntoStringTransformer::class);
         }
 
         public function execute(string $content, array $variables = []): string
@@ -66,6 +75,7 @@
                 }
 
                 [$block, $it] = $this->parseBlock($content, $it + 2, NULL, NULL);
+                $tree[] = $block;
             }
 
             if ($it < $contentLen) {
@@ -88,7 +98,24 @@
 
             $it = $this->skipWhitespace($content, $it);
 
-            $stream = $this->tokenizer->tokenize(Str::substr($content, $it));
+            $tokens = [];
+            foreach ($this->tokenizer->tokenize(Str::substr($content, $it)) as $token) {
+                if (Validate::typeRequirements($token, SymbolToken::class, [
+                    'token' => '}}',
+                ])) {
+                    break;
+                }
+
+                $tokens[] = $token;
+            }
+
+            [$isExpression, $instructions] = $this->interpretTokens($tokens, $it);
+
+            if ($isExpression) {
+                return [$this->prepareInstructions($instructions), Arr::last($tokens)->getEnd() + $it + 2];
+            }
+
+            dump([$isExpression, $instructions]);
         }
 
         private function executeTree(array $tree, array $var): string
@@ -141,5 +168,40 @@
         private function skipWhitespace(string $content, int $it): int
         {
             return Str::findFirstNotOf($content, " \t\r\n\v", $it);
+        }
+
+        private function interpretTokens(array $tokens, int $startIt): array
+        {
+            // let's make sense of this maddness
+            $instructions = [];
+
+            for ($it = 0; $it < Arr::len($tokens); ++$it) {
+                $current = $tokens[$it];
+
+                switch (get_class($current)) {
+                    case KeywordToken::class:
+                        $instructions[] = $current->getToken();
+                        break;
+
+                    case WhitespaceToken::class:
+                        continue 2;
+
+                    case LiteralToken::class:
+                        dump($current);
+                        break;
+
+                    default:
+                        Assert::unreachable();
+                }
+            }
+
+            return [true, $instructions];
+        }
+
+        private function prepareInstructions(array $instructions): BlockInterface
+        {
+            if (Arr::len($instructions) === 1) {
+                return new PrintConstantBlock($instructions[0]);
+            }
         }
     }
