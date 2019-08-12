@@ -25,6 +25,8 @@
     use PsychoB\Framework\Template\Generic\Block\PrintVariableBlock;
     use PsychoB\Framework\Template\Generic\BlockInterface;
     use PsychoB\Framework\Template\Generic\Builtin\Constant;
+    use PsychoB\Framework\Template\Generic\Builtin\Group;
+    use PsychoB\Framework\Template\Generic\Builtin\Tree;
     use PsychoB\Framework\Template\Generic\Builtin\Variable;
     use PsychoB\Framework\Template\TemplateBlockRepository;
     use PsychoB\Framework\Template\TemplateFilterRepository;
@@ -247,23 +249,85 @@
                     return new PrintConstantBlock($instructions[0]);
                 }
             } else {
-                [$ret,] = $this->prepareInstructionsTree($instructions, 0);
+                [$ret,] = $this->prepareInstructionsTree($instructions);
 
                 return new PrintExpressionBlock($ret);
             }
         }
 
-        private function prepareInstructionsTree(array $instructions, int $startIt): array
+        private function prepareInstructionsTree(array $instructions, int $startIt = 0, ?string $upTo = NULL): array
         {
-            $rootTree = new Tree();
+            $elements = [];
 
+            // let's order our elements
             for ($it = $startIt; $it < Arr::len($instructions); ++$it) {
                 $current = $instructions[$it];
 
-                if ($current instanceof Constant) {
-                    //
+                if ($current === '(') {
+                    [$el, $it] = $this->prepareInstructionsTree($instructions, $it + 1, ')');
+                    $elements[] = $el;
+                } else if ($current === ')' && $upTo === ')') {
+                    break;
+                } else {
+                    $elements[] = $current;
                 }
             }
+
+            // now let's merge expression based on signs
+
+            $jt = 0;
+            $curr = [];
+
+            while ($jt < Arr::len($elements)) {
+                switch (Arr::len($curr)) {
+                    case 0:
+                        $curr[] = $elements[$jt];
+                        break;
+
+                    case 1:
+                        switch ($elements[$jt]) {
+                            case '+':
+                            case '*':
+                            case '/':
+                            case '-':
+                                $curr[] = $elements[$jt];
+                                break;
+
+                            default:
+                                Assert::unreachable('unknown symbol');
+                        }
+                        break;
+
+                    case 2:
+                        $tmp = NULL;
+                        if ($curr[0] instanceof Tree) {
+                            if (Arr::contains(['*', '/'], $curr[1])) {
+                                if (Arr::contains(['+', '-'], $curr[0]->getSign())) {
+                                    $subTree = new Tree($curr[0]->getRight(), $curr[1], $elements[$jt]);
+                                    $leftTree = new Tree($curr[0]->getLeft(), $curr[0]->getSign(), $subTree);
+                                    $tmp = [$leftTree];
+                                }
+                            }
+                        }
+                        if ($tmp === NULL) {
+                            $curr = [new Tree($curr[0], $curr[1], $elements[$jt])];
+                        } else {
+                            $curr = $tmp;
+                        }
+                        break;
+
+                    default:
+                        Assert::unreachable();
+                }
+
+                $jt++;
+            }
+
+            while (Arr::is($curr)) {
+                $curr = Arr::first($curr);
+            }
+
+            return [new Group($curr), $it];
         }
 
         private function interpretTokensVariable(array $tokens, int $startIt): array

@@ -8,11 +8,14 @@
     namespace PsychoB\Framework\Template\Generic\Block;
 
     use PsychoB\Framework\Template\Generic\BlockInterface;
+    use PsychoB\Framework\Template\Generic\Builtin\Constant;
+    use PsychoB\Framework\Template\Generic\Builtin\Group;
+    use PsychoB\Framework\Template\Generic\Builtin\Tree;
     use PsychoB\Framework\Template\TemplateState;
 
     class PrintExpressionBlock implements BlockInterface
     {
-        /** @var mixed[] */
+        /** @var mixed */
         protected $instructions;
 
         /**
@@ -27,31 +30,84 @@
 
         public function getOutputType(): int
         {
-            // TODO: Implement getOutputType() method.
+            return self::OUTPUT_RAW_HTML | self::OUTPUT_PHP;
         }
 
         public static function getArgumentTypeHint(): array
         {
-            // TODO: Implement getArgumentTypeHint() method.
+            return [];
         }
 
         public static function getImpliedBlockEnd(): int
         {
-            // TODO: Implement getImpliedBlockEnd() method.
+            return self::IMPLIED_END_AT_INSTRUCTION;
         }
 
         public static function getHeaderPreference(): int
         {
-            // TODO: Implement getHeaderPreference() method.
+            return self::PREFERENCE_ARGUMENTS;
         }
 
         public function execute(TemplateState $state): string
         {
-            return '';
+            return htmlspecialchars($this->executeExpression($this->instructions, $state));
         }
 
         public function serialize(int $type): string
         {
             // TODO: Implement serialize() method.
+        }
+
+        private function executeExpression($instructions, TemplateState $state): string
+        {
+            if ($instructions instanceof Group) {
+                return $this->executeExpression($instructions->getGroup(), $state);
+            }
+
+            if ($instructions instanceof Tree) {
+                $left = $instructions->getLeft();
+                $sign = $instructions->getSign();
+                $right = $instructions->getRight();
+
+                if  ($left instanceof Group) {
+                    $left = $this->executeExpression($left->getGroup(), $state);
+                }
+
+                if ($left instanceof Tree) {
+                    $left = $this->executeExpression($left, $state);
+                }
+
+                if ($left instanceof Constant) {
+                    $left = $left->getConstant();
+                }
+
+                if  ($right instanceof Group) {
+                    $right = $this->executeExpression($right->getGroup(), $state);
+                }
+
+                if ($right instanceof Tree) {
+                    $right = $this->executeExpression($right, $state);
+                }
+
+                if ($right instanceof Constant) {
+                    $right = $right->getConstant();
+                }
+
+                switch ($sign) {
+                    case '+':
+                        return $left + $right;
+
+                    case '-':
+                        return $left - $right;
+
+                    case '*':
+                        return $left * $right;
+
+                    case '/':
+                        return $left / $right;
+                }
+            }
+
+            return $instructions;
         }
     }
