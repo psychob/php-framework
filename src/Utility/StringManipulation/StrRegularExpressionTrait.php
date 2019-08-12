@@ -27,4 +27,15 @@
 
             return false;
         }
+
+        public static function matchAny(string $subject, array $regularExpressions): bool
+        {
+            foreach ($regularExpressions as $reg) {
+                if (preg_match($reg, $subject) === 1) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }

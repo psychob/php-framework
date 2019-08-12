@@ -122,7 +122,19 @@
                 return [$this->prepareInstructions($instructions), Arr::last($tokens)->getEnd() + $it + 2];
             }
 
-            dump([$isExpression, $instructions]);
+            $name = $tokens[0]->getToken();
+            $class = $this->blockRepository->get($name);
+            $preference = call_user_func([$class, 'getHeaderPreference']);
+
+            switch ($preference) {
+                case BlockInterface::PREFERENCE_ARGUMENTS:
+                    break;
+
+                case BlockInterface::PREFERENCE_TOKENS:
+                    $klass = $this->blockRepository->resolve($name, [$instructions]);
+            }
+
+            dump([$name, $class, $preference, $klass]);
         }
 
         private function executeTree(array $tree, array $var): string
@@ -194,6 +206,15 @@
         {
             // let's make sense of this maddness
             $instructions = [];
+
+            $firstToken = $tokens[0];
+            if ($firstToken instanceof LiteralToken) {
+                if (!Str::matchAny($firstToken->getToken(), [
+                    '/^[0-9]+$/',
+                ])) {
+                    return [false, NULL];
+                }
+            }
 
             for ($it = 0; $it < Arr::len($tokens); ++$it) {
                 $current = $tokens[$it];
