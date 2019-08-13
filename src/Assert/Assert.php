@@ -14,7 +14,6 @@
      * @since  0.1
      *
      * @method static isEqual(mixed $left, mixed $right, ?string $message = NULL)
-     * @method static typeRequirements(mixed $obj, array|string $type, mixed[] $properties, ?string $message = NULL)
      * @method static unreachable(?string $message = NULL)
      * @method static isSmallerOrEqual($left, $right, ?string $message = NULL)
      * @method static isGreaterOrEqual($left, $right, ?string $message = NULL)

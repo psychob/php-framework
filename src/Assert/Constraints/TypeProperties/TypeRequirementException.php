@@ -5,8 +5,9 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Assert\Exception;
+    namespace PsychoB\Framework\Assert\Constraints\TypeProperties;
 
+    use PsychoB\Framework\Assert\Exception\AssertionException;
     use Throwable;
 
     class TypeRequirementException extends AssertionException

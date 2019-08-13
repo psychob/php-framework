@@ -39,7 +39,6 @@
         /** @var string[] */
         protected static $Assertions = [
             'isEqual' => IsEqualAssert::class,
-            'typeRequirements' => TypeRequirementAssert::class,
             'isPropertyEqual' => PropertyIsEqualAssert::class,
             'hasProperties' => ObjectPropertiesAssert::class,
             'unreachable' => UnreachableAssert::class,

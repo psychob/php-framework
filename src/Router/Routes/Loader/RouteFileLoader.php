@@ -164,7 +164,7 @@
                     throw new \Exception();
             }
 
-            Assert::typeRequirements($tokens[$it], NewLineToken::class, [
+            Assert::typeHas($tokens[$it], NewLineToken::class, [
                 'token' => PHP_EOL,
             ]);
             $end = $tokens[$it]->getEnd();
@@ -182,14 +182,14 @@
 
         protected function parsePrefix(array &$tokens, int &$it, int $intend)
         {
-            Assert::typeRequirements($tokens[$it], ExecutorToken::class, [
+            Assert::typeHas($tokens[$it], ExecutorToken::class, [
                 'token' => 'prefix',
             ]);
             $it++;
             $this->current[] = ['type' => 'prefix', 'name' => $tokens[$it]->getToken(), 'intend' => 0];
 
             $it++;
-            Assert::typeRequirements($tokens[$it], SymbolToken::class, [
+            Assert::typeHas($tokens[$it], SymbolToken::class, [
                 'token' => ':',
             ]);
 
@@ -198,18 +198,18 @@
 
         private function parseMiddleware(array &$tokens, int &$it, int $intend)
         {
-            Assert::typeRequirements($tokens[$it], ExecutorToken::class, [
+            Assert::typeHas($tokens[$it], ExecutorToken::class, [
                 'token' => 'middleware',
             ]);
             $it++;
 
             $middlewares = [];
             for (; count($tokens) > $it; ++$it) {
-                if (Validate::typeRequirements($tokens[$it], SymbolToken::class, ['token' => ':',])) {
+                if (Validate::typeHas($tokens[$it], SymbolToken::class, ['token' => ':',])) {
                     break;
                 }
 
-                if (Validate::typeRequirements($tokens[$it], SymbolToken::class, ['token' => ','])) {
+                if (Validate::typeHas($tokens[$it], SymbolToken::class, ['token' => ','])) {
                     continue;
                 }
 

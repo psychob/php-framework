@@ -9,7 +9,7 @@
 
     use PsychoB\Framework\Assert\Constraints\TypeProperties\TypeIsAssert;
     use PsychoB\Framework\Assert\Exception\AssertionException;
-    use PsychoB\Framework\Assert\Exception\TypeRequirementException;
+    use PsychoB\Framework\Assert\Constraints\TypeProperties\TypeRequirementException;
 
     class TypeRequirementAssert
     {
