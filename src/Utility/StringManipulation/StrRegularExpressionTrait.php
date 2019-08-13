@@ -27,4 +27,9 @@
 
             return false;
         }
+
+        public static function matching(string $subject, string $regularExpression): bool
+        {
+            return preg_match($regularExpression, $subject) === 1;
+        }
     }
