@@ -22,13 +22,13 @@
         public static function ensure($obj, $type, ?string $message = NULL): void
         {
             if (Str::is($type)) {
-                if (!static::matchStringType($obj, $type)) {
-                    throw new TypeDoesntMatchException($obj, $type, $message);
+                if (static::matchStringType($obj, $type)) {
+                    return;
                 }
             } else if (Arr::is($type)) {
                 if (Arr::hasMultiple($type, 'type', 'class') && Arr::len($type) === 2) {
-                    if (!static::matchOneArray($obj, $type)) {
-                        throw new TypeDoesntMatchException($obj, $type, $message);
+                    if (static::matchOneArray($obj, $type)) {
+                        return;
                     }
                 } else {
                     foreach ($type as $element) {
@@ -36,7 +36,9 @@
                             if (static::matchStringType($obj, $element)) {
                                 return;
                             }
-                        } else if (Arr::hasMultiple($element, 'type', 'class') && Arr::len($type) === 2) {
+                        } else if (Arr::is($element) &&
+                            Arr::hasMultiple($element, 'type', 'class') &&
+                            Arr::len($element) === 2) {
                             if (static::matchOneArray($obj, $element)) {
                                 return;
                             }
@@ -45,12 +47,13 @@
                                   ->unreachable();
                         }
                     }
-
-                    throw new TypeDoesntMatchException($obj, $type, $message);
                 }
             } else {
-                throw new TypeDoesntMatchException($obj, $type, $message);
+                Assert::arguments('Type must be either array or string', 'type', 2)
+                      ->unreachable();
             }
+
+            throw new TypeDoesntMatchException($obj, $type, $message);
         }
 
         public static function exactType(string $class): string
@@ -77,6 +80,10 @@
             switch ($type['type']) {
                 case 'implements':
                     return $obj instanceof $type['class'];
+
+                default:
+                    Assert::arguments('Type must be either array or string', 'type', 2)
+                          ->unreachable();
             }
-        }
+        } // @codeCoverageIgnore
     }
