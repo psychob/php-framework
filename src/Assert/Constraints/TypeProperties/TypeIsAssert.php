@@ -5,16 +5,19 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Assert\Constraints;
+    namespace PsychoB\Framework\Assert\Constraints\TypeProperties;
 
-    use PsychoB\Framework\Assert\Exception\TypeDoesntMatchException;
+    use PsychoB\Framework\Assert\Assert;
     use PsychoB\Framework\Utility\Arr;
     use PsychoB\Framework\Utility\Str;
 
-    class TypeAssert
+    class TypeIsAssert
     {
-        public const TYPE_STRING = '*string';
-        public const TYPE_ARRAY  = '*array';
+        const TYPE_INT     = '*integer';
+        const TYPE_STRING  = '*string';
+        const TYPE_ARRAY   = '*array';
+        const TYPE_FLOAT   = '*double';
+        const TYPE_BOOLEAN = '*boolean';
 
         public static function ensure($obj, $type, ?string $message = NULL): void
         {
@@ -38,7 +41,8 @@
                                 return;
                             }
                         } else {
-                            throw new TypeDoesntMatchException($obj, $type, $message);
+                            Assert::arguments('Type must be either array or string', 'type', 2)
+                                  ->unreachable();
                         }
                     }
 

@@ -29,6 +29,9 @@
      *
      * @method static isEmpty($obj)
      * @method static isNotEmpty($obj)
+     *
+     * @method static typeIs($obj, string|string[] $types)
+     * @method static typeHas($obj, string|string[] $types, mixed[] $properties)
      */
     final class Validate
     {

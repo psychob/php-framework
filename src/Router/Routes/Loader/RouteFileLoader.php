@@ -150,7 +150,7 @@
 
         private function parseTree(array &$tokens, int $it, int $intend)
         {
-            Assert::hasType($tokens[$it], ExecutorToken::class);
+            Assert::typeIs($tokens[$it], ExecutorToken::class);
             switch ($tokens[$it]->getToken()) {
                 case 'prefix':
                     $this->parsePrefix($tokens, $it, $intend);
@@ -260,7 +260,7 @@
 
         protected function assertType($element, TokenInterface $currentToken, array $tokens, int $idx): void
         {
-            Assert::hasType($element, [TypeAssert::TYPE_STRING, TypeAssert::TYPE_ARRAY]);
+            Assert::typeIs($element, [TypeAssert::TYPE_STRING, TypeAssert::TYPE_ARRAY]);
 
             if (Str::is($element)) {
                 if (!Validate::hasType($currentToken, $element)) {

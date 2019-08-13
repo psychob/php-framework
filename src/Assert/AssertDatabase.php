@@ -21,6 +21,8 @@
     use PsychoB\Framework\Assert\Constraints\ObjectPropertiesAssert;
     use PsychoB\Framework\Assert\Constraints\PropertyIsEqualAssert;
     use PsychoB\Framework\Assert\Constraints\TypeAssert;
+    use PsychoB\Framework\Assert\Constraints\TypeProperties\TypeHasAssert;
+    use PsychoB\Framework\Assert\Constraints\TypeProperties\TypeIsAssert;
     use PsychoB\Framework\Assert\Constraints\TypeRequirementAssert;
     use PsychoB\Framework\Assert\Constraints\UnreachableAssert;
     use PsychoB\Framework\Assert\Exception\AssertNotFoundException;
@@ -38,7 +40,6 @@
         protected static $Assertions = [
             'isEqual' => IsEqualAssert::class,
             'typeRequirements' => TypeRequirementAssert::class,
-            'hasType' => TypeAssert::class,
             'isPropertyEqual' => PropertyIsEqualAssert::class,
             'hasProperties' => ObjectPropertiesAssert::class,
             'unreachable' => UnreachableAssert::class,
@@ -58,6 +59,10 @@
             // object properties
             'isEmpty' => IsEmptyAssert::class,
             'isNotEmpty' => IsNotEmptyAssert::class,
+
+            // type properties
+            'typeHas' => TypeHasAssert::class,
+            'typeIs' => TypeIsAssert::class,
         ];
 
         protected static function add(string $name, string $class): void

@@ -28,6 +28,9 @@
      *
      * @method static isEmpty($obj, ?string $message = NULL)
      * @method static isNotEmpty($obj, ?string $message = NULL)
+     *
+     * @method static typeIs($obj, string|string[] $types, ?string $message = NULL)
+     * @method static typeHas($obj, string|string[] $types, mixed[] $properties, ?string $message = NULL)
      */
     final class Assert extends AssertDatabase
     {
