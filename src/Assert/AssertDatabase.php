@@ -14,7 +14,8 @@
     use PsychoB\Framework\Assert\Constraints\IsEqualAssert;
     use PsychoB\Framework\Assert\Constraints\Identity\IsFalseAssert;
     use PsychoB\Framework\Assert\Constraints\IsGreaterOrEqualAssert;
-    use PsychoB\Framework\Assert\Constraints\IsNotEmptyAssert;
+    use PsychoB\Framework\Assert\Constraints\ObjectProperties\IsEmptyAssert;
+    use PsychoB\Framework\Assert\Constraints\ObjectProperties\IsNotEmptyAssert;
     use PsychoB\Framework\Assert\Constraints\IsSmallerOrEqualAssert;
     use PsychoB\Framework\Assert\Constraints\Identity\IsTrueAssert;
     use PsychoB\Framework\Assert\Constraints\ObjectPropertiesAssert;
@@ -40,18 +41,23 @@
             'hasType' => TypeAssert::class,
             'isPropertyEqual' => PropertyIsEqualAssert::class,
             'hasProperties' => ObjectPropertiesAssert::class,
-            'isNotEmpty' => IsNotEmptyAssert::class,
             'unreachable' => UnreachableAssert::class,
             'isSmallerOrEqual' => IsSmallerOrEqualAssert::class,
             'isGreaterOrEqual' => IsGreaterOrEqualAssert::class,
             'hasNoKey' => HasNoKeyAssert::class,
             'classImplements' => ClassImplementsAssert::class,
 
-            // improved
+            // equality
             'isTruthy' => IsTruthyAssert::class,
             'isFalsy' => IsFalsyAssert::class,
+
+            // identity
             'isTrue' => IsTrueAssert::class,
             'isFalse' => IsFalseAssert::class,
+
+            // object properties
+            'isEmpty' => IsEmptyAssert::class,
+            'isNotEmpty' => IsNotEmptyAssert::class,
         ];
 
         protected static function add(string $name, string $class): void

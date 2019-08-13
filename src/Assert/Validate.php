@@ -18,14 +18,17 @@
      * @method static isEqual(mixed $left, mixed $right)
      * @method static typeRequirements(mixed $obj, array|string $type, mixed[] $properties, ?string $message = NULL)
      * @method static hasType($obj, mixed|string $type, ?string $message = NULL)
-     * @method static isNotEmpty($obj)
      * @method static isSmallerOrEqual($left, $right)
      * @method static isGreaterOrEqual($left, $right)
      *
      * @method static isTruthy($value)
      * @method static isFalsy($value)
+     *
      * @method static isTrue($obj)
      * @method static isFalse($obj)
+     *
+     * @method static isEmpty($obj)
+     * @method static isNotEmpty($obj)
      */
     final class Validate
     {

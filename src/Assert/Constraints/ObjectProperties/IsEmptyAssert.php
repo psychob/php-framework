@@ -5,16 +5,14 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Assert\Constraints;
+    namespace PsychoB\Framework\Assert\Constraints\ObjectProperties;
 
-    use PsychoB\Framework\Assert\Exception\ValueIsEmptyException;
-
-    class IsNotEmptyAssert
+    class IsEmptyAssert
     {
         public static function ensure($obj, ?string $message = NULL): void
         {
-            if (empty($obj)) {
-                throw new ValueIsEmptyException($obj, $message);
+            if (!empty($obj)) {
+                throw new ValueIsNotEmptyException($obj, $message);
             }
         }
     }

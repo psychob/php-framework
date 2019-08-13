@@ -5,62 +5,59 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace Tests\PsychoB\Framework\Unit\Assert\Constraint\Identity;
+    namespace Tests\PsychoB\Framework\Unit\Assert\Constraint\ObjectProperties;
 
     use PsychoB\Framework\Assert\Assert;
-    use PsychoB\Framework\Assert\Constraints\Identity\IsFalseAssert;
-    use PsychoB\Framework\Assert\Constraints\Identity\ValueIsNotFalseException;
+    use PsychoB\Framework\Assert\Constraints\ObjectProperties\IsNotEmptyAssert;
+    use PsychoB\Framework\Assert\Constraints\ObjectProperties\ValueIsEmptyException;
     use PsychoB\Framework\Assert\Validate;
     use PsychoB\Framework\Testing\UnitTestCase;
     use PsychoB\Framework\Utility\Str;
 
-    class IsFalseAssertTest extends UnitTestCase
+    class IsNotEmptyAssertTest extends UnitTestCase
     {
         public function provideTrueTestData(): array
         {
             return [
-                [false],
+                [['a']],
             ];
         }
 
         public function provideFalseTestData(): array
         {
             return [
-                [0],
-                [""],
-                ["0"],
-                [true],
+                [[]],
             ];
         }
 
         /** @dataProvider provideTrueTestData */
         public function testTrue($value): void
         {
-            IsFalseAssert::ensure($value);
+            IsNotEmptyAssert::ensure($value);
             $this->assertTrue(true);
         }
 
         /** @dataProvider provideFalseTestData */
         public function testFalse($value): void
         {
-            $this->expectException(ValueIsNotFalseException::class);
+            $this->expectException(ValueIsEmptyException::class);
             $this->expectExceptionMessage(Str::toRepr($value));
-            IsFalseAssert::ensure($value);
+            IsNotEmptyAssert::ensure($value);
         }
 
         /** @dataProvider provideFalseTestData */
         public function testFalseWithCustomMessage($value): void
         {
-            $this->expectException(ValueIsNotFalseException::class);
+            $this->expectException(ValueIsEmptyException::class);
             $this->expectExceptionMessage('Custom Message');
 
-            IsFalseAssert::ensure($value, "Custom Message");
+            IsNotEmptyAssert::ensure($value, "Custom Message");
         }
 
         /** @dataProvider provideTrueTestData */
         public function testTrueWhenCallingThroughAssert($value): void
         {
-            Assert::isFalse($value);
+            Assert::isNotEmpty($value);
 
             $this->assertTrue(true);
         }
@@ -68,21 +65,21 @@
         /** @dataProvider provideFalseTestData */
         public function testFalseWhenCallingThroughAssert($value): void
         {
-            $this->expectException(ValueIsNotFalseException::class);
+            $this->expectException(ValueIsEmptyException::class);
             $this->expectExceptionMessage(Str::toRepr($value));
 
-            Assert::isFalse($value);
+            Assert::isNotEmpty($value);
         }
 
         /** @dataProvider provideTrueTestData */
         public function testTrueWhenCallingThroughValidate($value): void
         {
-            $this->assertTrue(Validate::isFalse($value));
+            $this->assertTrue(Validate::isNotEmpty($value));
         }
 
         /** @dataProvider provideFalseTestData */
         public function testFalseWhenCallingThroughValidate($value): void
         {
-            $this->assertFalse(Validate::isFalse($value));
+            $this->assertFalse(Validate::isNotEmpty($value));
         }
     }
