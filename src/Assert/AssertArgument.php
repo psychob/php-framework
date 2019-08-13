@@ -26,6 +26,7 @@
      * @method static isGreaterOrEqual($left, $right)
      *
      * @method static isTruthy($value)
+     * @method static isFalsy($value)
      */
     class AssertArgument
     {

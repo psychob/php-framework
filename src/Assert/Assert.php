@@ -24,6 +24,7 @@
      * @method static isGreaterOrEqual($left, $right, ?string $message = NULL)
      *
      * @method static isTruthy($value, ?string $message = NULL)
+     * @method static isFalsy($value, ?string $message = NULL)
      */
     final class Assert extends AssertDatabase
     {

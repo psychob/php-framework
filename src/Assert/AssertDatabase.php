@@ -8,6 +8,7 @@
     namespace PsychoB\Framework\Assert;
 
     use PsychoB\Framework\Assert\Constraints\ClassImplementsAssert;
+    use PsychoB\Framework\Assert\Constraints\Equality\IsFalsyAssert;
     use PsychoB\Framework\Assert\Constraints\Equality\IsTruthyAssert;
     use PsychoB\Framework\Assert\Constraints\HasNoKeyAssert;
     use PsychoB\Framework\Assert\Constraints\IsEqualAssert;
@@ -50,6 +51,7 @@
 
             // improved
             'isTruthy' => IsTruthyAssert::class,
+            'isFalsy' => IsFalsyAssert::class,
         ];
 
         protected static function add(string $name, string $class): void
