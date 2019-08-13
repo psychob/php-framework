@@ -10,18 +10,14 @@
     use Iterator;
     use PsychoB\Framework\Math\Ast\Expr;
     use PsychoB\Framework\Math\Ast\Group\Group;
-    use PsychoB\Framework\Math\Ast\OpExpr;
-    use PsychoB\Framework\Math\Ast\Op\AddGroup;
-    use PsychoB\Framework\Math\Ast\Op\DivGroup;
-    use PsychoB\Framework\Math\Ast\Op\MulGroup;
-    use PsychoB\Framework\Math\Ast\Op\SubGroup;
+    use PsychoB\Framework\Math\Ast\Op\AddOp;
     use PsychoB\Framework\Math\Ast\Symbol\Symbol;
     use PsychoB\Framework\Math\Ast\Type\FloatType;
     use PsychoB\Framework\Math\Ast\Type\IntType;
+    use PsychoB\Framework\Math\Parser\SymbolDef;
     use PsychoB\Framework\Parser\Tokenizer\Tokenizer;
     use PsychoB\Framework\Parser\Tokenizer\Tokens\SymbolToken;
     use PsychoB\Framework\Parser\Tokenizer\Tokens\WhitespaceToken;
-    use PsychoB\Framework\Utility\Arr;
     use PsychoB\Framework\Utility\Str;
 
     class Parser
@@ -36,21 +32,7 @@
 
         /** @var Tokenizer */
         protected $tokenizer;
-
-        protected $precedenceDefault = 0;
-        protected $precedence = [
-            '+' => 0,
-            '-' => 0,
-            '*' => 10,
-            '/' => 10,
-        ];
-
-        protected $symbols = [
-            '+' => AddGroup::class,
-            '-' => SubGroup::class,
-            '/' => DivGroup::class,
-            '*' => MulGroup::class,
-        ];
+        protected $symbols = [];
 
         public function __construct()
         {
@@ -66,6 +48,15 @@
                 WhitespaceToken::class,
                 true
             );
+
+            $this->setUpSymbols();
+
+            dd($this);
+        }
+
+        private function setUpSymbols(): void
+        {
+            $this->symbols[] = new SymbolDef('+', SymbolDef::TYPE_UNARY_POSTFIX, UnaryPlus::class);
         }
 
         public function expression(string $expr): Expr
@@ -73,6 +64,7 @@
             $tokens = $this->tokenizer->tokenize($expr);
 
             $tokens->rewind();
+
             return $this->getSubexpressionImpl($tokens);
         }
 
@@ -121,58 +113,23 @@
             return new Group($this->getSubexpressionImpl($tokens, $endChar));
         }
 
-        private function getSubexpressionImpl(Iterator $tokens, ?string $endChar = null): Expr
+        private function getSubexpressionImpl(Iterator $tokens, ?string $endChar = NULL): Expr
         {
+            $lastGroup = $this->getOperand($tokens);
+
             while ($tokens->valid()) {
-                $el = $this->getElement($tokens);
-                $elements[] = $el;
+                $symbol = $this->getSymbol($tokens);
+                $nextGroup = $this->getOperand($tokens);
 
-                $tokens->next();
-
-                if ($endChar !== NULL && ($el instanceof Symbol && $el->getSymbol() === $endChar)) {
-                    break;
-                }
+                dump($lastGroup, $symbol, $nextGroup);
             }
+        }
 
-            if (Arr::len($elements) === 1) {
-                return Arr::first($elements);
-            }
+        private function getOperand(Iterator $tokens): Expr
+        {
+        }
 
-            // build expr
-            $e = [];
-            foreach ($elements as $element) {
-                switch (Arr::len($e)) {
-                    case 2:
-                        $class = $e[1]->getSymbol();
-                        $class = $this->symbols[$class];
-
-                        if ($e[0] instanceof OpExpr) {
-                            $symbol = $e[0]->getSymbol();
-                            $leftPrec = $this->precedence[$symbol] ?? $this->precedenceDefault;
-                            $rightPrec = $this->precedence[$e[1]->getSymbol()] ?? $this->precedenceDefault;
-
-                            if ($rightPrec > $leftPrec) {
-                                // we change places
-                                $right = new $class($e[0]->getRight(), $element);
-                                $leftClass = new $this->symbols[$e[0]->getSymbol()]($e[0]->getLeft(), $right);
-
-                                $e = [$leftClass,];
-                            } else {
-                                // we are doing normal thing
-                                $e = [new $class($e[0], $element),];
-                            }
-                        } else {
-                            $e = [
-                                new $class($e[0], $element),
-                            ];
-                        }
-                        continue;
-
-                    default:
-                        Arr::push($e, $element);
-                }
-            }
-
-            return Arr::first($e);
+        private function getSymbol(Iterator $tokens): Expr
+        {
         }
     }

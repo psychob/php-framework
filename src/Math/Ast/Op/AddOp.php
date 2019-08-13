@@ -9,7 +9,7 @@
 
     use PsychoB\Framework\Math\Ast\Expr;
 
-    class AddGroup extends AbstractOp implements Expr
+    class AddOp extends AbstractOp implements Expr
     {
         public function __construct(Expr $left, Expr $right)
         {
