@@ -16,8 +16,6 @@
      * @author Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
      * @since  0.1
      *
-     * @method static isTrue($obj)
-     * @method static isFalse($obj)
      * @method static isEqual(mixed $left, mixed $right)
      * @method static typeRequirements(mixed $obj, array|string $type, mixed[] $properties)
      * @method static hasType($obj, mixed|string $type)
@@ -27,6 +25,8 @@
      *
      * @method static isTruthy($value)
      * @method static isFalsy($value)
+     * @method static isTrue($obj)
+     * @method static isFalse($obj)
      */
     class AssertArgument
     {

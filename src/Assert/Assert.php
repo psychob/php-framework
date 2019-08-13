@@ -13,8 +13,6 @@
      * @author Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
      * @since  0.1
      *
-     * @method static isTrue($obj, ?string $message = NULL)
-     * @method static isFalse($obj, ?string $message = NULL)
      * @method static isEqual(mixed $left, mixed $right, ?string $message = NULL)
      * @method static typeRequirements(mixed $obj, array|string $type, mixed[] $properties, ?string $message = NULL)
      * @method static hasType($obj, mixed|string $type, ?string $message = NULL)
@@ -25,6 +23,8 @@
      *
      * @method static isTruthy($value, ?string $message = NULL)
      * @method static isFalsy($value, ?string $message = NULL)
+     * @method static isTrue($obj, ?string $message = NULL)
+     * @method static isFalse($obj, ?string $message = NULL)
      */
     final class Assert extends AssertDatabase
     {

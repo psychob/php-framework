@@ -5,9 +5,7 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\Assert\Constraints;
-
-    use PsychoB\Framework\Assert\Exception\ValueIsNotFalseException;
+    namespace PsychoB\Framework\Assert\Constraints\Identity;
 
     class IsFalseAssert
     {
