@@ -23,6 +23,8 @@
      * @method static isNotEmpty($obj)
      * @method static isSmallerOrEqual($left, $right)
      * @method static isGreaterOrEqual($left, $right)
+     *
+     * @method static isTruthy($value)
      */
     final class Validate
     {

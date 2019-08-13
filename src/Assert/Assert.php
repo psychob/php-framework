@@ -22,6 +22,8 @@
      * @method static unreachable(?string $message = NULL)
      * @method static isSmallerOrEqual($left, $right, ?string $message = NULL)
      * @method static isGreaterOrEqual($left, $right, ?string $message = NULL)
+     *
+     * @method static isTruthy($value, ?string $message = NULL)
      */
     final class Assert extends AssertDatabase
     {
