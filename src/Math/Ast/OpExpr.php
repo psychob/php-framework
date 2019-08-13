@@ -7,7 +7,7 @@
 
     namespace PsychoB\Framework\Math\Ast;
 
-    interface GroupExpr extends SymbolExpr
+    interface OpExpr extends SymbolExpr
     {
         public function getLeft(): Expr;
 

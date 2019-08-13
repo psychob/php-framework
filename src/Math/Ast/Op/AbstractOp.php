@@ -9,10 +9,10 @@
 
     use PsychoB\Framework\Math\Ast\AbstractExpr;
     use PsychoB\Framework\Math\Ast\Expr;
-    use PsychoB\Framework\Math\Ast\GroupExpr;
+    use PsychoB\Framework\Math\Ast\OpExpr;
     use PsychoB\Framework\Math\Ast\SymbolExpr;
 
-    abstract class AbstractGroup extends AbstractExpr implements Expr, SymbolExpr, GroupExpr
+    abstract class AbstractOp extends AbstractExpr implements Expr, SymbolExpr, OpExpr
     {
         protected $symbol;
         protected $left;

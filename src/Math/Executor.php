@@ -15,7 +15,7 @@
                 return sprintf('%s(%s)', $parse->getTypeName(), $parse->getValue());
             }
 
-            if ($parse instanceof Ast\GroupExpr) {
+            if ($parse instanceof Ast\OpExpr) {
                 return sprintf('%s(%s, %s)',
                     $parse->getSymbol(),
                     self::toString($parse->getLeft()),

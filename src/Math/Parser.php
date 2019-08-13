@@ -9,6 +9,7 @@
 
     use Iterator;
     use PsychoB\Framework\Math\Ast\Expr;
+    use PsychoB\Framework\Math\Ast\OpExpr;
     use PsychoB\Framework\Math\Ast\Op\AddGroup;
     use PsychoB\Framework\Math\Ast\Op\DivGroup;
     use PsychoB\Framework\Math\Ast\Op\MulGroup;
@@ -90,9 +91,26 @@
                         $class = $e[1]->getSymbol();
                         $class = $this->symbols[$class];
 
-                        $e = [
-                            new $class($e[0], $element),
-                        ];
+                        if ($e[0] instanceof OpExpr) {
+                            $symbol = $e[0]->getSymbol();
+                            $leftPrec = $this->precedence[$symbol] ?? $this->precedenceDefault;
+                            $rightPrec = $this->precedence[$e[1]->getSymbol()] ?? $this->precedenceDefault;
+
+                            if ($rightPrec > $leftPrec) {
+                                // we change places
+                                $right = new $class($e[0]->getRight(), $element);
+                                $leftClass = new $this->symbols[$e[0]->getSymbol()]($e[0]->getLeft(), $right);
+
+                                $e = [$leftClass,];
+                            } else {
+                                // we are doing normal thing
+                                $e = [new $class($e[0], $element),];
+                            }
+                        } else {
+                            $e = [
+                                new $class($e[0], $element),
+                            ];
+                        }
                         continue;
 
                     default:
