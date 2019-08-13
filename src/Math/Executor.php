@@ -11,6 +11,9 @@
     {
         public static function toString(Ast\Expr $parse): string
         {
+            if ($parse instanceof Ast\GroupExpr) {
+                return sprintf('%s', self::toString($parse->getValue()));
+            }
             if ($parse instanceof Ast\TypeExpr) {
                 return sprintf('%s(%s)', $parse->getTypeName(), $parse->getValue());
             }
