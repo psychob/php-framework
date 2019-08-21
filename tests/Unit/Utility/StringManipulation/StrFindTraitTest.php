@@ -7,6 +7,7 @@
 
     namespace Tests\PsychoB\Framework\Unit\Utility\StringManipulation;
 
+    use PsychoB\Framework\Exception\InvalidArgumentException;
     use PsychoB\Framework\Testing\UnitTestCase;
     use PsychoB\Framework\Utility\Str;
 
@@ -26,6 +27,23 @@
         public function testFindFirstNot(string $input, $toFind, ?int $offset, $result): void
         {
             $this->assertSame($result, Str::findFirstNotOf($input, $toFind, $offset ?? 0));
+        }
+
+        public function provideFindFirstNotInvalidData(): array
+        {
+            return [
+                ['abc', 1234, null],
+                ['abc', 'ab', 40],
+                ['abc', 'ab', -40],
+            ];
+        }
+
+        /** @dataProvider provideFindFirstNotInvalidData */
+        public function testFindFirstNotFailure(string $input, $toFind, ?int $offset): void
+        {
+            $this->expectException(InvalidArgumentException::class);
+
+            Str::findFirstNotOf($input, $toFind, $offset ?? 0);
         }
 
         public function provideFindFirst()
