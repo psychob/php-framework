@@ -7,7 +7,12 @@
 
     namespace PsychoB\Framework\Assert;
 
-    class Validate
-    {
+    use PsychoB\Framework\Assert\System\ValidateAssert;
 
+    final class Validate
+    {
+        public static function __callStatic($name, $arguments)
+        {
+            return ValidateAssert::__callStatic($name, $arguments);
+        }
     }

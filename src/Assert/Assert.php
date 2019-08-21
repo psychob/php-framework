@@ -7,12 +7,22 @@
 
     namespace PsychoB\Framework\Assert;
 
+    use PsychoB\Framework\Assert\System\ArgumentAssert;
     use PsychoB\Framework\Assert\System\NormalAssert;
 
-    class Assert
+    final class Assert
     {
+        private static $argAssertCopy = NULL;
+
         public static function __callStatic($name, $arguments)
         {
             return NormalAssert::__callStatic($name, $arguments);
+        }
+
+        public static function arguments(?string $message = NULL,
+            ?int $position = NULL,
+            ?string $name = NULL): ArgumentAssert
+        {
+            return new ArgumentAssert($message, $position, $name);
         }
     }
