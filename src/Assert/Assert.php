@@ -12,16 +12,14 @@
 
     final class Assert
     {
-        private static $argAssertCopy = NULL;
-
         public static function __callStatic($name, $arguments)
         {
             return NormalAssert::__callStatic($name, $arguments);
         }
 
         public static function arguments(?string $message = NULL,
-            ?int $position = NULL,
-            ?string $name = NULL): ArgumentAssert
+            ?string $name = NULL,
+            ?int $position = NULL): ArgumentAssert
         {
             return new ArgumentAssert($message, $position, $name);
         }

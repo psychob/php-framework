@@ -8,6 +8,7 @@
     namespace PsychoB\Framework\Assert\System;
 
     use PsychoB\Framework\Assert\Constraints\EnumProperties\ValidateEnumAssert;
+    use PsychoB\Framework\Assert\Constraints\TypeProperties\TypeAssert;
 
     /**
      * Class that contains all default defined asserts
@@ -20,5 +21,7 @@
         protected static $asserts = [
             'enumBits' => [ValidateEnumAssert::class, 'enumBits'],
             'enumArray' => [ValidateEnumAssert::class, 'enumArray'],
+
+            'typeIs' => [TypeAssert::class, 'typeIs'],
         ];
     }

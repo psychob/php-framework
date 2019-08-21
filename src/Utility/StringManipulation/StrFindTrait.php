@@ -8,7 +8,7 @@
     namespace PsychoB\Framework\Utility\StringManipulation;
 
     use PsychoB\Framework\Assert\Assert;
-    use PsychoB\Framework\Assert\Constraints\TypeProperties\TypeIsAssert;
+    use PsychoB\Framework\Assert\Constraints\TypeProperties\TypeAssert;
     use PsychoB\Framework\Utility\Arr;
     use PsychoB\Framework\Utility\Str;
 
@@ -136,8 +136,8 @@
         {
             Assert::arguments('find must be array or string', 'toFind', 2)
                   ->typeIs($toFind, [
-                      TypeIsAssert::TYPE_STRING,
-                      TypeIsAssert::TYPE_ARRAY,
+                      TypeAssert::TYPE_STRING,
+                      TypeAssert::TYPE_ARRAY,
                   ]);
 
             $inLen = Str::len($input);
