@@ -10,6 +10,7 @@
     use PsychoB\Framework\Assert\Constraints\EnumProperties\ValidateEnumAssert;
     use PsychoB\Framework\Assert\Constraints\TypeProperties\TypeAssert;
     use PsychoB\Framework\Assert\Constraints\Value\ComparisionAssert;
+    use PsychoB\Framework\Assert\Constraints\Value\EmptinessAssert;
 
     /**
      * Class that contains all default defined asserts
@@ -29,5 +30,8 @@
             'isSame' => [ComparisionAssert::class, 'isSame'],
             'notEqual' => [ComparisionAssert::class, 'isNotEqual'],
             'notSame' => [ComparisionAssert::class, 'isNotSame'],
+
+            'isEmpty' => [EmptinessAssert::class, 'isEmpty'],
+            'notEmpty' => [EmptinessAssert::class, 'isNotEmpty'],
         ];
     }
