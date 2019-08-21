@@ -10,10 +10,14 @@
     use PsychoB\Framework\Assert\Assert;
     use PsychoB\Framework\Assert\Constraints\Value\ComparisionAssert;
     use PsychoB\Framework\Assert\Constraints\Value\ValuesAreDifferentException;
-    use PsychoB\Framework\Assert\Constraints\Value\ValuesAreSameException;
     use PsychoB\Framework\Assert\Validate;
     use PsychoB\Framework\Testing\UnitTestCase;
 
+    /**
+     * @covers \PsychoB\Framework\Assert\Constraints\Value\ComparisionAssert
+     * @covers \PsychoB\Framework\Assert\Constraints\Value\ValuesAreDifferentException
+     * @covers \PsychoB\Framework\Assert\Constraints\Value\ComparisionAssertException
+     */
     class IsSameTest extends UnitTestCase
     {
         /** @dataProvider \Tests\PsychoB\Framework\Unit\Assert\Constraints\Value\ComparisionAssert\ComparisionAssertProviders::provideSameValues() */

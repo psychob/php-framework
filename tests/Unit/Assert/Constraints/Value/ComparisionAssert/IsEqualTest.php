@@ -16,6 +16,7 @@
     /**
      * @covers \PsychoB\Framework\Assert\Constraints\Value\ComparisionAssert
      * @covers \PsychoB\Framework\Assert\Constraints\Value\ValuesAreDifferentException
+     * @covers \PsychoB\Framework\Assert\Constraints\Value\ComparisionAssertException
      */
     class IsEqualTest extends UnitTestCase
     {
