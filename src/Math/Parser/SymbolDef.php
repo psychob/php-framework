@@ -37,7 +37,7 @@
         public function __construct(string $symbol, int $type, string $class)
         {
             Assert::arguments('Type must be one of SymbolDef::TYPE_ constants', 'type', 2)
-                  ->enumOneOf($type, [
+                  ->enumOne($type, [
                       'SymbolDef::TYPE_UNARY_PREFIX' => SymbolDef::TYPE_UNARY_PREFIX,
                       'SymbolDef::TYPE_UNARY_POSTFIX' => SymbolDef::TYPE_UNARY_POSTFIX,
                       'SymbolDef::TYPE_BINARY_PREFIX' => SymbolDef::TYPE_BINARY_PREFIX,
