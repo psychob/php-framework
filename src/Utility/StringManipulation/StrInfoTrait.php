@@ -25,7 +25,7 @@
         public static function first(string $str): string
         {
             Assert::arguments('String cannot be empty', 'str', 1)
-                  ->isNotEmpty($str);
+                  ->notEmpty($str);
 
             return $str[0];
         }
@@ -33,7 +33,7 @@
         public static function last(string $str): string
         {
             Assert::arguments('String cannot be empty', 'str', 1)
-                  ->isNotEmpty($str);
+                  ->notEmpty($str);
 
             return $str[Str::len($str) - 1];
         }
