@@ -33,5 +33,10 @@
 
             'isEmpty' => [EmptinessAssert::class, 'isEmpty'],
             'notEmpty' => [EmptinessAssert::class, 'isNotEmpty'],
+
+            'isSmaller' => [ComparisionAssert::class, 'isSmaller'],
+            'isSmallerOrEqual' => [ComparisionAssert::class, 'isSmallerEqual'],
+            'isGreater' => [ComparisionAssert::class, 'isGreater'],
+            'isGreaterOrEqual' => [ComparisionAssert::class, 'isGreaterEqual'],
         ];
     }

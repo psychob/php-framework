@@ -15,6 +15,7 @@
      *
      * @author Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
      * @since  0.1
+     * @deprecated
      */
     class AssertionException extends BaseException
     {

@@ -36,4 +36,32 @@
                 throw new ValuesAreSameException($left, $right, false, $message);
             }
         }
+
+        public static function isSmaller($left, $right, ?string $message = NULL): void
+        {
+            if ($left >= $right) {
+                throw new ValueIsNotSmallerException($left, $right, $message);
+            }
+        }
+
+        public static function isSmallerEqual($left, $right, ?string $message = NULL): void
+        {
+            if ($left > $right) {
+                throw new ValueIsNotSmallerOrEqualException($left, $right, $message);
+            }
+        }
+
+        public static function isGreater($left, $right, ?string $message = NULL): void
+        {
+            if ($left <= $right) {
+                throw new ValueIsNotGreaterException($left, $right, $message);
+            }
+        }
+
+        public static function isGreaterEqual($left, $right, ?string $message = NULL): void
+        {
+            if ($left < $right) {
+                throw new ValueIsNotGreaterOrEqualException($left, $right, $message);
+            }
+        }
     }

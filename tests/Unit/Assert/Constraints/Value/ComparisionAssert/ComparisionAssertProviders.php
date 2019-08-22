@@ -57,4 +57,52 @@
                 [false, []],
             ];
         }
+
+        public static function provideSmallerValues(): array
+        {
+            return [
+                [0, 10],
+                [0, '100'],
+                [10, 100],
+                [-30, 0],
+            ];
+        }
+
+        public static function provideSmallerEqualValues(): array
+        {
+            return [
+                [0, 10],
+                [10, 10],
+                [0, '100'],
+                [100, '100'],
+                [10, 100],
+                [100, 100],
+                [-30, 0],
+                [-30, -30],
+            ];
+        }
+
+        public function provideGreaterValues()
+        {
+            return [
+                [10, 0],
+                ['100', 0],
+                [100, 10],
+                [0, -30],
+            ];
+        }
+
+        public function provideGreaterEqualValues()
+        {
+            return [
+                [10, 0],
+                [10, 10],
+                ['100', 0],
+                ['100', 100],
+                [100, 10],
+                [100, 100],
+                [0, -30],
+                [-30, -30],
+            ];
+        }
     }
