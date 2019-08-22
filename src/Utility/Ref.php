@@ -8,6 +8,8 @@
     namespace PsychoB\Framework\Utility;
 
     use Jawira\CaseConverter\Convert;
+    use PsychoB\Framework\Assert\Assert;
+    use PsychoB\Framework\Assert\Constraints\TypeProperties\TypeAssert;
 
     class Ref
     {
@@ -66,5 +68,25 @@
             $ref = new \ReflectionClass($obj);
 
             return Arr::contains($ref->getInterfaceNames(), $interface);
+        }
+
+        public static function getEnumValues($obj, string $startsWith = ''): array
+        {
+            Assert::arguments('must be object or string', 'obj', 1)
+                  ->typeIs($obj, [
+                      TypeAssert::TYPE_OBJECT,
+                      TypeAssert::TYPE_STRING,
+                  ]);
+
+            $ref = new \ReflectionClass($obj);
+            $ret = [];
+
+            foreach ($ref->getConstants() as $name => $value) {
+                if (empty($startsWith) || Str::startsWith($name, $startsWith)) {
+                    $ret[$name] = $value;
+                }
+            }
+
+            return $ret;
         }
     }

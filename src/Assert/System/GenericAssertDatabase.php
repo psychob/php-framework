@@ -8,6 +8,7 @@
     namespace PsychoB\Framework\Assert\System;
 
     use PsychoB\Framework\Assert\Constraints\ArrayProperties\ArrayAssert;
+    use PsychoB\Framework\Assert\Constraints\EnumProperties\EnumAssert;
     use PsychoB\Framework\Assert\Constraints\EnumProperties\ValidateEnumAssert;
     use PsychoB\Framework\Assert\Constraints\TypeProperties\ClassImplementsAssert;
     use PsychoB\Framework\Assert\Constraints\TypeProperties\TypeAssert;
@@ -23,8 +24,8 @@
     final class GenericAssertDatabase extends AssertDatabaseTrait
     {
         protected static $asserts = [
-            'enumBits' => [ValidateEnumAssert::class, 'enumBits'],
-            'enumArray' => [ValidateEnumAssert::class, 'enumArray'],
+            'enumOne' => [EnumAssert::class, 'oneOf'],
+            'enumCombination' => [EnumAssert::class, 'combinationOf'],
 
             'typeIs' => [TypeAssert::class, 'typeIs'],
             'classImplements' => [ClassImplementsAssert::class, 'classImplements'],
