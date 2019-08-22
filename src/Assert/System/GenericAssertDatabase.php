@@ -9,6 +9,7 @@
 
     use PsychoB\Framework\Assert\Constraints\ArrayProperties\ArrayAssert;
     use PsychoB\Framework\Assert\Constraints\EnumProperties\ValidateEnumAssert;
+    use PsychoB\Framework\Assert\Constraints\TypeProperties\ClassImplementsAssert;
     use PsychoB\Framework\Assert\Constraints\TypeProperties\TypeAssert;
     use PsychoB\Framework\Assert\Constraints\Value\ComparisionAssert;
     use PsychoB\Framework\Assert\Constraints\Value\EmptinessAssert;
@@ -26,6 +27,7 @@
             'enumArray' => [ValidateEnumAssert::class, 'enumArray'],
 
             'typeIs' => [TypeAssert::class, 'typeIs'],
+            'classImplements' => [ClassImplementsAssert::class, 'classImplements'],
 
             'isEqual' => [ComparisionAssert::class, 'isEqual'],
             'isSame' => [ComparisionAssert::class, 'isSame'],
