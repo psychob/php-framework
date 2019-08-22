@@ -8,7 +8,7 @@
     namespace PsychoB\Framework\Utility\StringManipulation;
 
     use PsychoB\Framework\Assert\Assert;
-    use PsychoB\Framework\Assert\Constraints\TypeAssert;
+    use PsychoB\Framework\Assert\Constraints\TypeProperties\TypeAssert;
     use PsychoB\Framework\Utility\Arr;
     use PsychoB\Framework\Utility\Str;
 
@@ -135,7 +135,7 @@
         private static function findFirst_ensureArguments(string $input, $toFind, int $offset): int
         {
             Assert::arguments('find must be array or string', 'toFind', 2)
-                  ->hasType($toFind, [
+                  ->typeIs($toFind, [
                       TypeAssert::TYPE_STRING,
                       TypeAssert::TYPE_ARRAY,
                   ]);

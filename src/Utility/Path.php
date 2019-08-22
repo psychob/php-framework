@@ -18,7 +18,7 @@
 
         public static function join(string ...$paths): string
         {
-            Assert::arguments()->isNotEmpty($paths);
+            Assert::arguments()->notEmpty($paths);
 
             switch (Arr::len($paths)) {
                 case 1:

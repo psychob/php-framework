@@ -7,33 +7,12 @@
 
     namespace PsychoB\Framework\Assert;
 
-    use PsychoB\Framework\Assert\Exception\AssertionException;
+    use PsychoB\Framework\Assert\System\ValidateAssert;
 
-    /**
-     * Class Validate
-     *
-     * @author Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
-     * @since  0.1
-     *
-     * @method static isTrue($obj)
-     * @method static isFalse($obj)
-     * @method static isEqual(mixed $left, mixed $right)
-     * @method static typeRequirements(mixed $obj, array|string $type, mixed[] $properties, ?string $message = NULL)
-     * @method static hasType($obj, mixed|string $type, ?string $message = NULL)
-     * @method static isNotEmpty($obj)
-     * @method static isSmallerOrEqual($left, $right)
-     * @method static isGreaterOrEqual($left, $right)
-     */
     final class Validate
     {
         public static function __callStatic($name, $arguments)
         {
-            try {
-                Assert::__callStatic($name, $arguments);
-            } catch (AssertionException $e) {
-                return false;
-            }
-
-            return true;
+            return ValidateAssert::__callStatic($name, $arguments);
         }
     }
