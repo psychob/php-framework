@@ -7,6 +7,7 @@
 
     namespace PsychoB\Framework\Assert\System;
 
+    use PsychoB\Framework\Assert\Constraints\ArrayProperties\ArrayAssert;
     use PsychoB\Framework\Assert\Constraints\EnumProperties\ValidateEnumAssert;
     use PsychoB\Framework\Assert\Constraints\TypeProperties\TypeAssert;
     use PsychoB\Framework\Assert\Constraints\Value\ComparisionAssert;
@@ -38,5 +39,8 @@
             'isSmallerOrEqual' => [ComparisionAssert::class, 'isSmallerEqual'],
             'isGreater' => [ComparisionAssert::class, 'isGreater'],
             'isGreaterOrEqual' => [ComparisionAssert::class, 'isGreaterEqual'],
+
+            'hasKey' => [ArrayAssert::class, 'hasKey'],
+            'dontHaveKey' => [ArrayAssert::class, 'dontHaveKey'],
         ];
     }

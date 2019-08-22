@@ -32,7 +32,7 @@
         public function addGroup(string $name, array $symbols, string $class, bool $allowCombining): void
         {
             Assert::arguments('Group already exists', $name, 1)
-                  ->hasNoKey($this->groups, $name);
+                  ->dontHaveKey($this->groups, $name);
 
             Assert::arguments('Class must implement interface TokenInterface', $class, 3)
                   ->classImplements($class, TokenInterface::class);
