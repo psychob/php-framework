@@ -18,6 +18,10 @@
         <testsuite name="Scenario">
             <directory suffix="Test.php">tests/Scenario</directory>
         </testsuite>
+
+        <testsuite name="Unit-ExpressionEngine">
+            <directory suffix="Test.php">tests/Unit/ExpressionEngine</directory>
+        </testsuite>
     </testsuites>
 
     <filter>

@@ -1,26 +1,33 @@
 language: php
 php:
   - '7.2'
+  - '7.3'
 
 env:
   global:
     - CC_TEST_REPORTER_ID=7d7f8090bc8b67fc08ed87841ba79a162c2a980b6a941bb864a9dd6400c22688
-    - CODECOV_TOKEN="c275d384-d3bf-4664-be3d-2504c7964d85"
+
+jobs:
+  include:
+    - stage: "Test"
+      name: "All test cases"
+      script:
+        - phpunit --coverage-clover build/logs/clover.xml
+      after_script:
+        - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+        - bash <(curl -s https://codecov.io/bash)
+    - stage: "Test"
+      name: "Expression Engine Tests"
+      script:
+        - phpunit --coverage-clover build/logs/clover.xml --testsuite Unit-ExpressionEngine
+      after_script:
+        - bash <(curl -s https://codecov.io/bash) -F expression_engine
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
   - composer install --prefer-dist --no-interaction --no-progress --no-suggest -o
-
-script:
-  - phpunit --coverage-clover build/logs/clover.xml
-
-after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
-
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
 
 cache:
   directories:
