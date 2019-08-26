@@ -26,6 +26,5 @@
 
         public function parse(): NodeInterface
         {
-            // TODO: Implement parse() method.
         }
     }
