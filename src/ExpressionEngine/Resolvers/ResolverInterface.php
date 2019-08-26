@@ -5,9 +5,9 @@
     // (c) 2019 Andrzej Budzanowski <kontakt@andrzej.budzanowski.pl>
     //
 
-    namespace PsychoB\Framework\ExpressionEngine\Ast;
+    namespace PsychoB\Framework\ExpressionEngine\Resolvers;
 
-    class Node
+    interface ResolverInterface
     {
 
     }
