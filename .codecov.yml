@@ -1,0 +1,4 @@
+flags:
+  dependency_injection:
+    paths:
+      - ./src/DependencyInjection
