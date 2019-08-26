@@ -2,3 +2,7 @@ flags:
   dependency_injection:
     paths:
       - ./src/DependencyInjection
+
+  expression_engine:
+    paths:
+      - ./src/ExpressionEngine
